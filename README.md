@@ -45,17 +45,13 @@ For refactorings and optimizations keep in mind that:
 - Both optimizations and refactorings require significant testing across all supported devices
 
  ## Things people have asked for (may or may not be implemented)
-- Adjustable font size
 - Goal completion marker
 - Pressure trend
 - Monthly run/bike distance
 - Notifications as icon
-- 7 day rolling run distance
 - Line font for bottom fields
 - clock font without segments
 - separate 24h mode for alt tz
-- Configurable data for the notification field, week number and other short info could work
-- Second custom theme for easy switching
 
 ## Change log
 2026-03-20 v4.6.2

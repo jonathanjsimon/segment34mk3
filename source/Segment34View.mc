@@ -8,6 +8,7 @@ import Toybox.Weather;
 import Toybox.Complications;
 using Toybox.Position;
 
+(:background_excluded)
 class Segment34View extends WatchUi.WatchFace {
 
     hidden var visible as Boolean = true;
@@ -76,6 +77,7 @@ class Segment34View extends WatchUi.WatchFace {
     hidden var themeColors as Array<Graphics.ColorType> = [];
     hidden var nightMode as Boolean?;
     hidden var weatherCondition as CurrentConditions or StoredWeather or Null;
+    hidden var propWeatherProvider as Number = 0;
     hidden var hrHistoryData as Array<Number>?;
     hidden var canBurnIn as Boolean = false;
     hidden var isSleeping as Boolean = false;
@@ -1643,6 +1645,7 @@ class Segment34View extends WatchUi.WatchFace {
         propWeekOffset = p.getValue("weekOffset") as Number;
         propSmallFontVariant = p.getValue("smallFontVariant") as Number;
         propStressDynamicColor = p.getValue("stressDynamicColor") as Boolean;
+        propWeatherProvider = p.getValue("weatherProvider") as Number;
 
         nightMode = null; // force update color theme
         updateColorTheme();
@@ -1854,11 +1857,18 @@ class Segment34View extends WatchUi.WatchFace {
     }
 
     hidden function updateWeather() as Void {
-        if(Weather.getCurrentConditions() != null) {
-            weatherCondition = Weather.getCurrentConditions();
-            try { storeWeatherData(); } catch(e) {}
-        } else {
+        if (propWeatherProvider == 1) {
+            // OWM provider: background service delegate handles fetching.
+            // The view only reads the results from Application.Storage.
             try { weatherCondition = readWeatherData(); } catch(e) {}
+        } else {
+            // Garmin provider: original behavior unchanged.
+            if (Weather.getCurrentConditions() != null) {
+                weatherCondition = Weather.getCurrentConditions();
+                try { storeWeatherData(); } catch(e) {}
+            } else {
+                try { weatherCondition = readWeatherData(); } catch(e) {}
+            }
         }
         cachedTempUnit = getTempUnit();
     }
@@ -3230,6 +3240,7 @@ class Segment34View extends WatchUi.WatchFace {
 
 }
 
+(:background_excluded)
 class Segment34Delegate extends WatchUi.WatchFaceDelegate {
     var screenW = null;
     var screenH = null;
@@ -3291,6 +3302,7 @@ class Segment34Delegate extends WatchUi.WatchFaceDelegate {
 
 }
 
+(:background_excluded)
 class StoredWeather {
     public var observationLocationPosition as Position.Location or Null;
     public var precipitationChance as Lang.Number or Null;

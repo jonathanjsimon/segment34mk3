@@ -271,6 +271,17 @@
             </settingConfig>
     </setting>
 
+    <setting propertyKey="@Properties.weatherProvider" title="Weather provider">
+        <settingConfig type="list">
+            <listEntry value="0">Garmin</listEntry>
+            <listEntry value="1">OpenWeatherMap</listEntry>
+        </settingConfig>
+    </setting>
+
+    <setting propertyKey="@Properties.owmApiKey" title="OWM API key">
+        <settingConfig type="alphanumeric" />
+    </setting>
+
     <setting propertyKey="@Properties.weatherLine1Shows" title="@Strings.settings_line_1_above_clock">
         <settingConfig type="list">
             <listEntry value="-2">@Strings.settings_hidden</listEntry>

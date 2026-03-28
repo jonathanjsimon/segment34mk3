@@ -67,4 +67,6 @@
     <property id="pressToOpenBottomRight" type="number">0</property>
     <property id="labelVisibility" type="number">0</property>
     <property id="stressDynamicColor" type="boolean">false</property>
+    <property id="weatherProvider" type="number">0</property>
+    <property id="owmApiKey" type="string"></property>
 </properties>

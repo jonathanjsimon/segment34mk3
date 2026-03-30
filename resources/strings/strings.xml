@@ -224,7 +224,8 @@
     <string id="settings_gradient_none" scope="settings">No gradients</string>
     <string id="settings_clock_font" scope="settings">Clock Font</string>
     <string id="settings_font_34_segments" scope="settings">34 Segments, default</string>
-    <string id="settings_font_17_segments" scope="settings">17 Segments, blockier more readable</string>
+    <string id="settings_font_17_segments" scope="settings">17 Segments</string>
+    <string id="settings_font_7_segments" scope="settings">7 Segments</string>
     <string id="settings_font_size" scope="settings">Font size</string>
     <string id="settings_font_small" scope="settings">Small (default)</string>
     <string id="settings_font_large" scope="settings">Large (adjust other settings to make it less cramped)</string>

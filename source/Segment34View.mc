@@ -198,7 +198,6 @@ class Segment34View extends WatchUi.WatchFace {
     (:Round260) const barWidth = 3;
     (:Round280) const barWidth = 3;
     (:Round390) const barWidth = 4;
-    (:InstinctCrossover) const barWidth = 4;
     (:Round416) const barWidth = 4;
     (:Round454) const barWidth = 4;
     (:Square) const barWidth = 4;
@@ -285,8 +284,10 @@ class Segment34View extends WatchUi.WatchFace {
     hidden function loadResources() as Void {
         if(propClockFont == 0) {
             fontClock = Application.loadResource(Rez.Fonts.segments80);
-        } else {
+        } else if(propClockFont == 1) {
             fontClock = Application.loadResource(Rez.Fonts.segments80_2);
+        } else {
+            fontClock = Application.loadResource(Rez.Fonts.segments80_3);
         }
 
         if(propFontSize == 0) {
@@ -343,8 +344,10 @@ class Segment34View extends WatchUi.WatchFace {
     hidden function loadResources() as Void {
         if(propClockFont == 0) {
             fontClock = Application.loadResource(Rez.Fonts.segments80wide);
-        } else {
+        } else if(propClockFont == 1) {
             fontClock = Application.loadResource(Rez.Fonts.segments80wide_2);
+        } else {
+            fontClock = Application.loadResource(Rez.Fonts.segments80wide_3);
         }
         if(propFontSize == 0) {
             fontTinyData = Application.loadResource(Rez.Fonts.storre);
@@ -398,9 +401,12 @@ class Segment34View extends WatchUi.WatchFace {
         if(propClockFont == 0) {
             fontClock = Application.loadResource(Rez.Fonts.segments125);
             fontClockOutline = Application.loadResource(Rez.Fonts.segments125outline);
-        } else {
+        } else if(propClockFont == 1) {
             fontClock = Application.loadResource(Rez.Fonts.segments125_2);
             fontClockOutline = Application.loadResource(Rez.Fonts.segments125outline_2);
+        } else {
+            fontClock = Application.loadResource(Rez.Fonts.segments125_3);
+            fontClockOutline = Application.loadResource(Rez.Fonts.segments125outline_3);
         }
 
         if(propFontSize == 0) {
@@ -452,51 +458,17 @@ class Segment34View extends WatchUi.WatchFace {
         histogramHeight = 25;
     }
 
-    (:InstinctCrossover)
-    hidden function loadResources() as Void {
-        if(propClockFont == 0) {
-            fontClock = Application.loadResource(Rez.Fonts.segments125);
-            fontClockOutline = Application.loadResource(Rez.Fonts.segments125outline);
-        } else {
-            fontClock = Application.loadResource(Rez.Fonts.segments125_2);
-            fontClockOutline = Application.loadResource(Rez.Fonts.segments125outline_2);
-        }
-        fontTinyData = Application.loadResource(Rez.Fonts.led_small_lines);
-        loadSmallFont(Rez.Fonts.led, Rez.Fonts.led_inbetween, Rez.Fonts.led_lines);
-        fontLargeData = Application.loadResource(Rez.Fonts.led_big);
-        fontBottomData = fontLargeData;
-        fontLabel = Application.loadResource(Rez.Fonts.storre);
-        fontAODData = Application.loadResource(Rez.Fonts.led);
-        fontBattery = fontTinyData;
-
-        loadAODGraphics();
-
-        clockHeight = 125;
-        clockWidth = 350;
-        labelHeight = 10;
-        labelMargin = 8;
-        tinyDataHeight = 15;
-        smallDataHeight = 20;
-        largeDataHeight = 27;
-        largeDataWidth = 24;
-        bottomDataWidth = 24;
-
-        baseX = centerX;
-        baseY = centerY;  // Centered for analog hands
-        barBottomAdj = 2;
-        bottomFiveAdj = 10;
-        marginY = 9;
-        histogramHeight = 25;
-    }
-
     (:Round416)
     hidden function loadResources() as Void {
         if(propClockFont == 0) {
             fontClock = Application.loadResource(Rez.Fonts.segments125);
             fontClockOutline = Application.loadResource(Rez.Fonts.segments125outline);
-        } else {
+        } else if(propClockFont == 1) {
             fontClock = Application.loadResource(Rez.Fonts.segments125_2);
             fontClockOutline = Application.loadResource(Rez.Fonts.segments125outline_2);
+        } else {
+            fontClock = Application.loadResource(Rez.Fonts.segments125_3);
+            fontClockOutline = Application.loadResource(Rez.Fonts.segments125outline_3);
         }
 
         if(propFontSize == 0) {
@@ -553,9 +525,12 @@ class Segment34View extends WatchUi.WatchFace {
         if(propClockFont == 0) {
             fontClock = Application.loadResource(Rez.Fonts.segments145);
             fontClockOutline = Application.loadResource(Rez.Fonts.segments145outline);
-        } else {
+        } else if(propClockFont == 1) {
             fontClock = Application.loadResource(Rez.Fonts.segments145_2);
             fontClockOutline = Application.loadResource(Rez.Fonts.segments145outline_2);
+        } else {
+            fontClock = Application.loadResource(Rez.Fonts.segments145_3);
+            fontClockOutline = Application.loadResource(Rez.Fonts.segments145outline_3);
         }
 
         if(propFontSize == 0) {
@@ -614,41 +589,63 @@ class Segment34View extends WatchUi.WatchFace {
         if(propClockFont == 0) {
             fontClock = Application.loadResource(Rez.Fonts.segments145);
             fontClockOutline = Application.loadResource(Rez.Fonts.segments145outline);
-        } else {
+        } else if(propClockFont == 1) {
             fontClock = Application.loadResource(Rez.Fonts.segments145_2);
             fontClockOutline = Application.loadResource(Rez.Fonts.segments145outline_2);
+        } else {
+            fontClock = Application.loadResource(Rez.Fonts.segments145_3);
+            fontClockOutline = Application.loadResource(Rez.Fonts.segments145outline_3);
         }
-        fontTinyData = Application.loadResource(Rez.Fonts.led_small_lines);
-        loadSmallFont(Rez.Fonts.led, Rez.Fonts.led_inbetween, Rez.Fonts.led_lines);
-        fontLargeData = Application.loadResource(Rez.Fonts.led_big);
-        fontBottomData = fontLargeData;
-        fontLabel = Application.loadResource(Rez.Fonts.storre);
-        fontAODData = Application.loadResource(Rez.Fonts.led);
-        fontBattery = fontTinyData;
 
+        if(propFontSize == 0) {
+            fontTinyData = Application.loadResource(Rez.Fonts.led_small_lines);
+            loadSmallFont(Rez.Fonts.led, Rez.Fonts.led_inbetween, Rez.Fonts.led_lines);
+            fontLargeData = Application.loadResource(Rez.Fonts.led_big);
+            fontBottomData = fontLargeData;
+            fontLabel = Application.loadResource(Rez.Fonts.storre);
+            fontAODData = Application.loadResource(Rez.Fonts.led);
+            fontBattery = fontTinyData;
+
+            textSideAdj = 1;
+            marginY = 18;
+            labelHeight = 10;
+            smallDataHeight = 20;
+            bottomFiveAdj = 8;
+            baseY = centerY - smallDataHeight - 10;
+            bottomFieldWidths = [4, 4, 4, 0];
+
+        } else {
+            fontTinyData = Application.loadResource(Rez.Fonts.led_small_lines);
+            loadSmallFont(Rez.Fonts.led_big, Rez.Fonts.led_big_readable, Rez.Fonts.led_big_lines);
+            fontLargeData = Application.loadResource(Rez.Fonts.led_big);
+            fontBottomData = fontLargeData;
+            fontLabel = fontTinyData;
+            fontAODData = Application.loadResource(Rez.Fonts.led_big);
+            fontBattery = Application.loadResource(Rez.Fonts.led_lines);
+
+            textSideAdj = 6;
+            marginY = 14;
+            labelHeight = 13;            
+            smallDataHeight = 27;
+            bottomFiveAdj = 6;
+            baseY = centerY - 35;
+            bottomFieldWidths = [4, 4, 4, 0];
+        }
+        
+        clockHeight = 145;
+        clockWidth = 415;
         loadAODGraphics();
 
-        clockHeight = 145;
-        clockWidth = 413;
-        labelHeight = 10;
         labelMargin = 8;
         tinyDataHeight = 13;
-        smallDataHeight = 20;
         largeDataHeight = 27;
+        baseX = centerX + 3;
+        fieldSpaceingAdj = 20;
         largeDataWidth = 24;
         bottomDataWidth = 24;
-
-        baseX = centerX + 3;
-        baseY = centerY - smallDataHeight + 4;
-        fieldSpaceingAdj = 20;
-        textSideAdj = 4;
-        bottomFiveAdj = 4;
         barBottomAdj = 2;
-        marginY = 17;
         histogramHeight = 30;
-        histogramTargetWidth = 55;
-        histogramBarWidth = 3;
-        histogramBarSpacing = 3;
+        histogramTargetWidth = 45;
     }
 
     hidden function computeDisplayValues(now as Gregorian.Info) as Dictionary {
@@ -808,7 +805,6 @@ class Segment34View extends WatchUi.WatchFace {
         dc.drawText(baseX + halfClockWidth - textSideAdj, y1, fontSmallData, seconds, Graphics.TEXT_JUSTIFY_RIGHT);
     }
 
-    (:DefaultLayout)
     hidden function calculateLayout() as Void {
         var y1 = baseY + halfClockHeight + marginY;
         var y2 = y1 + smallDataHeight + marginY;
@@ -826,22 +822,6 @@ class Segment34View extends WatchUi.WatchFace {
         calculateSquareLayout();
     }
 
-    (:InstinctCrossover)
-    hidden function calculateLayout() as Void {
-        var y1 = baseY + halfClockHeight + marginY;
-        var y2 = y1 + labelHeight + labelMargin + largeDataHeight;
-        
-        fieldY = y1;
-        
-        var data_width = Math.sqrt(centerY*centerY - (y2 - centerY)*(y2 - centerY)) * 2 + fieldSpaceingAdj;
-        var left_edge = Math.round((screenWidth - data_width) / 2);
-        
-        calculateFieldXCoords(data_width, left_edge);
-
-        bottomFiveY = y2 + halfMarginY + bottomFiveAdj;
-        if((propLabelVisibility == 1 or propLabelVisibility == 3)) { bottomFiveY = bottomFiveY - labelHeight; }
-    }
-    
     hidden function calculateFieldXCoords(data_width as Float, left_edge as Number) as Void {
         var digits = getFieldWidths();
         var tot_digits = digits[0] + digits[1] + digits[2] + digits[3];
@@ -857,7 +837,6 @@ class Segment34View extends WatchUi.WatchFace {
         fieldXCoords[3] = left_edge + Math.round(dw1 + dw2 + dw3 + (dw4 / 2));
     }
 
-    (:DefaultLayout)
     hidden function drawWatchface(dc as Dc, now as Gregorian.Info, aod as Boolean, values as Dictionary) as Void {
         // Clear
         dc.setColor(themeColors[bg], themeColors[bg]);
@@ -892,7 +871,7 @@ class Segment34View extends WatchUi.WatchFace {
 
                 // Draw Moon
                 dc.setColor(themeColors[moon], Graphics.COLOR_TRANSPARENT);
-                dc.drawText(centerX, yn3 + ((top_data_height + tinyDataHeight) / 2), fontMoon, values[:dataMoon], Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+                dc.drawText(centerX, yn3 + ((top_data_height + tinyDataHeight) / 2) + 2, fontMoon, values[:dataMoon], Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
             } else {
                 // Top 2 fields: Just values (larger)
                 if(top_data_height == marginY) { top_field_font = fontSmallData; }
@@ -996,153 +975,6 @@ class Segment34View extends WatchUi.WatchFace {
 
         // Draw the 5 digit bottom field(s) and icons
         drawBottomFieldsWithIcons(dc, values);
-
-        // Draw battery icon
-        drawBatteryIcon(dc, values);
-    }
-
-    (:InstinctCrossover)
-    hidden function drawWatchface(dc as Dc, now as Gregorian.Info, aod as Boolean, values as Dictionary) as Void {
-        // Clear
-        dc.setColor(themeColors[bg], themeColors[bg]);
-        dc.clear();
-
-        // Shifted positions: date line is now above clock
-        var yn0 = baseY - halfClockHeight - marginY - smallDataHeight;  // date line (above clock)
-        var yn1 = yn0 - marginY - smallDataHeight;  // weather line 2
-        var yn2 = yn1 - marginY - smallDataHeight;  // weather line 1
-        var yn3 = yn2 - marginY - histogramHeight;
-
-        // Draw Top data fields or histogram
-        if(propTopPartShows == 2) {
-            drawHistogram(dc, values[:dataGraph1], centerX, yn3, histogramHeight);
-        } else {
-            var top_data_height = halfMarginY;
-            var top_field_font = fontTinyData;
-            var top_field_center_offset = 20;
-            if(propTopPartShows == 1) { top_field_center_offset = labelHeight; }
-            if(propLabelVisibility == 0 or propLabelVisibility == 3) {
-                dc.setColor(themeColors[fieldLbl], Graphics.COLOR_TRANSPARENT);
-                dc.drawText(centerX - top_field_center_offset, marginY, fontLabel, values[:dataLabelTopLeft], Graphics.TEXT_JUSTIFY_RIGHT);
-                dc.drawText(centerX + top_field_center_offset, marginY, fontLabel, values[:dataLabelTopRight], Graphics.TEXT_JUSTIFY_LEFT);
-
-                top_data_height = labelHeight + halfMarginY + 2;
-            }
-
-            dc.setColor(themeColors[dataVal], Graphics.COLOR_TRANSPARENT);
-            if(propTopPartShows == 0) {
-                dc.drawText(centerX - top_field_center_offset, marginY + top_data_height, top_field_font, values[:dataTopLeft], Graphics.TEXT_JUSTIFY_RIGHT);
-                dc.drawText(centerX + top_field_center_offset, marginY + top_data_height, top_field_font, values[:dataTopRight], Graphics.TEXT_JUSTIFY_LEFT);
-
-                // Draw Moon
-                dc.setColor(themeColors[moon], Graphics.COLOR_TRANSPARENT);
-                dc.drawText(centerX, marginY + ((top_data_height + tinyDataHeight) / 2), fontMoon, values[:dataMoon], Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-            } else {
-                if(top_data_height == halfMarginY) { top_field_font = fontSmallData; }
-                dc.drawText(centerX - top_field_center_offset, marginY + top_data_height, top_field_font, values[:dataTopLeft], Graphics.TEXT_JUSTIFY_RIGHT);
-                dc.drawText(centerX + top_field_center_offset, marginY + top_data_height, top_field_font, values[:dataTopRight], Graphics.TEXT_JUSTIFY_LEFT);
-            }
-        }
-
-        // Draw Lines above clock (shifted up by one row)
-        dc.setColor(themeColors[dataVal], Graphics.COLOR_TRANSPARENT);
-        dc.drawText(centerX, yn2, fontSmallData, values[:dataAboveLine1], Graphics.TEXT_JUSTIFY_CENTER);
-        dc.drawText(centerX, yn1, fontSmallData, values[:dataAboveLine2], Graphics.TEXT_JUSTIFY_CENTER);
-
-        // Draw date line ABOVE clock (at yn0)
-        dc.setColor(themeColors[date], Graphics.COLOR_TRANSPARENT);
-        if(propDateAlignment == 0) {
-            dc.drawText(baseX - halfClockWidth + textSideAdj, yn0, fontSmallData, values[:dataBelow], Graphics.TEXT_JUSTIFY_LEFT);
-        } else {
-            dc.drawText(baseX, yn0, fontSmallData, values[:dataBelow], Graphics.TEXT_JUSTIFY_CENTER);
-        }
-
-        // Draw seconds (above clock)
-        if(propShowSeconds) {
-            dc.drawText(baseX + halfClockWidth - textSideAdj, yn0, fontSmallData, values[:dataSeconds], Graphics.TEXT_JUSTIFY_RIGHT);
-        }
-
-        // Draw Notification count (above clock)
-        dc.setColor(themeColors[notif], Graphics.COLOR_TRANSPARENT);
-        if(propDateAlignment == 0) {
-            if(!propShowSeconds) {
-                dc.drawText(baseX + halfClockWidth - textSideAdj, yn0, fontSmallData, values[:dataNotifications], Graphics.TEXT_JUSTIFY_RIGHT);
-            } else {
-                var date_width = dc.getTextWidthInPixels(values[:dataBelow], fontSmallData);
-                var sec_width = dc.getTextWidthInPixels(values[:dataSeconds], fontSmallData);
-                var date_right_edge = baseX - halfClockWidth + textSideAdj + date_width;
-                var sec_left = baseX + halfClockWidth - textSideAdj - sec_width;
-                var pos = sec_left - marginX;
-                if((sec_left - date_right_edge) < 3 * marginX) {
-                    pos = (date_right_edge + sec_left) / 2;
-                }
-                dc.drawText(pos, yn0, fontSmallData, values[:dataNotifications], Graphics.TEXT_JUSTIFY_CENTER);
-            }
-        } else {
-            dc.drawText(baseX - halfClockWidth, yn0, fontSmallData, values[:dataNotifications], Graphics.TEXT_JUSTIFY_LEFT);
-        }
-
-        if(!aod) {
-            // Draw Clock
-            if(propClockOutlineStyle != 5) {
-                dc.setColor(themeColors[clockBg], Graphics.COLOR_TRANSPARENT);
-                if(propShowClockBg and !aod) {
-                    dc.drawText(baseX, baseY, fontClock, clockBgText, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-                }
-                dc.setColor(themeColors[clock], Graphics.COLOR_TRANSPARENT);
-                dc.drawText(baseX, baseY, fontClock, values[:dataClock], Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-
-                // Draw clock gradient
-                if(drawGradient != null and themeColors[bg] == 0x000000 and !aod) {
-                    dc.drawBitmap(centerX - halfClockWidth, baseY - halfClockHeight, drawGradient);
-                }
-            }
-
-            if(propClockOutlineStyle == 2 or propClockOutlineStyle == 3 or propClockOutlineStyle == 5) {
-                if(fontClockOutline != null) { // Someone has only bothered to draw this font for AMOLED sizes
-                    // Draw outline
-                    dc.setColor(themeColors[outline], Graphics.COLOR_TRANSPARENT);
-                    dc.drawText(baseX, baseY, fontClockOutline, values[:dataClock], Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-                }
-            }
-        } else { // AOD
-            if(propClockOutlineStyle == 0 or propClockOutlineStyle == 2) {
-                // Draw Clock
-                dc.setColor(themeColors[clock], Graphics.COLOR_TRANSPARENT);
-                dc.drawText(baseX, baseY, fontClock, values[:dataClock], Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-            }
-
-            if(propClockOutlineStyle == 1 or propClockOutlineStyle == 2 or propClockOutlineStyle == 3 or propClockOutlineStyle == 5) {
-                // Draw Outline
-                dc.setColor(themeColors[outline], Graphics.COLOR_TRANSPARENT);
-                dc.drawText(baseX, baseY, fontClockOutline, values[:dataClock], Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-            }
-
-            if(propClockOutlineStyle == 4) {
-                // Filled clock but outline color
-                dc.setColor(themeColors[outline], Graphics.COLOR_TRANSPARENT);
-                dc.drawText(baseX, baseY, fontClock, values[:dataClock], Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-            }
-        }
-
-        // Draw stress and body battery bars
-        drawSideBars(dc, values);
-
-        // Draw the three bottom data fields (directly below clock, no date row)
-        var digits = getFieldWidths();
-
-        drawDataField(dc, fieldXCoords[0], fieldY, 3, values[:dataLabelBottomLeft], values[:dataBottomLeft], digits[0], fontLargeData, largeDataWidth * digits[0]);
-        drawDataField(dc, fieldXCoords[1], fieldY, 3, values[:dataLabelBottomMiddle], values[:dataBottomMiddle], digits[1], fontLargeData, largeDataWidth * digits[1]);
-        drawDataField(dc, fieldXCoords[2], fieldY, 3, values[:dataLabelBottomRight], values[:dataBottomRight], digits[2], fontLargeData, largeDataWidth * digits[2]);
-        drawDataField(dc, fieldXCoords[3], fieldY, 3, values[:dataLabelBottomFourth], values[:dataBottomFourth], digits[3], fontLargeData, largeDataWidth * digits[3]);
-
-        // Draw the 5 digit bottom field
-        var step_width = drawDataField(dc, centerX, bottomFiveY, 0, null, values[:dataBottom], 5, fontBottomData, bottomDataWidth * 5);
-
-        // Draw icons
-        dc.setColor(themeColors[dataVal], Graphics.COLOR_TRANSPARENT);
-        dc.drawText(centerX - (step_width / 2) - (marginX / 2), bottomFiveY + (largeDataHeight / 2) + iconYAdj, fontIcons, values[:dataIcon1], Graphics.TEXT_JUSTIFY_RIGHT | Graphics.TEXT_JUSTIFY_VCENTER);
-        dc.drawText(centerX + (step_width / 2) + (marginX / 2) - 2, bottomFiveY + (largeDataHeight / 2) + iconYAdj, fontIcons, values[:dataIcon2], Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
 
         // Draw battery icon
         drawBatteryIcon(dc, values);
@@ -1657,7 +1489,11 @@ class Segment34View extends WatchUi.WatchFace {
         } else if(propTimeSeparator == 3) {
             clockBgText = "####B";
         } else {
-            clockBgText = "#####";
+            if(propClockFont == 2) {
+                clockBgText = "## ##";
+            } else {
+                clockBgText = "#####";
+            }
         }
     }
 

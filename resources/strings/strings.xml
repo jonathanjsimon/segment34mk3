@@ -1,5 +1,5 @@
 <strings>
-    <string id="AppName">Segment34 MkII</string>
+    <string id="AppName">Segment34 MkIII</string>
 
     <string id="UNIT_KCAL">KCAL</string>
     <string id="UNIT_M">M</string>
@@ -226,6 +226,7 @@
     <string id="settings_font_34_segments" scope="settings">34 Segments, default</string>
     <string id="settings_font_17_segments" scope="settings">17 Segments</string>
     <string id="settings_font_7_segments" scope="settings">7 Segments</string>
+    <string id="settings_font_dots" scope="settings">Dots</string>
     <string id="settings_font_size" scope="settings">Font size</string>
     <string id="settings_font_small" scope="settings">Small (default)</string>
     <string id="settings_font_large" scope="settings">Large (adjust other settings to make it less cramped)</string>

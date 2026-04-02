@@ -108,6 +108,7 @@
             <listEntry value="0">@Strings.settings_font_34_segments</listEntry>
             <listEntry value="1">@Strings.settings_font_17_segments</listEntry>
             <listEntry value="2">@Strings.settings_font_7_segments</listEntry>
+            <listEntry value="3">@Strings.settings_font_dots</listEntry>
         </settingConfig>
     </setting>
 

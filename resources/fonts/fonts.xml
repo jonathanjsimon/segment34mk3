@@ -19,7 +19,14 @@
     <font id="segments125outline_3" filename="segments125outline_3.fnt" antialias="true" filter=" #1234567890:ABP" />
     <font id="segments145_3" filename="segments145_3.fnt" antialias="true" filter=" #1234567890:ABP" />
     <font id="segments145outline_3" filename="segments145outline_3.fnt" antialias="true" filter=" #1234567890:ABP" />
-    
+
+    <font id="segments80_4" filename="segments80_4.fnt" antialias="true" filter=" #1234567890:ABP" />
+    <font id="segments80wide_4" filename="segments80wide_4.fnt" antialias="true" filter=" #1234567890:ABP" />
+    <font id="segments125_4" filename="segments125_4.fnt" antialias="false" filter=" #1234567890:ABP" />
+    <font id="segments125outline_4" filename="segments125outline_4.fnt" antialias="true" filter=" #1234567890:ABP" />
+    <font id="segments145_4" filename="segments145_4.fnt" antialias="true" filter=" #1234567890:ABP" />
+    <font id="segments145outline_4" filename="segments145outline_4.fnt" antialias="true" filter=" #1234567890:ABP" />
+
     <font id="icons" filename="icons.fnt" antialias="true" />
     <font id="led" filename="led.fnt" antialias="false" />
     <font id="led_inbetween" filename="led_inbetween.fnt" antialias="true" />

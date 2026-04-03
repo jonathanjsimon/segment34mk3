@@ -656,7 +656,7 @@ class Segment34View extends WatchUi.WatchFace {
         values[:dataAboveLine1] = getValueByTypeWithUnit(propWeatherLine1Shows, 10);
         values[:dataAboveLine2] = getValueByTypeWithUnit(propWeatherLine2Shows, 10);
         values[:dataBelow] = getValueByTypeWithUnit(propDateFieldShows, 10);
-        values[:dataNotifications] = getValueByTypeWithUnit(propNotificationCountShows, 2);
+        values[:dataNotifications] = getValueByType(propNotificationCountShows, 2);
         values[:dataBottomLeft] = getValueByType(propLeftValueShows, fieldWidths[0]);
         values[:dataBottomMiddle] = getValueByType(propMiddleValueShows, fieldWidths[1]);
         values[:dataBottomRight] = getValueByType(propRightValueShows, fieldWidths[2]);

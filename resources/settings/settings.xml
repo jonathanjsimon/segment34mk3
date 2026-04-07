@@ -136,6 +136,7 @@
         <settingConfig type="list">
             <listEntry value="-2">@Strings.settings_hidden</listEntry>
             <listEntry value="0">@Strings.settings_active_min_week</listEntry>
+            <listEntry value="62">@Strings.settings_active_hours_week</listEntry>
             <listEntry value="1">@Strings.settings_active_min_day</listEntry>
             <listEntry value="2">@Strings.settings_distance_day</listEntry>
             <listEntry value="19">@Strings.settings_run_distance_week</listEntry>
@@ -194,6 +195,7 @@
         <settingConfig type="list">
             <listEntry value="-2">@Strings.settings_hidden</listEntry>
             <listEntry value="0">@Strings.settings_active_min_week</listEntry>
+            <listEntry value="62">@Strings.settings_active_hours_week</listEntry>
             <listEntry value="1">@Strings.settings_active_min_day</listEntry>
             <listEntry value="2">@Strings.settings_distance_day</listEntry>
             <listEntry value="19">@Strings.settings_run_distance_week</listEntry>
@@ -398,6 +400,7 @@
             <listEntry value="-2">@Strings.settings_hidden</listEntry>
             <listEntry value="16">@Strings.settings_steps_day</listEntry>
             <listEntry value="0">@Strings.settings_active_min_week</listEntry>
+            <listEntry value="62">@Strings.settings_active_hours_week</listEntry>
             <listEntry value="1">@Strings.settings_active_min_day</listEntry>
             <listEntry value="2">@Strings.settings_distance_day</listEntry>
             <listEntry value="19">@Strings.settings_run_distance_week</listEntry>
@@ -456,6 +459,7 @@
             <listEntry value="-2">@Strings.settings_hidden</listEntry>
             <listEntry value="16">@Strings.settings_steps_day</listEntry>
             <listEntry value="0">@Strings.settings_active_min_week</listEntry>
+            <listEntry value="62">@Strings.settings_active_hours_week</listEntry>
             <listEntry value="1">@Strings.settings_active_min_day</listEntry>
             <listEntry value="2">@Strings.settings_distance_day</listEntry>
             <listEntry value="19">@Strings.settings_run_distance_week</listEntry>
@@ -514,6 +518,7 @@
             <listEntry value="-2">@Strings.settings_hidden</listEntry>
             <listEntry value="16">@Strings.settings_steps_day</listEntry>
             <listEntry value="0">@Strings.settings_active_min_week</listEntry>
+            <listEntry value="62">@Strings.settings_active_hours_week</listEntry>
             <listEntry value="1">@Strings.settings_active_min_day</listEntry>
             <listEntry value="2">@Strings.settings_distance_day</listEntry>
             <listEntry value="19">@Strings.settings_run_distance_week</listEntry>
@@ -572,6 +577,7 @@
             <listEntry value="-2">@Strings.settings_hidden</listEntry>
             <listEntry value="16">@Strings.settings_steps_day</listEntry>
             <listEntry value="0">@Strings.settings_active_min_week</listEntry>
+            <listEntry value="62">@Strings.settings_active_hours_week</listEntry>
             <listEntry value="1">@Strings.settings_active_min_day</listEntry>
             <listEntry value="2">@Strings.settings_distance_day</listEntry>
             <listEntry value="19">@Strings.settings_run_distance_week</listEntry>
@@ -748,6 +754,7 @@
             <listEntry value="-2">@Strings.settings_hidden</listEntry>
             <listEntry value="16">@Strings.settings_steps_day</listEntry>
             <listEntry value="0">@Strings.settings_active_min_week</listEntry>
+            <listEntry value="62">@Strings.settings_active_hours_week</listEntry>
             <listEntry value="1">@Strings.settings_active_min_day</listEntry>
             <listEntry value="2">@Strings.settings_distance_day</listEntry>
             <listEntry value="19">@Strings.settings_run_distance_week</listEntry>

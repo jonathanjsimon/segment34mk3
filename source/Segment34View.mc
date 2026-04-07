@@ -1914,6 +1914,11 @@ class Segment34View extends WatchUi.WatchFace {
             if(activityInfo.activeMinutesWeek != null) {
                 val = activityInfo.activeMinutesWeek.total.format(numberFormat);
             }
+        } else if(complicationType == 62) { // Active hours / week
+            if(activityInfo == null) { activityInfo = ActivityMonitor.getInfo(); }
+            if(activityInfo.activeMinutesWeek != null) {
+                val = (activityInfo.activeMinutesWeek.total / 60.0).format("%.1f");
+            }
         } else if(complicationType == 1) { // Active min / day
             if(activityInfo == null) { activityInfo = ActivityMonitor.getInfo(); }
             if(activityInfo.activeMinutesDay != null) {
@@ -2285,6 +2290,7 @@ class Segment34View extends WatchUi.WatchFace {
         if(complicationType == 37) { return propTzName2.toUpper() + ":"; }
         switch(complicationType) {
             case 0: return formatLabel(Rez.Strings.LABEL_WMIN_1, Rez.Strings.LABEL_WMIN_2, labelSize);
+            case 62: return formatLabel(Rez.Strings.LABEL_WHRS_1, Rez.Strings.LABEL_WHRS_2, labelSize);
             case 1: return formatLabel(Rez.Strings.LABEL_DMIN_1, Rez.Strings.LABEL_DMIN_2, labelSize);
             case 2:
                 if(propIsMetricDistance) { return formatLabel(Rez.Strings.LABEL_DKM_1, Rez.Strings.LABEL_DKM_2, labelSize); }

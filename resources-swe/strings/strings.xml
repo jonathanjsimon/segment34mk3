@@ -230,6 +230,7 @@
     <string id="settings_top_left_small" scope="settings">Övre vänstra lilla datafält:</string>
     <string id="settings_hidden" scope="settings">Dolt</string>
     <string id="settings_active_min_week" scope="settings">Aktiva min / vecka</string>
+    <string id="settings_active_hours_week" scope="settings">Aktiva timmar / vecka</string>
     <string id="settings_active_min_day" scope="settings">Aktiva min / dag</string>
     <string id="settings_distance_day" scope="settings">Distans / dag</string>
     <string id="settings_run_distance_week" scope="settings">Springdistans / vecka</string>

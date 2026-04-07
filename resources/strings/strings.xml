@@ -89,6 +89,8 @@
 
     <string id="LABEL_WMIN_1">W MIN</string>
     <string id="LABEL_WMIN_2">WEEK MIN</string>
+    <string id="LABEL_WHRS_1">W HRS</string>
+    <string id="LABEL_WHRS_2">WEEK HRS</string>
     <string id="LABEL_DMIN_1">D MIN</string>
     <string id="LABEL_DMIN_2">MIN TODAY</string>
     <string id="LABEL_DKM_1">D KM</string>
@@ -242,6 +244,7 @@
     <string id="settings_top_left_small" scope="settings">Top left small data field:</string>
     <string id="settings_hidden" scope="settings">Hidden</string>
     <string id="settings_active_min_week" scope="settings">Active min / week</string>
+    <string id="settings_active_hours_week" scope="settings">Active hours / week</string>
     <string id="settings_active_min_day" scope="settings">Active min / day</string>
     <string id="settings_distance_day" scope="settings">Distance / day</string>
     <string id="settings_run_distance_week" scope="settings">Run distance / week</string>

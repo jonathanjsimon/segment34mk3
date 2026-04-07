@@ -228,6 +228,7 @@
     <string id="settings_top_left_small" scope="settings">Campo datos pequeño arriba izquierda:</string>
     <string id="settings_hidden" scope="settings">Oculto</string>
     <string id="settings_active_min_week" scope="settings">Minutos activo / semana</string>
+    <string id="settings_active_hours_week" scope="settings">Horas activas / semana</string>
     <string id="settings_active_min_day" scope="settings">Minutos activo / día</string>
     <string id="settings_distance_day" scope="settings">Distancia / día</string>
     <string id="settings_run_distance_week" scope="settings">Distancia carrera / semana</string>

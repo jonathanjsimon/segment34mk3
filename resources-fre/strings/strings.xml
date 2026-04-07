@@ -229,6 +229,7 @@
     <string id="settings_top_left_small" scope="settings">Petit champ de données en haut à gauche :</string>
     <string id="settings_hidden" scope="settings">Masqué</string>
     <string id="settings_active_min_week" scope="settings">Minutes actives / semaine</string>
+    <string id="settings_active_hours_week" scope="settings">Heures actives / semaine</string>
     <string id="settings_active_min_day" scope="settings">Minutes actives / jour</string>
     <string id="settings_distance_day" scope="settings">Distance / jour</string>
     <string id="settings_run_distance_week" scope="settings">Distance de course / semaine</string>

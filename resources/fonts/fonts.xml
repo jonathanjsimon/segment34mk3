@@ -13,6 +13,11 @@
     <font id="segments145_2" filename="segments145_2.fnt" antialias="true" filter=" #1234567890:ABP" />
     <font id="segments145outline_2" filename="segments145outline_2.fnt" antialias="true" filter=" #1234567890:ABP" />
 
+    <font id="segments80_2r" filename="segments80_2r.fnt" antialias="true" filter=" #1234567890:ABP" />
+    <font id="segments80wide_2r" filename="segments80wide_2r.fnt" antialias="true" filter=" #1234567890:ABP" />
+    <font id="segments125_2r" filename="segments125_2r.fnt" antialias="true" filter=" #1234567890:ABP" />
+    <font id="segments145_2r" filename="segments145_2r.fnt" antialias="true" filter=" #1234567890:ABP" />
+
     <font id="segments80_3" filename="segments80_3.fnt" antialias="true" filter=" #1234567890:ABP" />
     <font id="segments80wide_3" filename="segments80wide_3.fnt" antialias="true" filter=" #1234567890:ABP" />
     <font id="segments125_3" filename="segments125_3.fnt" antialias="false" filter=" #1234567890:ABP" />

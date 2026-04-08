@@ -37,7 +37,7 @@ class Segment34View extends WatchUi.WatchFace {
     hidden var bottomFiveAdj as Number = 0;
     hidden var fieldSpaceingAdj as Number = 0;
     hidden var textSideAdj as Number = 0;
-    hidden var iconYAdj as Number = 0;
+    hidden var iconYAdj as Number = 3;
     hidden var histogramBarWidth as Number = 2;
     hidden var histogramBarSpacing as Number = 2;
     hidden var histogramHeight as Number = 20;
@@ -285,6 +285,7 @@ class Segment34View extends WatchUi.WatchFace {
             case 1:  fontClock = Application.loadResource(Rez.Fonts.segments80_2); break;
             case 2:  fontClock = Application.loadResource(Rez.Fonts.segments80_3); break;
             case 3:  fontClock = Application.loadResource(Rez.Fonts.segments80_4); break;
+            case 4:  fontClock = Application.loadResource(Rez.Fonts.segments80_2r); break;
             default: fontClock = Application.loadResource(Rez.Fonts.segments80); break;
         }
 
@@ -342,6 +343,7 @@ class Segment34View extends WatchUi.WatchFace {
             case 1:  fontClock = Application.loadResource(Rez.Fonts.segments80wide_2); break;
             case 2:  fontClock = Application.loadResource(Rez.Fonts.segments80wide_3); break;
             case 3:  fontClock = Application.loadResource(Rez.Fonts.segments80wide_4); break;
+            case 4:  fontClock = Application.loadResource(Rez.Fonts.segments80wide_2r); break;
             default: fontClock = Application.loadResource(Rez.Fonts.segments80wide); break;
         }
         if(propFontSize == 0) {
@@ -395,6 +397,7 @@ class Segment34View extends WatchUi.WatchFace {
             case 1:  fontClock = Application.loadResource(Rez.Fonts.segments125_2); fontClockOutline = Application.loadResource(Rez.Fonts.segments125outline_2); break;
             case 2:  fontClock = Application.loadResource(Rez.Fonts.segments125_3); fontClockOutline = Application.loadResource(Rez.Fonts.segments125outline_3); break;
             case 3:  fontClock = Application.loadResource(Rez.Fonts.segments125_4); fontClockOutline = Application.loadResource(Rez.Fonts.segments125outline_4); break;
+            case 4:  fontClock = Application.loadResource(Rez.Fonts.segments125_2r); fontClockOutline = Application.loadResource(Rez.Fonts.segments125outline_2); break;
             default: fontClock = Application.loadResource(Rez.Fonts.segments125);   fontClockOutline = Application.loadResource(Rez.Fonts.segments125outline); break;
         }
 
@@ -451,6 +454,7 @@ class Segment34View extends WatchUi.WatchFace {
             case 1:  fontClock = Application.loadResource(Rez.Fonts.segments125_2); fontClockOutline = Application.loadResource(Rez.Fonts.segments125outline_2); break;
             case 2:  fontClock = Application.loadResource(Rez.Fonts.segments125_3); fontClockOutline = Application.loadResource(Rez.Fonts.segments125outline_3); break;
             case 3:  fontClock = Application.loadResource(Rez.Fonts.segments125_4); fontClockOutline = Application.loadResource(Rez.Fonts.segments125outline_4); break;
+            case 4:  fontClock = Application.loadResource(Rez.Fonts.segments125_2r); fontClockOutline = Application.loadResource(Rez.Fonts.segments125outline_2); break;
             default: fontClock = Application.loadResource(Rez.Fonts.segments125);   fontClockOutline = Application.loadResource(Rez.Fonts.segments125outline); break;
         }
 
@@ -507,6 +511,7 @@ class Segment34View extends WatchUi.WatchFace {
             case 1:  fontClock = Application.loadResource(Rez.Fonts.segments145_2); fontClockOutline = Application.loadResource(Rez.Fonts.segments145outline_2); break;
             case 2:  fontClock = Application.loadResource(Rez.Fonts.segments145_3); fontClockOutline = Application.loadResource(Rez.Fonts.segments145outline_3); break;
             case 3:  fontClock = Application.loadResource(Rez.Fonts.segments145_4); fontClockOutline = Application.loadResource(Rez.Fonts.segments145outline_4); break;
+            case 4:  fontClock = Application.loadResource(Rez.Fonts.segments145_2r); fontClockOutline = Application.loadResource(Rez.Fonts.segments145outline_2); break;
             default: fontClock = Application.loadResource(Rez.Fonts.segments145);   fontClockOutline = Application.loadResource(Rez.Fonts.segments145outline); break;
         }
 
@@ -565,6 +570,7 @@ class Segment34View extends WatchUi.WatchFace {
             case 1:  fontClock = Application.loadResource(Rez.Fonts.segments145_2); fontClockOutline = Application.loadResource(Rez.Fonts.segments145outline_2); break;
             case 2:  fontClock = Application.loadResource(Rez.Fonts.segments145_3); fontClockOutline = Application.loadResource(Rez.Fonts.segments145outline_3); break;
             case 3:  fontClock = Application.loadResource(Rez.Fonts.segments145_4); fontClockOutline = Application.loadResource(Rez.Fonts.segments145outline_4); break;
+            case 4:  fontClock = Application.loadResource(Rez.Fonts.segments145_2r); fontClockOutline = Application.loadResource(Rez.Fonts.segments145outline_2); break;
             default: fontClock = Application.loadResource(Rez.Fonts.segments145);   fontClockOutline = Application.loadResource(Rez.Fonts.segments145outline); break;
         }
 
@@ -1178,7 +1184,7 @@ class Segment34View extends WatchUi.WatchFace {
                 dc.drawText(x - 1, y + 4, fontBattery, values[:dataBattery], Graphics.TEXT_JUSTIFY_CENTER);
             }
         } else {
-            y =  screenHeight - 33;
+            y = screenHeight - 33;
             dc.drawText(x, y, fontIcons, "T", Graphics.TEXT_JUSTIFY_CENTER);
             if(System.getSystemStats().battery <= 15) {
                 dc.setColor(0xFF0000, Graphics.COLOR_TRANSPARENT);
@@ -1216,7 +1222,7 @@ class Segment34View extends WatchUi.WatchFace {
                 dc.drawText(x - 1, y + 3, fontBattery, values[:dataBattery], Graphics.TEXT_JUSTIFY_CENTER);
             }
         } else {
-            y =  screenHeight - 26;
+            y = screenHeight - 28;
             dc.drawText(x, y, fontIcons, "C", Graphics.TEXT_JUSTIFY_CENTER);
             if(System.getSystemStats().battery <= 15) {
                 dc.setColor(0xFF0000, Graphics.COLOR_TRANSPARENT);
@@ -2958,11 +2964,6 @@ class Segment34View extends WatchUi.WatchFace {
     }
 
     (:Square)
-    hidden function getBottomField2Shows() as Number {
-        return propBottomField2Shows;
-    }
-
-    (:Square)
     hidden function computeBottomField2Values(values as Dictionary) as Void {
         values[:dataBottom2] = getValueByType(propBottomField2Shows, 5);
         if (propBottomFieldShows != -2 and propBottomField2Shows != -2) {
@@ -2995,8 +2996,24 @@ class Segment34View extends WatchUi.WatchFace {
         }
     }
 
+    // Non-Square stubs for other devices
+    (:Round)
+    hidden function calculateSquareLayout() as Void {
+        // No-op for non-square devices
+    }
+
+    (:Round)
+    hidden function loadBottomField2Property() as Void {
+        // No-op for non-square devices devices
+    }
+
+    (:Round)
+    hidden function computeBottomField2Values(values as Dictionary) as Void {
+        // No-op for non-square devices devices
+    }
+
     (:Square)
-    hidden function drawSquares(dc as Dc, values as Dictionary) as Void {
+    hidden function drawBottomFieldsWithIcons(dc as Dc, values as Dictionary) as Void {
         if (dualBottomFieldActive) {
             var field1Width = bottomDataWidth * 5;
             var field2Width = bottomDataWidth * 5;
@@ -3031,57 +3048,49 @@ class Segment34View extends WatchUi.WatchFace {
                 Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
         } else {
             // Single field - original behavior
-            var step_width = drawDataField(dc, centerX, bottomFiveY, 0, null,
-                values[:dataBottom], 5, fontBottomData, bottomDataWidth * 5);
+            var step_width = drawDataField(dc, centerX, bottomFiveY, 0, null, values[:dataBottom], 5, fontBottomData, bottomDataWidth * 5);
 
+            // Draw icons
             dc.setColor(themeColors[dataVal], Graphics.COLOR_TRANSPARENT);
-            dc.drawText(centerX - (step_width / 2) - (marginX / 2),
-                bottomFiveY + (largeDataHeight / 2) + iconYAdj,
-                fontIcons, values[:dataIcon1],
-                Graphics.TEXT_JUSTIFY_RIGHT | Graphics.TEXT_JUSTIFY_VCENTER);
-            dc.drawText(centerX + (step_width / 2) + (marginX / 2) - 2,
-                bottomFiveY + (largeDataHeight / 2) + iconYAdj,
-                fontIcons, values[:dataIcon2],
-                Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
+            if(propFontSize == 1 and step_width == 0) {
+                var y = 0;
+                if(screenWidth <= 280) {
+                    step_width = 45;
+                    y = screenHeight - 28;
+                } else {
+                    step_width = 65;
+                    y = screenHeight - 31;
+                }
+                dc.drawText(centerX - (step_width / 2) - (marginX / 2), y, fontIcons, values[:dataIcon1], Graphics.TEXT_JUSTIFY_RIGHT);
+                dc.drawText(centerX + (step_width / 2) + (marginX / 2) - 2, y, fontIcons, values[:dataIcon2], Graphics.TEXT_JUSTIFY_LEFT);
+            } else {
+                dc.drawText(centerX - (step_width / 2) - (marginX / 2), bottomFiveY + (largeDataHeight / 2) + iconYAdj, fontIcons, values[:dataIcon1], Graphics.TEXT_JUSTIFY_RIGHT | Graphics.TEXT_JUSTIFY_VCENTER);
+                dc.drawText(centerX + (step_width / 2) + (marginX / 2) - 2, bottomFiveY + (largeDataHeight / 2) + iconYAdj, fontIcons, values[:dataIcon2], Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
+            }
         }
     }
 
-    // Non-Square stubs for other devices
-    (:Round)
-    hidden function calculateSquareLayout() as Void {
-        // No-op for non-square devices
-    }
-
-    (:Round)
-    hidden function loadBottomField2Property() as Void {
-        // No-op for non-square devices devices
-    }
-
-    (:Round)
-    hidden function getBottomField2Shows() as Number {
-        return -2; // Hidden by default for non-square devices devices
-    }
-
-    (:Round)
-    hidden function computeBottomField2Values(values as Dictionary) as Void {
-        // No-op for non-square devices devices
-    }
-
-    (:Square)
-    hidden function drawBottomFieldsWithIcons(dc as Dc, values as Dictionary) as Void {
-        drawSquares(dc, values);
-    }
-
     (:Round)
     hidden function drawBottomFieldsWithIcons(dc as Dc, values as Dictionary) as Void {
-        // Original single field behavior
-        var step_width = 0;
-        step_width = drawDataField(dc, centerX, bottomFiveY, 0, null, values[:dataBottom], 5, fontBottomData, bottomDataWidth * 5);
+        var step_width = drawDataField(dc, centerX, bottomFiveY, 0, null, values[:dataBottom], 5, fontBottomData, bottomDataWidth * 5);
 
         // Draw icons
         dc.setColor(themeColors[dataVal], Graphics.COLOR_TRANSPARENT);
-        dc.drawText(centerX - (step_width / 2) - (marginX / 2), bottomFiveY + (largeDataHeight / 2) + iconYAdj, fontIcons, values[:dataIcon1], Graphics.TEXT_JUSTIFY_RIGHT | Graphics.TEXT_JUSTIFY_VCENTER);
-        dc.drawText(centerX + (step_width / 2) + (marginX / 2) - 2, bottomFiveY + (largeDataHeight / 2) + iconYAdj, fontIcons, values[:dataIcon2], Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
+        if(propFontSize == 1 and step_width == 0) {
+            var y = 0;
+            if(screenWidth <= 280) {
+                step_width = 45;
+                y = screenHeight - 28;
+            } else {
+                step_width = 65;
+                y = screenHeight - 31;
+            }
+            dc.drawText(centerX - (step_width / 2) - (marginX / 2), y, fontIcons, values[:dataIcon1], Graphics.TEXT_JUSTIFY_RIGHT);
+            dc.drawText(centerX + (step_width / 2) + (marginX / 2) - 2, y, fontIcons, values[:dataIcon2], Graphics.TEXT_JUSTIFY_LEFT);
+        } else {
+            dc.drawText(centerX - (step_width / 2) - (marginX / 2), bottomFiveY + (largeDataHeight / 2) + iconYAdj, fontIcons, values[:dataIcon1], Graphics.TEXT_JUSTIFY_RIGHT | Graphics.TEXT_JUSTIFY_VCENTER);
+            dc.drawText(centerX + (step_width / 2) + (marginX / 2) - 2, bottomFiveY + (largeDataHeight / 2) + iconYAdj, fontIcons, values[:dataIcon2], Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
+        }
     }
 
 }

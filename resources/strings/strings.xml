@@ -227,6 +227,7 @@
     <string id="settings_clock_font" scope="settings">Clock Font</string>
     <string id="settings_font_34_segments" scope="settings">34 Segments, default</string>
     <string id="settings_font_17_segments" scope="settings">17 Segments</string>
+    <string id="settings_font_17_segments_rounded" scope="settings">17 Segments (rounded)</string>
     <string id="settings_font_7_segments" scope="settings">7 Segments</string>
     <string id="settings_font_dots" scope="settings">Dots</string>
     <string id="settings_font_size" scope="settings">Font size</string>

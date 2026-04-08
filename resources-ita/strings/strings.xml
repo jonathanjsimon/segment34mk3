@@ -89,6 +89,8 @@
 
     <string id="LABEL_WMIN_1">MIN S</string>
     <string id="LABEL_WMIN_2">MIN SETT</string>
+    <string id="LABEL_WHRS_1">ORE S</string>
+    <string id="LABEL_WHRS_2">ORE SETT</string>
     <string id="LABEL_DMIN_1">MIN G</string>
     <string id="LABEL_DMIN_2">MIN OGGI</string>
     <string id="LABEL_DKM_1">KM G</string>

@@ -89,6 +89,8 @@
 
     <string id="LABEL_WMIN_1">MIN SEM</string>
     <string id="LABEL_WMIN_2">MIN SEM</string>
+    <string id="LABEL_WHRS_1">H SEM</string>
+    <string id="LABEL_WHRS_2">H SEM</string>
     <string id="LABEL_DMIN_1">MIN J</string>
     <string id="LABEL_DMIN_2">MIN AUJ</string>
     <string id="LABEL_DKM_1">KM J</string>

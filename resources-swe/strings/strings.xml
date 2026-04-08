@@ -89,6 +89,8 @@
 
     <string id="LABEL_WMIN_1">V MIN</string>
     <string id="LABEL_WMIN_2">VECKA MIN</string>
+    <string id="LABEL_WHRS_1">V TIM</string>
+    <string id="LABEL_WHRS_2">VECKA TIM</string>
     <string id="LABEL_DMIN_1">D MIN</string>
     <string id="LABEL_DMIN_2">MIN IDAG</string>
     <string id="LABEL_DKM_1">D KM</string>
@@ -289,6 +291,7 @@
     <string id="settings_stress_rest_orange_blue" scope="settings">Stress/vila (orange/blå)</string>
     <string id="settings_temperature_sensor_history" scope="settings">Temperatursensorhistorik</string>
     <string id="settings_small_font_variant" scope="settings">Liten punktmatrisfont variant:</string>
+    <string id="settings_bottom_font_variant" scope="settings">Nedre fält font variant:</string>
     <string id="settings_dots" scope="settings">Punkter</string>
     <string id="settings_blended" scope="settings">Blandad</string>
     <string id="settings_lines_highest_contrast" scope="settings">Linjer (högsta kontrast)</string>

@@ -89,6 +89,8 @@
 
     <string id="LABEL_WMIN_1">MIN TG</string>
     <string id="LABEL_WMIN_2">MIN TYG</string>
+    <string id="LABEL_WHRS_1">GDZ TG</string>
+    <string id="LABEL_WHRS_2">GDZ TYG</string>
     <string id="LABEL_DMIN_1">MIN DN</string>
     <string id="LABEL_DMIN_2">MIN DZIŚ</string>
     <string id="LABEL_DKM_1">KM DN</string>

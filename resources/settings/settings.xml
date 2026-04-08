@@ -115,6 +115,22 @@
         </settingConfig>
     </setting>
 
+    <setting propertyKey="@Properties.smallFontVariant" title="@Strings.settings_small_font_variant">
+            <settingConfig type="list">
+                <listEntry value="0">@Strings.settings_dots</listEntry>
+                <listEntry value="1">@Strings.settings_blended</listEntry>
+                <listEntry value="2">@Strings.settings_lines_highest_contrast</listEntry>
+            </settingConfig>
+    </setting>
+
+    <setting propertyKey="@Properties.bottomFontVariant" title="@Strings.settings_bottom_font_variant">
+            <settingConfig type="list">
+                <listEntry value="0">@Strings.settings_dots</listEntry>
+                <listEntry value="1">@Strings.settings_blended</listEntry>
+                <listEntry value="2">@Strings.settings_lines_highest_contrast</listEntry>
+            </settingConfig>
+    </setting>
+
     <setting propertyKey="@Properties.updateFreq" title="@Strings.settings_update_frequency">
         <settingConfig type="list">
             <listEntry value="60">@Strings.settings_every_minute</listEntry>
@@ -260,14 +276,6 @@
                 <listEntry value="5">@Strings.settings_stress_history</listEntry>
                 <listEntry value="7">@Strings.settings_stress_rest_orange_blue</listEntry>
                 <listEntry value="6">@Strings.settings_temperature_sensor_history</listEntry>
-            </settingConfig>
-    </setting>
-
-    <setting propertyKey="@Properties.smallFontVariant" title="@Strings.settings_small_font_variant">
-            <settingConfig type="list">
-                <listEntry value="0">@Strings.settings_dots</listEntry>
-                <listEntry value="1">@Strings.settings_blended</listEntry>
-                <listEntry value="2">@Strings.settings_lines_highest_contrast</listEntry>
             </settingConfig>
     </setting>
 

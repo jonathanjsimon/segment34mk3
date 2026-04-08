@@ -89,6 +89,8 @@
 
     <string id="LABEL_WMIN_1">W MIN</string>
     <string id="LABEL_WMIN_2">W AKT MIN</string>
+    <string id="LABEL_WHRS_1">W STD</string>
+    <string id="LABEL_WHRS_2">WOCHE STD</string>
     <string id="LABEL_DMIN_1">T MIN</string>
     <string id="LABEL_DMIN_2">T AKT MIN</string>
     <string id="LABEL_DKM_1">T KM</string>

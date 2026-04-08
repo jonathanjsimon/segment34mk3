@@ -51,7 +51,6 @@ class Segment34View extends WatchUi.WatchFace {
     hidden var fontLabel as WatchUi.FontResource?;
     hidden var fontTinyData as WatchUi.FontResource?;
     hidden var fontSmallData as WatchUi.FontResource?;
-    hidden var fontLargeData as WatchUi.FontResource?;
     hidden var fontAODData as WatchUi.FontResource?;
     hidden var fontBottomData as WatchUi.FontResource?;
     hidden var fontBattery as WatchUi.FontResource?;
@@ -162,6 +161,7 @@ class Segment34View extends WatchUi.WatchFace {
     hidden var propWeekOffset as Number = 0;
     hidden var propLabelVisibility as Number = 0;
     hidden var propSmallFontVariant as Number = 0;
+    hidden var propBottomFontVariant as Number = 2;
     hidden var propStressDynamicColor as Boolean = false;
 
     // Cached Labels
@@ -255,14 +255,14 @@ class Segment34View extends WatchUi.WatchFace {
         }
     }
 
-    hidden function loadSmallFont(resDefault, resReadable, resLines) as Void {
+    hidden function loadFontVariant(resDefault, resReadable, resLines, variant as Number) as FontResource {
         var selectedRes = resLines;
-        if (propSmallFontVariant == 0) {
+        if (variant == 0) {
             selectedRes = resDefault;
-        } else if (propSmallFontVariant == 1) {
+        } else if (variant == 1) {
             selectedRes = resReadable;
         }
-        fontSmallData = Application.loadResource(selectedRes);
+        return Application.loadResource(selectedRes) as FontResource;
     }
 
     hidden function loadAODGraphics() as Void {
@@ -290,9 +290,8 @@ class Segment34View extends WatchUi.WatchFace {
 
         if(propFontSize == 0) {
             fontTinyData = Application.loadResource(Rez.Fonts.storre);
-            loadSmallFont(Rez.Fonts.led_small, Rez.Fonts.led_small_readable, Rez.Fonts.led_small_lines);
-            fontLargeData = Application.loadResource(Rez.Fonts.led);
-            fontBottomData = fontLargeData;
+            fontSmallData = loadFontVariant(Rez.Fonts.led_small, Rez.Fonts.led_small_readable, Rez.Fonts.led_small_lines, propSmallFontVariant);
+            fontBottomData = loadFontVariant(Rez.Fonts.led, Rez.Fonts.led_inbetween, Rez.Fonts.led_lines, propBottomFontVariant);
             fontLabel = Application.loadResource(Rez.Fonts.smol);
             fontBattery = fontLabel;
 
@@ -306,16 +305,15 @@ class Segment34View extends WatchUi.WatchFace {
             bottomFieldWidths = [3, 3, 3, 0];
         } else {
             fontTinyData = Application.loadResource(Rez.Fonts.storre);
-            loadSmallFont(Rez.Fonts.led, Rez.Fonts.led_inbetween, Rez.Fonts.led_lines);
-            fontLargeData = Application.loadResource(Rez.Fonts.led);
-            fontBottomData = fontLargeData;
+            fontSmallData = loadFontVariant(Rez.Fonts.led, Rez.Fonts.led_inbetween, Rez.Fonts.led_lines, propSmallFontVariant);
+            fontBottomData = loadFontVariant(Rez.Fonts.led, Rez.Fonts.led_inbetween, Rez.Fonts.led_lines, propBottomFontVariant);
             fontLabel = fontTinyData;
             fontAODData = Application.loadResource(Rez.Fonts.led);
             fontBattery = Application.loadResource(Rez.Fonts.led_small_lines);
 
             marginY = 4;
-            labelHeight = 10;     
-            tinyDataHeight = 10;       
+            labelHeight = 10;
+            tinyDataHeight = 10;
             smallDataHeight = 20;
             bottomFiveAdj = 2;
             baseY = centerY - 6;
@@ -348,9 +346,8 @@ class Segment34View extends WatchUi.WatchFace {
         }
         if(propFontSize == 0) {
             fontTinyData = Application.loadResource(Rez.Fonts.storre);
-            loadSmallFont(Rez.Fonts.led_small, Rez.Fonts.led_small_readable, Rez.Fonts.led_small_lines);
-            fontLargeData = Application.loadResource(Rez.Fonts.led);
-            fontBottomData = fontLargeData;
+            fontSmallData = loadFontVariant(Rez.Fonts.led_small, Rez.Fonts.led_small_readable, Rez.Fonts.led_small_lines, propSmallFontVariant);
+            fontBottomData = loadFontVariant(Rez.Fonts.led, Rez.Fonts.led_inbetween, Rez.Fonts.led_lines, propBottomFontVariant);
             fontLabel = Application.loadResource(Rez.Fonts.smol);
             fontBattery = fontLabel;
 
@@ -363,15 +360,14 @@ class Segment34View extends WatchUi.WatchFace {
             bottomFieldWidths = [4, 3, 4, 0];
         } else {
             fontTinyData = Application.loadResource(Rez.Fonts.storre);
-            loadSmallFont(Rez.Fonts.led, Rez.Fonts.led_inbetween, Rez.Fonts.led_lines);
-            fontLargeData = Application.loadResource(Rez.Fonts.led);
-            fontBottomData = fontLargeData;
+            fontSmallData = loadFontVariant(Rez.Fonts.led, Rez.Fonts.led_inbetween, Rez.Fonts.led_lines, propSmallFontVariant);
+            fontBottomData = loadFontVariant(Rez.Fonts.led, Rez.Fonts.led_inbetween, Rez.Fonts.led_lines, propBottomFontVariant);
             fontLabel = fontTinyData;
             fontAODData = Application.loadResource(Rez.Fonts.led);
             fontBattery = Application.loadResource(Rez.Fonts.led_small_lines);
 
             marginY = 6;
-            labelHeight = 10;            
+            labelHeight = 10;
             smallDataHeight = 20;
             bottomFiveAdj = 5;
             baseY = centerY - 5;
@@ -404,9 +400,8 @@ class Segment34View extends WatchUi.WatchFace {
 
         if(propFontSize == 0) {
             fontTinyData = Application.loadResource(Rez.Fonts.led_small_lines);
-            loadSmallFont(Rez.Fonts.led, Rez.Fonts.led_inbetween, Rez.Fonts.led_lines);
-            fontLargeData = Application.loadResource(Rez.Fonts.led_big);
-            fontBottomData = fontLargeData;
+            fontSmallData = loadFontVariant(Rez.Fonts.led, Rez.Fonts.led_inbetween, Rez.Fonts.led_lines, propSmallFontVariant);
+            fontBottomData = loadFontVariant(Rez.Fonts.led_big, Rez.Fonts.led_big_readable, Rez.Fonts.led_big_lines, propBottomFontVariant);
             fontLabel = Application.loadResource(Rez.Fonts.storre);
             fontAODData = Application.loadResource(Rez.Fonts.led);
             fontBattery = fontTinyData;
@@ -421,9 +416,8 @@ class Segment34View extends WatchUi.WatchFace {
             bottomFieldWidths = [4, 3, 4, 0];
         } else {
             fontTinyData = Application.loadResource(Rez.Fonts.led_small_lines);
-            loadSmallFont(Rez.Fonts.led_big, Rez.Fonts.led_big_readable, Rez.Fonts.led_big_lines);
-            fontLargeData = Application.loadResource(Rez.Fonts.led_big);
-            fontBottomData = fontLargeData;
+            fontSmallData = loadFontVariant(Rez.Fonts.led_big, Rez.Fonts.led_big_readable, Rez.Fonts.led_big_lines, propSmallFontVariant);
+            fontBottomData = loadFontVariant(Rez.Fonts.led_big, Rez.Fonts.led_big_readable, Rez.Fonts.led_big_lines, propBottomFontVariant);
             fontLabel = fontTinyData;
             fontAODData = Application.loadResource(Rez.Fonts.led_big);
             fontBattery = Application.loadResource(Rez.Fonts.led_lines);
@@ -431,13 +425,13 @@ class Segment34View extends WatchUi.WatchFace {
             clockWidth = 360 - 4;
             textSideAdj = 10;
             marginY = 8;
-            labelHeight = 13;            
+            labelHeight = 13;
             smallDataHeight = 27;
             bottomFiveAdj = 4;
             baseY = centerY - 6;
             bottomFieldWidths = [3, 3, 3, 0];
         }
-        
+
         loadAODGraphics();
 
         clockHeight = 125;
@@ -462,9 +456,8 @@ class Segment34View extends WatchUi.WatchFace {
 
         if(propFontSize == 0) {
             fontTinyData = Application.loadResource(Rez.Fonts.led_small_lines);
-            loadSmallFont(Rez.Fonts.led, Rez.Fonts.led_inbetween, Rez.Fonts.led_lines);
-            fontLargeData = Application.loadResource(Rez.Fonts.led_big);
-            fontBottomData = fontLargeData;
+            fontSmallData = loadFontVariant(Rez.Fonts.led, Rez.Fonts.led_inbetween, Rez.Fonts.led_lines, propSmallFontVariant);
+            fontBottomData = loadFontVariant(Rez.Fonts.led_big, Rez.Fonts.led_big_readable, Rez.Fonts.led_big_lines, propBottomFontVariant);
             fontLabel = Application.loadResource(Rez.Fonts.storre);
             fontAODData = Application.loadResource(Rez.Fonts.led);
             fontBattery = fontTinyData;
@@ -478,16 +471,15 @@ class Segment34View extends WatchUi.WatchFace {
             bottomFieldWidths = [4, 4, 4, 0];
         } else {
             fontTinyData = Application.loadResource(Rez.Fonts.led_small_lines);
-            loadSmallFont(Rez.Fonts.led_big, Rez.Fonts.led_big_readable, Rez.Fonts.led_big_lines);
-            fontLargeData = Application.loadResource(Rez.Fonts.led_big);
-            fontBottomData = fontLargeData;
+            fontSmallData = loadFontVariant(Rez.Fonts.led_big, Rez.Fonts.led_big_readable, Rez.Fonts.led_big_lines, propSmallFontVariant);
+            fontBottomData = loadFontVariant(Rez.Fonts.led_big, Rez.Fonts.led_big_readable, Rez.Fonts.led_big_lines, propBottomFontVariant);
             fontLabel = fontTinyData;
             fontAODData = Application.loadResource(Rez.Fonts.led_big);
             fontBattery = Application.loadResource(Rez.Fonts.led_lines);
 
             textSideAdj = 2;
             marginY = 12;
-            labelHeight = 13;            
+            labelHeight = 13;
             smallDataHeight = 27;
             bottomFiveAdj = 6;
             baseY = centerY - 5;
@@ -520,9 +512,8 @@ class Segment34View extends WatchUi.WatchFace {
 
         if(propFontSize == 0) {
             fontTinyData = Application.loadResource(Rez.Fonts.led_small_lines);
-            loadSmallFont(Rez.Fonts.led, Rez.Fonts.led_inbetween, Rez.Fonts.led_lines);
-            fontLargeData = Application.loadResource(Rez.Fonts.led_big);
-            fontBottomData = fontLargeData;
+            fontSmallData = loadFontVariant(Rez.Fonts.led, Rez.Fonts.led_inbetween, Rez.Fonts.led_lines, propSmallFontVariant);
+            fontBottomData = loadFontVariant(Rez.Fonts.led_big, Rez.Fonts.led_big_readable, Rez.Fonts.led_big_lines, propBottomFontVariant);
             fontLabel = Application.loadResource(Rez.Fonts.storre);
             fontAODData = Application.loadResource(Rez.Fonts.led);
             fontBattery = fontTinyData;
@@ -537,22 +528,21 @@ class Segment34View extends WatchUi.WatchFace {
 
         } else {
             fontTinyData = Application.loadResource(Rez.Fonts.led_small_lines);
-            loadSmallFont(Rez.Fonts.led_big, Rez.Fonts.led_big_readable, Rez.Fonts.led_big_lines);
-            fontLargeData = Application.loadResource(Rez.Fonts.led_big);
-            fontBottomData = fontLargeData;
+            fontSmallData = loadFontVariant(Rez.Fonts.led_big, Rez.Fonts.led_big_readable, Rez.Fonts.led_big_lines, propSmallFontVariant);
+            fontBottomData = loadFontVariant(Rez.Fonts.led_big, Rez.Fonts.led_big_readable, Rez.Fonts.led_big_lines, propBottomFontVariant);
             fontLabel = fontTinyData;
             fontAODData = Application.loadResource(Rez.Fonts.led_big);
             fontBattery = Application.loadResource(Rez.Fonts.led_lines);
 
             textSideAdj = 6;
             marginY = 14;
-            labelHeight = 13;            
+            labelHeight = 13;
             smallDataHeight = 27;
             bottomFiveAdj = 6;
             baseY = centerY - 5;
             bottomFieldWidths = [3, 3, 3, 0];
         }
-        
+
         clockHeight = 145;
         clockWidth = 415;
         loadAODGraphics();
@@ -580,9 +570,8 @@ class Segment34View extends WatchUi.WatchFace {
 
         if(propFontSize == 0) {
             fontTinyData = Application.loadResource(Rez.Fonts.led_small_lines);
-            loadSmallFont(Rez.Fonts.led, Rez.Fonts.led_inbetween, Rez.Fonts.led_lines);
-            fontLargeData = Application.loadResource(Rez.Fonts.led_big);
-            fontBottomData = fontLargeData;
+            fontSmallData = loadFontVariant(Rez.Fonts.led, Rez.Fonts.led_inbetween, Rez.Fonts.led_lines, propSmallFontVariant);
+            fontBottomData = loadFontVariant(Rez.Fonts.led_big, Rez.Fonts.led_big_readable, Rez.Fonts.led_big_lines, propBottomFontVariant);
             fontLabel = Application.loadResource(Rez.Fonts.storre);
             fontAODData = Application.loadResource(Rez.Fonts.led);
             fontBattery = fontTinyData;
@@ -597,16 +586,15 @@ class Segment34View extends WatchUi.WatchFace {
 
         } else {
             fontTinyData = Application.loadResource(Rez.Fonts.led_small_lines);
-            loadSmallFont(Rez.Fonts.led_big, Rez.Fonts.led_big_readable, Rez.Fonts.led_big_lines);
-            fontLargeData = Application.loadResource(Rez.Fonts.led_big);
-            fontBottomData = fontLargeData;
+            fontSmallData = loadFontVariant(Rez.Fonts.led_big, Rez.Fonts.led_big_readable, Rez.Fonts.led_big_lines, propSmallFontVariant);
+            fontBottomData = loadFontVariant(Rez.Fonts.led_big, Rez.Fonts.led_big_readable, Rez.Fonts.led_big_lines, propBottomFontVariant);
             fontLabel = fontTinyData;
             fontAODData = Application.loadResource(Rez.Fonts.led_big);
             fontBattery = Application.loadResource(Rez.Fonts.led_lines);
 
             textSideAdj = 6;
             marginY = 14;
-            labelHeight = 13;            
+            labelHeight = 13;
             smallDataHeight = 27;
             bottomFiveAdj = 6;
             baseY = centerY - 35;
@@ -949,10 +937,10 @@ class Segment34View extends WatchUi.WatchFace {
         // Draw the three bottom data fields
         var digits = getFieldWidths();
 
-        drawDataField(dc, fieldXCoords[0], fieldY, 3, values[:dataLabelBottomLeft], values[:dataBottomLeft], digits[0], fontLargeData, largeDataWidth * digits[0]);
-        drawDataField(dc, fieldXCoords[1], fieldY, 3, values[:dataLabelBottomMiddle], values[:dataBottomMiddle], digits[1], fontLargeData, largeDataWidth * digits[1]);
-        drawDataField(dc, fieldXCoords[2], fieldY, 3, values[:dataLabelBottomRight], values[:dataBottomRight], digits[2], fontLargeData, largeDataWidth * digits[2]);
-        drawDataField(dc, fieldXCoords[3], fieldY, 3, values[:dataLabelBottomFourth], values[:dataBottomFourth], digits[3], fontLargeData, largeDataWidth * digits[3]);
+        drawDataField(dc, fieldXCoords[0], fieldY, 3, values[:dataLabelBottomLeft], values[:dataBottomLeft], digits[0], fontBottomData, largeDataWidth * digits[0]);
+        drawDataField(dc, fieldXCoords[1], fieldY, 3, values[:dataLabelBottomMiddle], values[:dataBottomMiddle], digits[1], fontBottomData, largeDataWidth * digits[1]);
+        drawDataField(dc, fieldXCoords[2], fieldY, 3, values[:dataLabelBottomRight], values[:dataBottomRight], digits[2], fontBottomData, largeDataWidth * digits[2]);
+        drawDataField(dc, fieldXCoords[3], fieldY, 3, values[:dataLabelBottomFourth], values[:dataBottomFourth], digits[3], fontBottomData, largeDataWidth * digits[3]);
 
         // Draw the 5 digit bottom field(s) and icons
         drawBottomFieldsWithIcons(dc, values);
@@ -1457,6 +1445,7 @@ class Segment34View extends WatchUi.WatchFace {
         propTzName2 = p.getValue("tzName2") as String;
         propWeekOffset = p.getValue("weekOffset") as Number;
         propSmallFontVariant = p.getValue("smallFontVariant") as Number;
+        propBottomFontVariant = p.getValue("bottomFontVariant") as Number;
         propStressDynamicColor = p.getValue("stressDynamicColor") as Boolean;
         propWeatherProvider = p.getValue("weatherProvider") as Number;
 

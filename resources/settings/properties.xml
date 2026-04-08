@@ -6,7 +6,7 @@
     <property id="colorOverride2" type="string"></property>
     <property id="hourFormat" type="number">0</property>
     <property id="zeropadHour" type="boolean">true</property>
-    <property id="timeSeparator" type="number">0</property>
+    <property id="timeSeparator" type="number">4</property>
     <property id="tempUnit" type="number">0</property>
     <property id="distanceUnit" type="number">0</property>
     <property id="showTempUnit" type="boolean">true</property>

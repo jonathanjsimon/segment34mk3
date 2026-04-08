@@ -1036,8 +1036,12 @@ class Segment34View extends WatchUi.WatchFace {
             return [4, 3, 3, 3];
         } else if(propFieldLayout == 12) {
             return [4, 4, 0, 0];
-        } else {
+        } else if(propFieldLayout == 13) {
             return [5, 3, 3, 0];
+        } else if(propFieldLayout == 14) {
+            return [5, 0, 0, 0];
+        } else {
+            return [5, 5, 0, 0];
         } 
     }
 

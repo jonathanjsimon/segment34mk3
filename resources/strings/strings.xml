@@ -223,6 +223,8 @@
     <string id="settings_gradient_clock_and_aod" scope="settings">Gradient for both clock and AOD (default)</string>
     <string id="settings_gradient_aod_only" scope="settings">No gradient for clock, gradient in AOD</string>
     <string id="settings_gradient_clock_only" scope="settings">Gradient for clock, no gradient in AOD</string>
+    <string id="settings_gradient_clock_scanlines_aod" scope="settings">Gradient for clock, scanlines in AOD</string>
+    <string id="settings_gradient_no_clock_scanlines_aod" scope="settings">No gradient for clock, scanlines in AOD</string>
     <string id="settings_gradient_none" scope="settings">No gradients</string>
     <string id="settings_clock_font" scope="settings">Clock Font</string>
     <string id="settings_font_34_segments" scope="settings">34 Segments, default</string>

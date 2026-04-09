@@ -30,3 +30,4 @@ char id=82 x=339 y=0 width=16 height=21 xoffset=1 yoffset=0 xadvance=19 page=0
 
 char id=83 x=356 y=0 width=20 height=20 xoffset=0 yoffset=0 xadvance=20 page=0
 char id=84 x=378 y=0 width=60 height=28 xoffset=0 yoffset=0 xadvance=60 page=0
+char id=85 x=439 y=0 width=20 height=20 xoffset=0 yoffset=0 xadvance=20 page=0

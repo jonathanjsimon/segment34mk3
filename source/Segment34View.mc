@@ -267,14 +267,16 @@ class Segment34View extends WatchUi.WatchFace {
     }
 
     hidden function loadAODGraphics() as Void {
-        if(propClockGradientOverlay == 0 or propClockGradientOverlay == 2) {
+        if(propClockGradientOverlay == 0 or propClockGradientOverlay == 2 or propClockGradientOverlay == 4) {
             drawGradient = Application.loadResource(Rez.Drawables.gradient) as BitmapResource;
         } else {
             drawGradient = null;
         }
-        
+
         if(propClockGradientOverlay == 0 or propClockGradientOverlay == 1) {
             drawAODPattern = Application.loadResource(Rez.Drawables.aod) as BitmapResource;
+        } else if(propClockGradientOverlay == 4 or propClockGradientOverlay == 5) {
+            drawAODPattern = Application.loadResource(Rez.Drawables.aod3) as BitmapResource;
         } else {
             drawAODPattern = Application.loadResource(Rez.Drawables.aod2) as BitmapResource;
         }
@@ -989,7 +991,12 @@ class Segment34View extends WatchUi.WatchFace {
             }
 
             // Draw clock gradient
-            dc.drawBitmap(centerX - halfClockWidth - (now.min % 2), baseY - halfClockHeight, drawAODPattern);
+            if(propClockGradientOverlay == 4 or propClockGradientOverlay == 5) {
+                dc.drawBitmap(centerX - halfClockWidth, baseY - halfClockHeight - (now.min % 2), drawAODPattern);
+            } else {
+                dc.drawBitmap(centerX - halfClockWidth - (now.min % 2), baseY - halfClockHeight, drawAODPattern);
+            }
+            
 
             // Draw Line below clock
             var y1 = baseY + halfClockHeight + marginY;
@@ -1006,8 +1013,11 @@ class Segment34View extends WatchUi.WatchFace {
     (:AMOLED)
     hidden function drawPattern(dc as Dc, color as ColorType, offset as Number) as Void {
         var text = "";
+        var pattern = "S"; // Checkerboard
+        if(propClockGradientOverlay == 4 or propClockGradientOverlay == 5) { pattern = "U"; } // Scanlines
+
         for(var i = 0; i < Math.ceil(screenWidth / 20) + 1; i++) {
-                text += "S";
+                text += pattern;
         }
 
         dc.setColor(color, Graphics.COLOR_TRANSPARENT);

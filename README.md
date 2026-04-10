@@ -52,11 +52,14 @@ For refactorings and optimizations keep in mind that:
 - Line font for bottom fields
 - clock font without segments
 - separate 24h mode for alt tz
+- Next sun event in bottom field
 
 ## Change log
 v0.4
 - Font style options for bottom fields
 - More options for bottom field layout
 - Adjustment in pink color theme
+- Yellow on Blue color theme replaced with Orange on
 - AM/PM on by default for 12h time
 - Option for histogram size
+- New clock overlay option: scanlines in AOD

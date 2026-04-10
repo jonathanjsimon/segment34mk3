@@ -1859,8 +1859,10 @@ class Segment34View extends WatchUi.WatchFace {
     }
 
     hidden function getTrainingStatusVal() as String {
-        var complication = Complications.getComplication(new Id(Complications.COMPLICATION_TYPE_TRAINING_STATUS));
-        if (complication != null && complication.value != null) { return complication.value.toUpper(); }
+        try {
+            var complication = Complications.getComplication(new Id(Complications.COMPLICATION_TYPE_TRAINING_STATUS));
+            if (complication != null && complication.value != null) { return complication.value.toUpper(); }
+        } catch(e) {}
         return "";
     }
 

@@ -58,10 +58,13 @@ class OpenWeatherService {
             if (feelsLike != null) { cc_data["feelsLikeTemperature"] = (feelsLike as Float); }
             var humidity = main.get("humidity");
             if (humidity != null) { cc_data["relativeHumidity"] = humidity as Number; }
-            var tempMax = main.get("temp_max");
-            if (tempMax != null) { cc_data["highTemperature"] = (tempMax as Float).toNumber(); }
-            var tempMin = main.get("temp_min");
-            if (tempMin != null) { cc_data["lowTemperature"] = (tempMin as Float).toNumber(); }
+            // High/low come from forecast aggregation (owm_forecast_high/low), not
+            // from the current-conditions endpoint whose temp_max/temp_min only
+            // reflect the current 3-hour observation window.
+            var fHigh = Application.Storage.getValue("owm_forecast_high");
+            var fLow  = Application.Storage.getValue("owm_forecast_low");
+            if (fHigh != null) { cc_data["highTemperature"] = fHigh as Number; }
+            if (fLow  != null) { cc_data["lowTemperature"]  = fLow  as Number; }
         }
 
         var wind = data.get("wind") as Dictionary?;
@@ -143,14 +146,36 @@ class OpenWeatherService {
 
         Application.Storage.setValue("hourly_forecast", hf_data);
 
-        // Patch precipitationChance into current_conditions from the nearest forecast slot.
-        var firstPop = (hf_data.size() > 0) ? hf_data[0].get("precipitationChance") : null;
-        if (firstPop != null) {
-            var cc = Application.Storage.getValue("current_conditions") as Dictionary?;
-            if (cc != null) {
-                cc["precipitationChance"] = firstPop;
-                Application.Storage.setValue("current_conditions", cc);
+        // Aggregate daily high/low across all forecast periods.
+        var dailyHigh = null as Number?;
+        var dailyLow  = null as Number?;
+        for (var i = 0; i < list.size(); i++) {
+            var fMain = (list[i] as Dictionary).get("main") as Dictionary?;
+            if (fMain != null) {
+                var tMax = fMain.get("temp_max");
+                var tMin = fMain.get("temp_min");
+                if (tMax != null) {
+                    var v = (tMax as Float).toNumber();
+                    if (dailyHigh == null || v > (dailyHigh as Number)) { dailyHigh = v; }
+                }
+                if (tMin != null) {
+                    var v = (tMin as Float).toNumber();
+                    if (dailyLow == null || v < (dailyLow as Number)) { dailyLow = v; }
+                }
             }
+        }
+        if (dailyHigh != null) { Application.Storage.setValue("owm_forecast_high", dailyHigh); }
+        if (dailyLow  != null) { Application.Storage.setValue("owm_forecast_low",  dailyLow); }
+
+        // Patch high/low and precipitationChance into current_conditions if it
+        // already exists (i.e. onCurrentResponse ran first).
+        var firstPop = (hf_data.size() > 0) ? hf_data[0].get("precipitationChance") : null;
+        var cc = Application.Storage.getValue("current_conditions") as Dictionary?;
+        if (cc != null) {
+            if (firstPop  != null) { cc["precipitationChance"] = firstPop; }
+            if (dailyHigh != null) { cc["highTemperature"] = dailyHigh as Number; }
+            if (dailyLow  != null) { cc["lowTemperature"]  = dailyLow  as Number; }
+            Application.Storage.setValue("current_conditions", cc);
         }
     }
 

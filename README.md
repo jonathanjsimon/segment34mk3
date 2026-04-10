@@ -58,6 +58,7 @@ For refactorings and optimizations keep in mind that:
 v0.5
 - Fixed issue with High / Low temp via OWM
 - Fixed issue with seconds clipping in always active mode with large font
+- Fixed issue with battery bar going outside outline
 
 v0.4
 - Font style options for bottom fields

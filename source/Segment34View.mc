@@ -1232,7 +1232,7 @@ class Segment34View extends WatchUi.WatchFace {
             } else {
                 dc.setColor(themeColors[dataVal], Graphics.COLOR_TRANSPARENT);
             }
-            if(propBatteryVariant == 3) {
+            if(propBatteryVariant == 3 or propBatteryVariant == -1) {
                 dc.drawText(x - 11, y + 3, fontBattery, values[:dataBattery], Graphics.TEXT_JUSTIFY_LEFT);
             } else {
                 dc.drawText(x - 1, y + 3, fontBattery, values[:dataBattery], Graphics.TEXT_JUSTIFY_CENTER);
@@ -1245,7 +1245,7 @@ class Segment34View extends WatchUi.WatchFace {
             } else {
                 dc.setColor(themeColors[dataVal], Graphics.COLOR_TRANSPARENT);
             }
-            if(propBatteryVariant == 3) {
+            if(propBatteryVariant == 3 or propBatteryVariant == -1) {
                 dc.drawText(x - 19, y + 4, fontBattery, values[:dataBattery], Graphics.TEXT_JUSTIFY_LEFT);
             } else {
                 dc.drawText(x - 1, y + 4, fontBattery, values[:dataBattery], Graphics.TEXT_JUSTIFY_CENTER);
@@ -1662,7 +1662,12 @@ class Segment34View extends WatchUi.WatchFace {
                 var max = 0;
                 var batLevel = System.getSystemStats().battery; 
 
-                if(screenHeight > 280 or propFontSize == 1) {
+                if(screenHeight > 280 and propFontSize == 1) {
+                    // led_lines font: 2px/char, "T" outline interior → max = 24
+                    sample = Math.round(batLevel / 100.0 * 24).toNumber();
+                    max = 24;
+                } else if(screenHeight > 280 or propFontSize == 1) {
+                    // led_small_lines or smol font: 1px/char → max = 35
                     sample = Math.round(batLevel / 100.0 * 35).toNumber();
                     max = 35;
                 } else {

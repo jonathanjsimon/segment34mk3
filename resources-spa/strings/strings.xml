@@ -125,6 +125,8 @@
     <string id="LABEL_WRUNMI_2">MI CORRER S</string>
     <string id="LABEL_WBIKEKM_2">KM BICI S</string>
     <string id="LABEL_WBIKEMI_2">MI BICI S</string>
+    <string id="LABEL_WSWIMKM_2">KM NAT S</string>
+    <string id="LABEL_WSWIMMI_2">MI NAT S</string>
     <string id="LABEL_TRAINING">ENTRENAMIENTO:</string>
     <string id="LABEL_PRESSURE">PRESIÓN:</string>
     <string id="LABEL_KG_1">KG</string>
@@ -148,6 +150,8 @@
     <string id="LABEL_SUNRISE_2">AMANECER</string>
     <string id="LABEL_SUNSET_1">ANOCHER</string>
     <string id="LABEL_SUNSET_2">ANOCHECER</string>
+    <string id="LABEL_DAWN_1">AURORA</string>
+    <string id="LABEL_DUSK_1">CREPUSC</string>
     <string id="LABEL_ALARM_1">ALARMA</string>
     <string id="LABEL_ALARM_2">ALARMAS</string>
     <string id="LABEL_HIGH_1">MAX</string>
@@ -449,4 +453,47 @@
     <string id="settings_temperature_uv_wind" scope="settings">Temperatura, Índice UV, Viento</string>
     <string id="settings_cgm_glucose_trend" scope="settings">CGM Glucemia + Tendencia</string>
     <string id="settings_cgm_age" scope="settings">CGM Edad (minutos)</string>
+    <string id="settings_just_outline" scope="settings">Solo mostrar el contorno</string>
+    <string id="settings_clock_gradient_overlay" scope="settings">Superposición degradado del reloj</string>
+    <string id="settings_gradient_clock_and_aod" scope="settings">Degradado para reloj y AOD (predeterminado)</string>
+    <string id="settings_gradient_aod_only" scope="settings">Sin degradado para reloj, degradado en AOD</string>
+    <string id="settings_gradient_clock_only" scope="settings">Degradado para reloj, sin degradado en AOD</string>
+    <string id="settings_gradient_clock_scanlines_aod" scope="settings">Degradado para reloj, scanlines en AOD</string>
+    <string id="settings_gradient_no_clock_scanlines_aod" scope="settings">Sin degradado para reloj, scanlines en AOD</string>
+    <string id="settings_gradient_none" scope="settings">Sin degradados</string>
+    <string id="settings_clock_font" scope="settings">Fuente del reloj</string>
+    <string id="settings_font_34_segments" scope="settings">34 segmentos, predeterminado</string>
+    <string id="settings_font_17_segments" scope="settings">17 segmentos</string>
+    <string id="settings_font_17_segments_rounded" scope="settings">17 segmentos (redondeado)</string>
+    <string id="settings_font_7_segments" scope="settings">7 segmentos</string>
+    <string id="settings_font_dots" scope="settings">Puntos</string>
+    <string id="settings_font_size" scope="settings">Tamaño de fuente</string>
+    <string id="settings_font_small" scope="settings">Pequeño (predeterminado)</string>
+    <string id="settings_font_large" scope="settings">Grande (ajusta otros ajustes para menos apretado)</string>
+    <string id="settings_every_30_seconds" scope="settings">Cada 30 segundos</string>
+    <string id="settings_histogram_size" scope="settings">Tamaño del histograma</string>
+    <string id="settings_histogram_small" scope="settings">Pequeño (predeterminado)</string>
+    <string id="settings_histogram_large" scope="settings">Grande</string>
+    <string id="settings_bottom_font_variant" scope="settings">Variante fuente campos inferiores:</string>
+    <string id="settings_auto" scope="settings">Auto - AM/PM para hora 12h</string>
+    <string id="settings_ampm" scope="settings">Sin separador, mostrar AM/PM después</string>
+    <string id="settings_show_temp_unit" scope="settings">Mostrar unidad de temperatura</string>
+    <string id="settings_swim_distance_7_days" scope="settings">Distancia natación últimos 7 días (solo actividades en dispositivo)</string>
+    <string id="settings_civil_dawn" scope="settings">Hora del alba civil</string>
+    <string id="settings_civil_dusk" scope="settings">Hora del crepúsculo civil</string>
+    <string id="settings_date_format_auto" scope="settings">Auto - DÍA, DD MES AAAA (año omitido para fuente grande)</string>
+    <string id="settings_date_format_custom" scope="settings">Personalizado - introduzca formato a continuación</string>
+    <string id="settings_date_custom_format" scope="settings">Formato personalizado (o=día semana d=día m=mes# n=mes y=año w=semana)</string>
+    <string id="settings_weather_data_1" scope="settings">Datos meteo 1 (especifica formato abajo)</string>
+    <string id="settings_weather_data_2" scope="settings">Datos meteo 2 (especifica formato abajo)</string>
+    <string id="settings_weather_format_1" scope="settings">Formato datos meteo 1 (t=temp w=viento h=humedad p=precip u=UV l=max/min f=sensación c=condiciones s=condiciones cortas n=ciudad(solo OWM))</string>
+    <string id="settings_weather_format_2" scope="settings">Formato datos meteo 2 (t=temp w=viento h=humedad p=precip u=UV l=max/min f=sensación c=condiciones s=condiciones cortas n=ciudad(solo OWM))</string>
+    <string id="settings_weather_feels_like" scope="settings">Meteo: Temperatura sensación</string>
+    <string id="settings_weather_provider" scope="settings">Proveedor meteo</string>
+    <string id="settings_garmin" scope="settings">Garmin</string>
+    <string id="settings_openweathermap" scope="settings">OpenWeatherMap (ver FAQ 5.0.0 en ludw.github.io/faq para configuración)</string>
+    <string id="settings_owm_api_key" scope="settings">Clave API OWM</string>
+    <string id="settings_owm_location_override" scope="settings">Anular ubicación OWM (lat,lon ej. 51.5,-0.1 — dejar vacío para usar ubicación Garmin)</string>
+    <string id="settings_seconds_shows" scope="settings">El campo de segundos muestra</string>
+    <string id="settings_seconds" scope="settings">Segundos</string>
 </strings>

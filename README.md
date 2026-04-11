@@ -60,6 +60,8 @@ v0.5
 - Fixed issue with battery bar going outside outline
 - More options for bottom 5 field, incl next sun event
 - Dawn / Dusk as option (calculated)
+- Seconds field can be configured to show something else
+- Shortened weather conditions as an alternative
 
 v0.4
 - Font style options for bottom fields

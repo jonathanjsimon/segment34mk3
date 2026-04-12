@@ -409,7 +409,7 @@ class Segment34View extends WatchUi.WatchFace {
             case 1:  fontClock = Application.loadResource(Rez.Fonts.segments125_2); fontClockOutline = Application.loadResource(Rez.Fonts.segments125outline_2); break;
             case 2:  fontClock = Application.loadResource(Rez.Fonts.segments125_3); fontClockOutline = Application.loadResource(Rez.Fonts.segments125outline_3); break;
             case 3:  fontClock = Application.loadResource(Rez.Fonts.segments125_4); fontClockOutline = Application.loadResource(Rez.Fonts.segments125outline_4); break;
-            case 4:  fontClock = Application.loadResource(Rez.Fonts.segments125_2r); fontClockOutline = Application.loadResource(Rez.Fonts.segments125outline_2); break;
+            case 4:  fontClock = Application.loadResource(Rez.Fonts.segments125_2r); fontClockOutline = Application.loadResource(Rez.Fonts.segments125outline_2r); break;
             default: fontClock = Application.loadResource(Rez.Fonts.segments125);   fontClockOutline = Application.loadResource(Rez.Fonts.segments125outline); break;
         }
 
@@ -466,7 +466,7 @@ class Segment34View extends WatchUi.WatchFace {
             case 1:  fontClock = Application.loadResource(Rez.Fonts.segments125_2); fontClockOutline = Application.loadResource(Rez.Fonts.segments125outline_2); break;
             case 2:  fontClock = Application.loadResource(Rez.Fonts.segments125_3); fontClockOutline = Application.loadResource(Rez.Fonts.segments125outline_3); break;
             case 3:  fontClock = Application.loadResource(Rez.Fonts.segments125_4); fontClockOutline = Application.loadResource(Rez.Fonts.segments125outline_4); break;
-            case 4:  fontClock = Application.loadResource(Rez.Fonts.segments125_2r); fontClockOutline = Application.loadResource(Rez.Fonts.segments125outline_2); break;
+            case 4:  fontClock = Application.loadResource(Rez.Fonts.segments125_2r); fontClockOutline = Application.loadResource(Rez.Fonts.segments125outline_2r); break;
             default: fontClock = Application.loadResource(Rez.Fonts.segments125);   fontClockOutline = Application.loadResource(Rez.Fonts.segments125outline); break;
         }
 
@@ -523,7 +523,7 @@ class Segment34View extends WatchUi.WatchFace {
             case 1:  fontClock = Application.loadResource(Rez.Fonts.segments145_2); fontClockOutline = Application.loadResource(Rez.Fonts.segments145outline_2); break;
             case 2:  fontClock = Application.loadResource(Rez.Fonts.segments145_3); fontClockOutline = Application.loadResource(Rez.Fonts.segments145outline_3); break;
             case 3:  fontClock = Application.loadResource(Rez.Fonts.segments145_4); fontClockOutline = Application.loadResource(Rez.Fonts.segments145outline_4); break;
-            case 4:  fontClock = Application.loadResource(Rez.Fonts.segments145_2r); fontClockOutline = Application.loadResource(Rez.Fonts.segments145outline_2); break;
+            case 4:  fontClock = Application.loadResource(Rez.Fonts.segments145_2r); fontClockOutline = Application.loadResource(Rez.Fonts.segments145outline_2r); break;
             default: fontClock = Application.loadResource(Rez.Fonts.segments145);   fontClockOutline = Application.loadResource(Rez.Fonts.segments145outline); break;
         }
 
@@ -582,7 +582,7 @@ class Segment34View extends WatchUi.WatchFace {
             case 1:  fontClock = Application.loadResource(Rez.Fonts.segments145_2); fontClockOutline = Application.loadResource(Rez.Fonts.segments145outline_2); break;
             case 2:  fontClock = Application.loadResource(Rez.Fonts.segments145_3); fontClockOutline = Application.loadResource(Rez.Fonts.segments145outline_3); break;
             case 3:  fontClock = Application.loadResource(Rez.Fonts.segments145_4); fontClockOutline = Application.loadResource(Rez.Fonts.segments145outline_4); break;
-            case 4:  fontClock = Application.loadResource(Rez.Fonts.segments145_2r); fontClockOutline = Application.loadResource(Rez.Fonts.segments145outline_2); break;
+            case 4:  fontClock = Application.loadResource(Rez.Fonts.segments145_2r); fontClockOutline = Application.loadResource(Rez.Fonts.segments145outline_2r); break;
             default: fontClock = Application.loadResource(Rez.Fonts.segments145);   fontClockOutline = Application.loadResource(Rez.Fonts.segments145outline); break;
         }
 

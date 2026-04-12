@@ -54,6 +54,9 @@ For refactorings and optimizations keep in mind that:
 - swim distance past 7 days
 
 ## Change log
+v0.6
+
+
 v0.5
 - Fixed issue with High / Low temp via OWM
 - Fixed issue with seconds clipping in always active mode with large font

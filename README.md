@@ -55,6 +55,8 @@ For refactorings and optimizations keep in mind that:
 
 ## Change log
 v0.6
+- Steps in small fields behaves a bit better
+- Outline for 17 segment (rounded) fixed
 
 
 v0.5

@@ -57,7 +57,8 @@ For refactorings and optimizations keep in mind that:
 v0.6
 - Steps in small fields behaves a bit better
 - Outline for 17 segment (rounded) fixed
-
+- 7 Segment font slightly adjusted
+- 17 Segment font slightly adusted
 
 v0.5
 - Fixed issue with High / Low temp via OWM

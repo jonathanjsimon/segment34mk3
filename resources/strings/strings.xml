@@ -328,7 +328,7 @@
     <string id="settings_weather_data_2" scope="settings">Weather data 2 (specify format below)</string>
     <string id="settings_weather_format_1" scope="settings">Weather data 1 format (t=temp w=wind h=humidity p=precip u=UV l=high/low f=feels c=conditions s=shortened conditions n=city(OWM only))</string>
     <string id="settings_weather_format_2" scope="settings">Weather data 2 format (t=temp w=wind h=humidity p=precip u=UV l=high/low f=feels c=conditions s=shortened conditions n=city(OWM only))</string>
-    <string id="settings_steps_day" scope="settings">Steps / day</string>
+    <string id="settings_steps_day" scope="settings">Steps / day (thousands if not enough room)</string>
     <string id="settings_wheelchair_pushes_day" scope="settings">Wheelchair pushes / day</string>
     <string id="settings_calories_kcal_day_2" scope="settings">Calories (kcal) / day</string>
     <string id="settings_active_total_calories" scope="settings">Active/Total Calories (kcal) / day</string>

@@ -2031,17 +2031,14 @@ class Segment34View extends WatchUi.WatchFace {
         } else if(complicationType == 16) { // Steps / day
             if(activityInfo == null) { activityInfo = ActivityMonitor.getInfo(); }
             if(activityInfo.steps != null) {
+                var steps = activityInfo.steps;
                 if(width >= 5) {
-                    val = activityInfo.steps.format(numberFormat);
+                    val = steps.format("%d");
+                } else if(width == 4 and steps < 10000) {
+                    val = steps.format("%d");
                 } else {
-                    var steps_k = activityInfo.steps / 1000.0;
-                    if(steps_k < 10 and width == 4) {
-                        val = steps_k.format("%.1f") + "K";
-                    } else {
-                        val = steps_k.format("%d") + "K";
-                    }
+                    val = (steps / 1000).format("%d") + "K";
                 }
-
             }
         } else if(complicationType == 17) { // Distance (m) / day
             if(activityInfo == null) { activityInfo = ActivityMonitor.getInfo(); }

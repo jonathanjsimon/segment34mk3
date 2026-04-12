@@ -317,7 +317,7 @@
     <string id="settings_daily_low_temperature" scope="settings">Dzienna temperatura minimalna</string>
     <string id="settings_temperature" scope="settings">Temperatura</string>
     <string id="settings_chance_of_precipitation" scope="settings">Szansa opadów</string>
-    <string id="settings_steps_day" scope="settings">Kroki / dzień</string>
+    <string id="settings_steps_day" scope="settings">Kroki / dzień (tysiące jeśli brak miejsca)</string>
     <string id="settings_wheelchair_pushes_day" scope="settings">Pchnięcia wózka / dzień</string>
     <string id="settings_calories_kcal_day_2" scope="settings">Kalorie (kcal) / dzień</string>
     <string id="settings_active_total_calories" scope="settings">Aktywne/Całkowite Kalorie (kcal) / dzień</string>

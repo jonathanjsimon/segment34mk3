@@ -303,7 +303,7 @@
     <string id="settings_weather_data_2" scope="settings">Wetterdaten 2 (Format unten angeben)</string>
     <string id="settings_weather_format_1" scope="settings">Wetterdaten 1 Format (t=Temp w=Wind h=Feuchte p=Regen u=UV l=Hoch/Tief f=Gefühlt c=Lage s=Kurzlage)</string>
     <string id="settings_weather_format_2" scope="settings">Wetterdaten 2 Format (t=Temp w=Wind h=Feuchte p=Regen u=UV l=Hoch/Tief f=Gefühlt c=Lage s=Kurzlage)</string>
-    <string id="settings_steps_day" scope="settings">Schritte / Tag</string>
+    <string id="settings_steps_day" scope="settings">Schritte / Tag (Tausender wenn nicht genug Platz)</string>
     <string id="settings_wheelchair_pushes_day" scope="settings">Rollstuhl-Schübe / Tag</string>
     <string id="settings_calories_kcal_day_2" scope="settings">Kalorien (kcal) / Tag</string>
     <string id="settings_active_total_calories" scope="settings">Aktiv/Gesamt Kalorien (kcal)/Tag</string>

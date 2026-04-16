@@ -285,6 +285,9 @@
                 <listEntry value="5">@Strings.settings_stress_history</listEntry>
                 <listEntry value="7">@Strings.settings_stress_rest_orange_blue</listEntry>
                 <listEntry value="6">@Strings.settings_temperature_sensor_history</listEntry>
+                <listEntry value="8">@Strings.settings_daily_distance_7d</listEntry>
+                <listEntry value="9">@Strings.settings_daily_steps_7d</listEntry>
+                <listEntry value="10">@Strings.settings_daily_active_minutes_7d</listEntry>
             </settingConfig>
     </setting>
 
@@ -949,7 +952,6 @@
         <settingConfig type="list">
             <listEntry value="0">@Strings.settings_nothing</listEntry>
             <listEntry value="-1">@Strings.settings_toggle_night_color</listEntry>
-            <listEntry value="1">@Strings.settings_battery</listEntry>
             <listEntry value="2">@Strings.settings_steps</listEntry>
             <listEntry value="3">@Strings.settings_calories</listEntry>
             <listEntry value="4">@Strings.settings_floors_climbed</listEntry>
@@ -977,7 +979,6 @@
         <settingConfig type="list">
             <listEntry value="0">@Strings.settings_nothing</listEntry>
             <listEntry value="-1">@Strings.settings_toggle_night_color</listEntry>
-            <listEntry value="1">@Strings.settings_battery</listEntry>
             <listEntry value="2">@Strings.settings_steps</listEntry>
             <listEntry value="3">@Strings.settings_calories</listEntry>
             <listEntry value="4">@Strings.settings_floors_climbed</listEntry>
@@ -1005,7 +1006,6 @@
         <settingConfig type="list">
             <listEntry value="0">@Strings.settings_nothing</listEntry>
             <listEntry value="-1">@Strings.settings_toggle_night_color</listEntry>
-            <listEntry value="1">@Strings.settings_battery</listEntry>
             <listEntry value="2">@Strings.settings_steps</listEntry>
             <listEntry value="3">@Strings.settings_calories</listEntry>
             <listEntry value="4">@Strings.settings_floors_climbed</listEntry>
@@ -1033,7 +1033,6 @@
         <settingConfig type="list">
             <listEntry value="0">@Strings.settings_nothing</listEntry>
             <listEntry value="-1">@Strings.settings_toggle_night_color</listEntry>
-            <listEntry value="1">@Strings.settings_battery</listEntry>
             <listEntry value="2">@Strings.settings_steps</listEntry>
             <listEntry value="3">@Strings.settings_calories</listEntry>
             <listEntry value="4">@Strings.settings_floors_climbed</listEntry>
@@ -1061,7 +1060,6 @@
         <settingConfig type="list">
             <listEntry value="0">@Strings.settings_nothing</listEntry>
             <listEntry value="-1">@Strings.settings_toggle_night_color</listEntry>
-            <listEntry value="1">@Strings.settings_battery</listEntry>
             <listEntry value="2">@Strings.settings_steps</listEntry>
             <listEntry value="3">@Strings.settings_calories</listEntry>
             <listEntry value="4">@Strings.settings_floors_climbed</listEntry>

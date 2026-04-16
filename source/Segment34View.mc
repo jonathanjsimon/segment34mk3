@@ -1163,9 +1163,18 @@ class Segment34View extends WatchUi.WatchFace {
     }
 
     hidden function drawHistogram(dc as Dc, data as Array<Number>?, x as Number, y as Number, h as Number) as Void {
-        if(data == null) { return; }
+        if(data == null || data.size() == 0) { return; }
         var scale = 100.0 / h;
-        var half_width = Math.round((data.size() * (histogramBarWidth + histogramBarSpacing)) / 2);
+        var bw = histogramBarWidth;
+        var bs = histogramBarSpacing;
+        if(propHistogramData >= 8) {
+            // Daily data mode: wider bars to fill ~75% of screen width
+            var n = data.size();
+            bs = 6;
+            bw = Math.round((x.toFloat() * 0.9 - bs.toFloat() * (n - 1)) / n).toNumber();
+            if(bw < 4) { bw = 4; }
+        }
+        var half_width = Math.round((data.size() * (bw + bs)) / 2);
         var bar_height = 0;
 
         dc.setColor(themeColors[clock], Graphics.COLOR_TRANSPARENT);
@@ -1175,7 +1184,7 @@ class Segment34View extends WatchUi.WatchFace {
                 dc.setColor(getStressColor(data[i]), Graphics.COLOR_TRANSPARENT);
             }
             bar_height = Math.round(data[i] / scale);
-            dc.fillRectangle(x - half_width + i * (histogramBarWidth + histogramBarSpacing), y + (h - bar_height), histogramBarWidth, bar_height);
+            dc.fillRectangle(x - half_width + i * (bw + bs), y + (h - bar_height), bw, bar_height);
         }
     }
 
@@ -2289,6 +2298,40 @@ class Segment34View extends WatchUi.WatchFace {
             max = 100;
         } else if(dataSource == 6) {
             iterator = Toybox.SensorHistory.getTemperatureHistory({:period => twoHours, :order => Toybox.SensorHistory.ORDER_OLDEST_FIRST});
+        } else if(dataSource == 8 or dataSource == 9 or dataSource == 10) {
+            // Daily data: past days (oldest first) + today (rightmost)
+            var history = ActivityMonitor.getHistory();
+            var todayInfo = ActivityMonitor.getInfo();
+            var rawData = [];
+            if(history != null) {
+                var daysAvail = history.size() < 7 ? history.size() : 7;
+                for(var i = daysAvail - 1; i >= 0; i--) {
+                    var dayVal = 0;
+                    if(dataSource == 8) {
+                        dayVal = (history[i].distance != null) ? history[i].distance : 0;
+                    } else if(dataSource == 9) {
+                        dayVal = (history[i].steps != null) ? history[i].steps : 0;
+                    } else if(dataSource == 10) {
+                        dayVal = (history[i].activeMinutes != null) ? history[i].activeMinutes.total : 0;
+                    }
+                    rawData.add(dayVal);
+                }
+            }
+            var todayVal = 0;
+            if(dataSource == 8 and todayInfo.distance != null) { todayVal = todayInfo.distance; }
+            else if(dataSource == 9 and todayInfo.steps != null) { todayVal = todayInfo.steps; }
+            else if(dataSource == 10 and todayInfo.activeMinutesDay != null) { todayVal = todayInfo.activeMinutesDay.total; }
+            rawData.add(todayVal);
+            var maxVal = 0;
+            for(var i = 0; i < rawData.size(); i++) {
+                if(rawData[i] > maxVal) { maxVal = rawData[i]; }
+            }
+            if(maxVal > 0) {
+                for(var i = 0; i < rawData.size(); i++) {
+                    ret.add(Math.round(rawData[i].toFloat() / maxVal * 100).toNumber());
+                }
+            }
+            return ret;
         }
 
         if(iterator == null) { return ret; }

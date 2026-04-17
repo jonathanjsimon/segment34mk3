@@ -932,6 +932,17 @@
         </settingConfig>
     </setting>
 
+    <setting propertyKey="@Properties.sideBarWidth" title="@Strings.settings_side_bar_width">
+        <settingConfig type="list">
+            <listEntry value="0">@Strings.settings_narrow_default</listEntry>
+            <listEntry value="1">@Strings.settings_wide</listEntry>
+        </settingConfig>
+    </setting>
+
+    <setting propertyKey="@Properties.limitBarHeight" title="@Strings.settings_limit_bar_height">
+        <settingConfig type="boolean" />
+    </setting>
+
     <setting propertyKey="@Properties.stressDynamicColor" title="Dynamic Stress Colors">
         <settingConfig type="boolean" />
     </setting>

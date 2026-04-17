@@ -46,6 +46,8 @@
     <property id="dateFieldShows" type="number">-1</property>
     <property id="leftBarShows" type="number">1</property>
     <property id="rightBarShows" type="number">2</property>
+    <property id="sideBarWidth" type="number">0</property>
+    <property id="limitBarHeight" type="boolean">false</property>
     <property id="aodAlignment" type="number">0</property>
     <property id="dateAlignment" type="number">0</property>
     <property id="bottomFieldAlignment" type="number">2</property>

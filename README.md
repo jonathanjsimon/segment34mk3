@@ -56,6 +56,9 @@ For refactorings and optimizations keep in mind that:
 v0.8
 - More adjustments to 7 segment font
 - Separate 24h/12h setting for alt timezone
+- Monthly run distance (both rolling 28 days and actual month)
+- Side bar width setting: Narrow (default) or Wide (double width)
+- Limit Bar Height setting: caps bars to fit within the round screen, with an indicator line at maximum height
 
 v0.7
 - Fix for font errors

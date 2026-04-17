@@ -439,6 +439,10 @@
     <string id="settings_hide_bottom_labels" scope="settings">Ukryj dolne etykiety</string>
     <string id="settings_left_bar_shows" scope="settings">Lewy pasek pokazuje</string>
     <string id="settings_right_bar_shows" scope="settings">Prawy pasek pokazuje</string>
+    <string id="settings_side_bar_width" scope="settings">Szerokość bocznych pasków</string>
+    <string id="settings_narrow_default" scope="settings">Wąski (domyślny)</string>
+    <string id="settings_wide" scope="settings">Szeroki</string>
+    <string id="settings_limit_bar_height" scope="settings">Ogranicz wysokość pasków</string>
     <string id="settings_step_goal_progress" scope="settings">Postęp celu kroków</string>
     <string id="settings_floor_climb_progress" scope="settings">Postęp wspinania się po piętrach</string>
     <string id="settings_act_min_progress" scope="settings">Cel aktywnych minut, postęp tygodniowy</string>

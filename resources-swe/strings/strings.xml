@@ -443,6 +443,10 @@
     <string id="settings_hide_bottom_labels" scope="settings">Dölj nedre etiketter</string>
     <string id="settings_left_bar_shows" scope="settings">Vänster stapel visar</string>
     <string id="settings_right_bar_shows" scope="settings">Höger stapel visar</string>
+    <string id="settings_side_bar_width" scope="settings">Bredd på sidostaplar</string>
+    <string id="settings_narrow_default" scope="settings">Smal (standard)</string>
+    <string id="settings_wide" scope="settings">Bred</string>
+    <string id="settings_limit_bar_height" scope="settings">Begränsa stapelns höjd</string>
     <string id="settings_step_goal_progress" scope="settings">Stegmålsframsteg</string>
     <string id="settings_floor_climb_progress" scope="settings">Våningsklättringsframsteg</string>
     <string id="settings_act_min_progress" scope="settings">Aktivminutsmål, veckoframsteg</string>

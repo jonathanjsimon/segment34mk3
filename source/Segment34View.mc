@@ -137,6 +137,10 @@ class Segment34View extends WatchUi.WatchFace {
     hidden var propBottomFieldLabelAlignment as Number = 0;
     hidden var propLeftBarShows as Number = 1;
     hidden var propRightBarShows as Number = 2;
+    hidden var propSideBarWidth as Number = 0;
+    hidden var propLimitBarHeight as Boolean = false;
+    hidden var actualBarWidth as Number = 0;
+    hidden var maxSideBarHeight as Number = 0;
     hidden var propIcon1 as Number = 1;
     hidden var propIcon2 as Number = 2;
     hidden var propHemisphere as Number = 0;
@@ -242,6 +246,7 @@ class Segment34View extends WatchUi.WatchFace {
         halfMarginY = Math.round(marginY / 2);
 
         calculateLayout();
+        calculateBarLimits();
 
         updateWeather();
     }
@@ -785,6 +790,30 @@ class Segment34View extends WatchUi.WatchFace {
         dc.drawText(baseX + halfClockWidth - textSideAdj, y1, fontSmallData, seconds, Graphics.TEXT_JUSTIFY_RIGHT);
     }
 
+    hidden function calculateBarLimits() as Void {
+        actualBarWidth = barWidth * (propSideBarWidth == 1 ? 2 : 1);
+
+        if (!propLimitBarHeight || screenWidth != screenHeight) {
+            maxSideBarHeight = clockHeight;
+            return;
+        }
+
+        var r = screenWidth / 2.0;
+        // Distance from screen centre to the bar's outer edge.
+        // The gap between clock face and bar is always barWidth; the bar itself is actualBarWidth wide.
+        var dx = halfClockWidth + barWidth + actualBarWidth;
+        if (dx >= r) {
+            maxSideBarHeight = 0;
+            return;
+        }
+
+        var maxHalfHeight = Math.sqrt(r * r - dx * dx);
+        var barBottom = baseY + halfClockHeight + barBottomAdj;
+        var maxHeight = barBottom - (centerY - maxHalfHeight);
+        maxSideBarHeight = maxHeight < 0 ? 0 : maxHeight.toNumber();
+        if (maxSideBarHeight > clockHeight) { maxSideBarHeight = clockHeight; }
+    }
+
     hidden function calculateLayout() as Void {
         var y1 = baseY + halfClockHeight + marginY;
         var y2 = y1 + smallDataHeight + marginY;
@@ -1114,54 +1143,69 @@ class Segment34View extends WatchUi.WatchFace {
     }
 
     hidden function drawSideBars(dc as Dc, values as Dictionary) as Void {
-        var barVal;
-        var barHeight;
-        var barColor;
+        var abw = actualBarWidth;
+        // The gap between the clock face and the bar is always barWidth (the base/narrow width),
+        // so wider bars grow outward only — the inner edge stays fixed.
+        var leftBarX  = centerX - halfClockWidth - barWidth - abw;
+        var rightBarX = centerX + halfClockWidth + barWidth;
 
         if (values[:dataLeftBar] != null) {
-            barVal = values[:dataLeftBar];
-            barHeight = Math.round(barVal * (clockHeight / 100.0));
-            if (propLeftBarShows == 1 && propStressDynamicColor) {
-                barColor = getStressColor(barVal);
-            } else {
-                barColor = themeColors[stress]; 
-            }
-            dc.setColor(barColor, Graphics.COLOR_TRANSPARENT);
-            dc.fillRectangle(
-                centerX - halfClockWidth - barWidth - barWidth, baseY + halfClockHeight - barHeight + barBottomAdj, barWidth, barHeight
-            );
-
-            if(propLeftBarShows == 6) {
-                drawMoveBarTicks(dc, centerX - halfClockWidth - barWidth - barWidth, centerX - halfClockWidth);
-            }
+            var useDynamic = (propLeftBarShows == 1 && propStressDynamicColor);
+            drawOneBar(dc, leftBarX, centerX - halfClockWidth,
+                values[:dataLeftBar], stress, propLeftBarShows, useDynamic);
         }
-
         if (values[:dataRightBar] != null) {
-            barVal = values[:dataRightBar];
-            barHeight = Math.round(barVal * (clockHeight / 100.0));
-            if (propRightBarShows == 1 && propStressDynamicColor) {
-                barColor = getStressColor(barVal);
-            } else {
-                barColor = themeColors[bodybatt]; 
-            }
-            dc.setColor(barColor, Graphics.COLOR_TRANSPARENT);
-            dc.fillRectangle(
-                centerX + halfClockWidth + barWidth, baseY + halfClockHeight - barHeight + barBottomAdj, barWidth, barHeight
-            );
-            
-            if(propRightBarShows == 6) {
-                drawMoveBarTicks(dc, centerX + halfClockWidth + barWidth + barWidth, centerX + halfClockWidth);
-            }
+            var useDynamic = (propRightBarShows == 1 && propStressDynamicColor);
+            drawOneBar(dc, rightBarX, centerX + halfClockWidth,
+                values[:dataRightBar], bodybatt, propRightBarShows, useDynamic);
         }
     }
 
-    hidden function drawMoveBarTicks(dc as Dc, x1, x2) as Void {
+    // Draw one side bar.
+    //   barX       - left X of the bar rectangle
+    //   clockEdgeX - the clock-face edge nearest to this bar (used for movebar tick extent)
+    //   barVal     - current value as a percentage (0–100)
+    //   baseColor  - default color index from themeColors
+    //   showsType  - what the bar is configured to show (6 = movebar)
+    //   useDynamic - true when stress dynamic color should be applied
+    hidden function drawOneBar(dc as Dc, barX as Number, clockEdgeX as Number,
+                               barVal as Number, baseColor as Number,
+                               showsType as Number, useDynamic as Boolean) as Void {
+        var abw = actualBarWidth;
+        // Scale bar height proportionally within the effective bar range.
+        // maxSideBarHeight equals clockHeight when limitBarHeight is off, so
+        // this formula is correct in both cases.
+        var barHeight = Math.round(barVal * (maxSideBarHeight / 100.0));
+        var barBottom = baseY + halfClockHeight + barBottomAdj;
+
+        var barColor = useDynamic ? getStressColor(barVal) : themeColors[baseColor];
+        dc.setColor(barColor, Graphics.COLOR_TRANSPARENT);
+        dc.fillRectangle(barX, barBottom - barHeight, abw, barHeight);
+
+        if (propLimitBarHeight && showsType != 6) {
+            // Show a 1px line at the top of the usable bar range (not for movebar, which has its own ticks)
+            dc.drawLine(barX, barBottom - maxSideBarHeight, barX + abw - 1, barBottom - maxSideBarHeight);
+        }
+
+        if (showsType == 6) {
+            drawMoveBarTicks(dc, barX, clockEdgeX);
+        }
+    }
+
+    hidden function drawMoveBarTicks(dc as Dc, barX as Number, clockEdgeX as Number) as Void {
+        // Ticks span from the bar's outer edge to the clock face edge.
+        // Works for both left (barX < clockEdgeX) and right (barX > clockEdgeX) bars.
+        var x1 = barX < clockEdgeX ? barX : clockEdgeX;
+        var x2 = barX < clockEdgeX ? clockEdgeX : barX + actualBarWidth;
+        var barBottom = baseY + halfClockHeight + barBottomAdj;
+        var scale = maxSideBarHeight / 100.0;
+
         dc.setColor(themeColors[bg], Graphics.COLOR_TRANSPARENT);
         dc.setPenWidth(2);
-        dc.drawLine(x1, baseY + halfClockHeight - (40 * (clockHeight / 100.0)), x2, baseY + halfClockHeight - (40 * (clockHeight / 100.0)));
-        dc.drawLine(x1, baseY + halfClockHeight - (55 * (clockHeight / 100.0)), x2, baseY + halfClockHeight - (55 * (clockHeight / 100.0)));
-        dc.drawLine(x1, baseY + halfClockHeight - (70 * (clockHeight / 100.0)), x2, baseY + halfClockHeight - (70 * (clockHeight / 100.0)));
-        dc.drawLine(x1, baseY + halfClockHeight - (85 * (clockHeight / 100.0)), x2, baseY + halfClockHeight - (85 * (clockHeight / 100.0)));
+        dc.drawLine(x1, barBottom - (40 * scale), x2, barBottom - (40 * scale));
+        dc.drawLine(x1, barBottom - (55 * scale), x2, barBottom - (55 * scale));
+        dc.drawLine(x1, barBottom - (70 * scale), x2, barBottom - (70 * scale));
+        dc.drawLine(x1, barBottom - (85 * scale), x2, barBottom - (85 * scale));
         dc.setPenWidth(1);
     }
 
@@ -1451,6 +1495,8 @@ class Segment34View extends WatchUi.WatchFace {
         loadBottomField2Property();
         propLeftBarShows = p.getValue("leftBarShows") as Number;
         propRightBarShows = p.getValue("rightBarShows") as Number;
+        propSideBarWidth = p.getValue("sideBarWidth") as Number;
+        propLimitBarHeight = p.getValue("limitBarHeight") as Boolean;
         propIcon1 = p.getValue("icon1") as Number;
         propIcon2 = p.getValue("icon2") as Number;
         propBatteryVariant = p.getValue("batteryVariant") as Number;

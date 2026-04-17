@@ -424,6 +424,10 @@
     <string id="settings_hide_bottom_labels" scope="settings">Verberge untere Beschriftungen</string>
     <string id="settings_left_bar_shows" scope="settings">Linker Balken zeigt</string>
     <string id="settings_right_bar_shows" scope="settings">Rechter Balken zeigt</string>
+    <string id="settings_side_bar_width" scope="settings">Breite der Seitenbalken</string>
+    <string id="settings_narrow_default" scope="settings">Schmal (Standard)</string>
+    <string id="settings_wide" scope="settings">Breit</string>
+    <string id="settings_limit_bar_height" scope="settings">Balkenhöhe begrenzen</string>
     <string id="settings_step_goal_progress" scope="settings">Schrittziel-Fortschritt</string>
     <string id="settings_floor_climb_progress" scope="settings">Etagenziel-Fortschritt</string>
     <string id="settings_act_min_progress" scope="settings">Aktiv-Minuten Ziel, Wochenfortschritt</string>

@@ -445,6 +445,10 @@
     <string id="settings_hide_bottom_labels" scope="settings">Oculta Etiquetas Inferiores</string>
     <string id="settings_left_bar_shows" scope="settings">La barra izquierda muestra</string>
     <string id="settings_right_bar_shows" scope="settings">La barra derecha muestra</string>
+    <string id="settings_side_bar_width" scope="settings">Ancho de las barras laterales</string>
+    <string id="settings_narrow_default" scope="settings">Estrecho (predeterminado)</string>
+    <string id="settings_wide" scope="settings">Ancho</string>
+    <string id="settings_limit_bar_height" scope="settings">Limitar la altura de las barras</string>
     <string id="settings_step_goal_progress" scope="settings">Progreso objetivo pasos</string>
     <string id="settings_floor_climb_progress" scope="settings">Progreso subida pisos</string>
     <string id="settings_act_min_progress" scope="settings">Objetivo minutos activos, progreso semanal</string>

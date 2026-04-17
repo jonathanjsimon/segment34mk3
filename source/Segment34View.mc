@@ -46,6 +46,12 @@ class Segment34View extends WatchUi.WatchFace {
     hidden var propHistogramSize as Number = 0;
     hidden var bottomFieldWidths as Array<Number> = [3, 3, 3, 0];
 
+    // Cached histogram data — sensor history only changes once per minute,
+    // so we skip the expensive SensorHistory iteration on sub-minute updates.
+    hidden var cachedHistogramData as Array<Number>? = null;
+    hidden var cachedHistogramDataSource as Number = -1;
+    hidden var lastHistogramMinute as Number = -1;
+
     hidden var fontMoon as WatchUi.FontResource?;
     hidden var fontIcons as WatchUi.FontResource;
     hidden var fontClock as WatchUi.FontResource?;
@@ -651,7 +657,17 @@ class Segment34View extends WatchUi.WatchFace {
         values[:dataClock] = getClockData(now);
         values[:dataMoon] = (propTopPartShows == 0) ? moonPhase(now) : "";
         if(propTopPartShows == 2) {
-            values[:dataGraph1] = getDataArrayByType(propHistogramData);
+            var currentMinute = now.hour * 60 + now.min;
+            // Only re-fetch sensor history when the minute changes or the data source changed.
+            // SensorHistory updates at most once per minute, so more frequent reads are wasted.
+            if(cachedHistogramData == null
+                    or currentMinute != lastHistogramMinute
+                    or propHistogramData != cachedHistogramDataSource) {
+                cachedHistogramData = getDataArrayByType(propHistogramData);
+                cachedHistogramDataSource = propHistogramData;
+                lastHistogramMinute = currentMinute;
+            }
+            values[:dataGraph1] = cachedHistogramData;
         } else {
             values[:dataGraph1] = null;
         }

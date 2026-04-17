@@ -92,6 +92,7 @@ class Segment34View extends WatchUi.WatchFace {
     hidden var cachedSwimDist7Days as Number = 0;
     hidden var lastActivityDistUpdate as Number = 0;
 
+    hidden var histogramGoalLine as Number? = null;
     hidden var lastHfTime as Number? = null;
     hidden var lastCcHash as Number? = null;
     hidden var isLowMem as Boolean = false;
@@ -1171,11 +1172,17 @@ class Segment34View extends WatchUi.WatchFace {
             // Daily data mode: wider bars to fill ~75% of screen width
             var n = data.size();
             bs = 6;
-            bw = Math.round((x.toFloat() * 0.9 - bs.toFloat() * (n - 1)) / n).toNumber();
+            bw = Math.round((x.toFloat() * 0.75 - bs.toFloat() * (n - 1)) / n).toNumber();
             if(bw < 4) { bw = 4; }
         }
         var half_width = Math.round((data.size() * (bw + bs)) / 2);
         var bar_height = 0;
+
+        if(histogramGoalLine != null) {
+            var goal_y = y + (h - Math.round(histogramGoalLine / scale));
+            dc.setColor(themeColors[fieldLbl], Graphics.COLOR_TRANSPARENT);
+            dc.drawLine(x - half_width, goal_y, x + half_width, goal_y);
+        }
 
         dc.setColor(themeColors[clock], Graphics.COLOR_TRANSPARENT);
         for(var i=0; i<data.size(); i++) {
@@ -2300,11 +2307,12 @@ class Segment34View extends WatchUi.WatchFace {
             iterator = Toybox.SensorHistory.getTemperatureHistory({:period => twoHours, :order => Toybox.SensorHistory.ORDER_OLDEST_FIRST});
         } else if(dataSource == 8 or dataSource == 9 or dataSource == 10) {
             // Daily data: past days (oldest first) + today (rightmost)
+            histogramGoalLine = null;
             var history = ActivityMonitor.getHistory();
             var todayInfo = ActivityMonitor.getInfo();
             var rawData = [];
             if(history != null) {
-                var daysAvail = history.size() < 7 ? history.size() : 7;
+                var daysAvail = history.size() < 6 ? history.size() : 6;
                 for(var i = daysAvail - 1; i >= 0; i--) {
                     var dayVal = 0;
                     if(dataSource == 8) {
@@ -2329,6 +2337,10 @@ class Segment34View extends WatchUi.WatchFace {
             if(maxVal > 0) {
                 for(var i = 0; i < rawData.size(); i++) {
                     ret.add(Math.round(rawData[i].toFloat() / maxVal * 100).toNumber());
+                }
+                if(dataSource == 9 and todayInfo.stepGoal != null and todayInfo.stepGoal > 0) {
+                    var goalNorm = Math.round(todayInfo.stepGoal.toFloat() / maxVal * 100).toNumber();
+                    if(goalNorm <= 100) { histogramGoalLine = goalNorm; }
                 }
             }
             return ret;

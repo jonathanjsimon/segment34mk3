@@ -47,18 +47,21 @@ For refactorings and optimizations keep in mind that:
  ## Things people have asked for (may or may not be implemented)
 - Goal completion marker
 - Pressure trend
-- Monthly run/bike distance
 - Notifications as icon
 
-- separate 24h mode for alt tz
+- teal / orange inverse theme
+- stress graph, handle gaps better
+- histogram active minutes 2 colors
 
 ## Change log
 v0.8
 - More adjustments to 7 segment font
 - Separate 24h/12h setting for alt timezone
+- Steps/Distance/active minutes in histogram
 - Monthly run distance (both rolling 28 days and actual month)
 - Side bar width setting: Narrow (default) or Wide (double width)
 - Limit Bar Height setting: caps bars to fit within the round screen, with an indicator line at maximum height
+- Counter value that reset every midnight and can be increased/decreased with longpress actions
 
 v0.7
 - Fix for font errors

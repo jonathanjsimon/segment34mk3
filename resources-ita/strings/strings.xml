@@ -178,6 +178,8 @@
     <string id="LABEL_HRS_NEXT_SUN_EVENT_1">H SOLE</string>
     <string id="LABEL_RHR_1">RFC</string>
     <string id="LABEL_RHR_2">FC RIPO</string>
+    <string id="LABEL_CNT_1">CNT</string>
+    <string id="LABEL_CNT_2">CONTATORE</string>
 
     <!-- Settings strings with scope="settings" -->
     <string id="settings_color_theme" scope="settings">Tema Colore</string>
@@ -492,4 +494,7 @@
     <string id="settings_owm_location_override" scope="settings">Override posizione OWM (lat,lon es. 51.5,-0.1 — lasciare vuoto per usare la posizione Garmin)</string>
     <string id="settings_seconds_shows" scope="settings">Il campo secondi mostra</string>
     <string id="settings_seconds" scope="settings">Secondi</string>
+    <string id="settings_daily_counter" scope="settings">Contatore (reset giornaliero, tieni premuto per aumentare)</string>
+    <string id="settings_increase_counter" scope="settings">Aumenta contatore</string>
+    <string id="settings_decrease_counter" scope="settings">Diminuisci contatore</string>
 </strings>

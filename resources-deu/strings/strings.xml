@@ -178,6 +178,8 @@
     <string id="LABEL_HRS_NEXT_SUN_EVENT_1">H SONN</string>
     <string id="LABEL_RHR_1">RHF</string>
     <string id="LABEL_RHR_2">RUHE HF</string>
+    <string id="LABEL_CNT_1">ZÄH</string>
+    <string id="LABEL_CNT_2">ZÄHLER</string>
 
     <!-- Settings strings with scope="settings" -->
     <string id="settings_color_theme" scope="settings">Farbschema</string>
@@ -475,4 +477,7 @@
     <string id="settings_cgm_age" scope="settings">CGM Alter (Minuten)</string>
     <string id="settings_seconds_shows" scope="settings">Sekundenfeld zeigt</string>
     <string id="settings_seconds" scope="settings">Sekunden</string>
+    <string id="settings_daily_counter" scope="settings">Zähler (tägl. zurückgesetzt, Langdruck zum Erhöhen)</string>
+    <string id="settings_increase_counter" scope="settings">Zähler erhöhen</string>
+    <string id="settings_decrease_counter" scope="settings">Zähler verringern</string>
 </strings>

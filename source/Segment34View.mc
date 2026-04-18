@@ -788,6 +788,10 @@ class Segment34View extends WatchUi.WatchFace {
         WatchUi.requestUpdate();
     }
 
+    public function forceDataRefresh() as Void {
+        lastUpdate = null;
+    }
+
     function onPartialUpdate(dc) {
         if(canBurnIn) { return; }
         if(!propAlwaysShowSeconds) { return; }
@@ -2348,6 +2352,16 @@ class Segment34View extends WatchUi.WatchFace {
                     }
                 }
             }
+        } else if(complicationType == 68) { // Daily counter (resets at midnight)
+            var today = Time.Gregorian.info(Time.now(), Time.FORMAT_SHORT);
+            var todayKey = today.year * 10000 + today.month * 100 + today.day;
+            var storedKey = Application.Storage.getValue("dailyCounterDay") as Number?;
+            if(storedKey == null || storedKey != todayKey) {
+                Application.Storage.setValue("dailyCounterDay", todayKey);
+                Application.Storage.setValue("dailyCounter", 0);
+            }
+            var count = Application.Storage.getValue("dailyCounter") as Number?;
+            val = (count != null ? count : 0).format(numberFormat);
         }
 
         return val;
@@ -2542,6 +2556,7 @@ class Segment34View extends WatchUi.WatchFace {
             case 65:
                 if(propIsMetricDistance) { return formatLabel(Rez.Strings.LABEL_WKM_1, Rez.Strings.LABEL_WSWIMKM_2, labelSize); }
                 return formatLabel(Rez.Strings.LABEL_WMI_1, Rez.Strings.LABEL_WSWIMMI_2, labelSize);
+            case 68: return formatLabel(Rez.Strings.LABEL_CNT_1, Rez.Strings.LABEL_CNT_2, labelSize);
         }
         return "";
     }
@@ -3418,6 +3433,14 @@ class Segment34Delegate extends WatchUi.WatchFaceDelegate {
                     view.infoMessage = "NIGHT THEME";
             }
             view.onSettingsChanged();
+        }
+
+        if(cID == -2 || cID == -3) { // Increase / decrease counter
+            var count = Application.Storage.getValue("dailyCounter") as Number?;
+            var newCount = (count != null ? count : 0) + (cID == -2 ? 1 : -1);
+            Application.Storage.setValue("dailyCounter", newCount);
+            view.forceDataRefresh();
+            WatchUi.requestUpdate();
         }
 
         if(cID != null and cID > 0) {

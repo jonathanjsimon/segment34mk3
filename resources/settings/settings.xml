@@ -212,6 +212,7 @@
             <listEntry value="45">@Strings.settings_next_calendar_event</listEntry>
             <listEntry value="53">@Strings.settings_cgm_glucose_trend</listEntry>
             <listEntry value="54">@Strings.settings_cgm_age</listEntry>
+            <listEntry value="68">@Strings.settings_daily_counter</listEntry>
         </settingConfig>
     </setting>
 
@@ -276,6 +277,7 @@
             <listEntry value="45">@Strings.settings_next_calendar_event</listEntry>
             <listEntry value="53">@Strings.settings_cgm_glucose_trend</listEntry>
             <listEntry value="54">@Strings.settings_cgm_age</listEntry>
+            <listEntry value="68">@Strings.settings_daily_counter</listEntry>
         </settingConfig>
     </setting>
 
@@ -395,6 +397,7 @@
         <settingConfig type="list">
             <listEntry value="-2">@Strings.settings_hidden</listEntry>
             <listEntry value="32">@Strings.settings_notification_count</listEntry>
+            <listEntry value="68">@Strings.settings_daily_counter</listEntry>
             <listEntry value="27">@Strings.settings_week_number</listEntry>
             <listEntry value="30">@Strings.settings_battery_percentage</listEntry>
             <listEntry value="31">@Strings.settings_battery_days_remaining</listEntry>
@@ -413,6 +416,7 @@
             <listEntry value="-2">@Strings.settings_hidden</listEntry>
             <listEntry value="-3">@Strings.settings_seconds</listEntry>
             <listEntry value="32">@Strings.settings_notification_count</listEntry>
+            <listEntry value="68">@Strings.settings_daily_counter</listEntry>
             <listEntry value="27">@Strings.settings_week_number</listEntry>
             <listEntry value="30">@Strings.settings_battery_percentage</listEntry>
             <listEntry value="31">@Strings.settings_battery_days_remaining</listEntry>
@@ -513,6 +517,7 @@
             <listEntry value="45">@Strings.settings_next_calendar_event</listEntry>
             <listEntry value="53">@Strings.settings_cgm_glucose_trend</listEntry>
             <listEntry value="54">@Strings.settings_cgm_age</listEntry>
+            <listEntry value="68">@Strings.settings_daily_counter</listEntry>
         </settingConfig>
     </setting>
 
@@ -577,6 +582,7 @@
             <listEntry value="45">@Strings.settings_next_calendar_event</listEntry>
             <listEntry value="53">@Strings.settings_cgm_glucose_trend</listEntry>
             <listEntry value="54">@Strings.settings_cgm_age</listEntry>
+            <listEntry value="68">@Strings.settings_daily_counter</listEntry>
         </settingConfig>
     </setting>
 
@@ -641,6 +647,7 @@
             <listEntry value="45">@Strings.settings_next_calendar_event</listEntry>
             <listEntry value="53">@Strings.settings_cgm_glucose_trend</listEntry>
             <listEntry value="54">@Strings.settings_cgm_age</listEntry>
+            <listEntry value="68">@Strings.settings_daily_counter</listEntry>
         </settingConfig>
     </setting>
 
@@ -705,6 +712,7 @@
             <listEntry value="45">@Strings.settings_next_calendar_event</listEntry>
             <listEntry value="53">@Strings.settings_cgm_glucose_trend</listEntry>
             <listEntry value="54">@Strings.settings_cgm_age</listEntry>
+            <listEntry value="68">@Strings.settings_daily_counter</listEntry>
         </settingConfig>
     </setting>
 
@@ -1001,6 +1009,8 @@
             <listEntry value="27">@Strings.settings_race_predictor_5k</listEntry>
             <listEntry value="35">@Strings.settings_pulse_ox_2</listEntry>
             <listEntry value="37">@Strings.settings_solar_input</listEntry>
+            <listEntry value="-2">@Strings.settings_increase_counter</listEntry>
+            <listEntry value="-3">@Strings.settings_decrease_counter</listEntry>
         </settingConfig>
     </setting>
 
@@ -1028,6 +1038,8 @@
             <listEntry value="27">@Strings.settings_race_predictor_5k</listEntry>
             <listEntry value="35">@Strings.settings_pulse_ox_2</listEntry>
             <listEntry value="37">@Strings.settings_solar_input</listEntry>
+            <listEntry value="-2">@Strings.settings_increase_counter</listEntry>
+            <listEntry value="-3">@Strings.settings_decrease_counter</listEntry>
         </settingConfig>
     </setting>
 
@@ -1055,6 +1067,8 @@
             <listEntry value="27">@Strings.settings_race_predictor_5k</listEntry>
             <listEntry value="35">@Strings.settings_pulse_ox_2</listEntry>
             <listEntry value="37">@Strings.settings_solar_input</listEntry>
+            <listEntry value="-2">@Strings.settings_increase_counter</listEntry>
+            <listEntry value="-3">@Strings.settings_decrease_counter</listEntry>
         </settingConfig>
     </setting>
 
@@ -1082,6 +1096,8 @@
             <listEntry value="27">@Strings.settings_race_predictor_5k</listEntry>
             <listEntry value="35">@Strings.settings_pulse_ox_2</listEntry>
             <listEntry value="37">@Strings.settings_solar_input</listEntry>
+            <listEntry value="-2">@Strings.settings_increase_counter</listEntry>
+            <listEntry value="-3">@Strings.settings_decrease_counter</listEntry>
         </settingConfig>
     </setting>
 
@@ -1109,6 +1125,8 @@
             <listEntry value="27">@Strings.settings_race_predictor_5k</listEntry>
             <listEntry value="35">@Strings.settings_pulse_ox_2</listEntry>
             <listEntry value="37">@Strings.settings_solar_input</listEntry>
+            <listEntry value="-2">@Strings.settings_increase_counter</listEntry>
+            <listEntry value="-3">@Strings.settings_decrease_counter</listEntry>
         </settingConfig>
     </setting>
 

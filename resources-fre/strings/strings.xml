@@ -178,6 +178,8 @@
     <string id="LABEL_HRS_NEXT_SUN_EVENT_1">H SOLEIL</string>
     <string id="LABEL_RHR_1">RFC</string>
     <string id="LABEL_RHR_2">FC REPO</string>
+    <string id="LABEL_CNT_1">CPT</string>
+    <string id="LABEL_CNT_2">COMPTEUR</string>
 
     <string id="settings_color_theme" scope="settings">Thème de couleur</string>
     <string id="settings_yellow_on_turquoise" scope="settings">Jaune sur turquoise</string>
@@ -491,4 +493,7 @@
     <string id="settings_owm_location_override" scope="settings">Remplacement de la localisation OWM (lat,lon ex. 51.5,-0.1 — laisser vide pour utiliser la localisation Garmin)</string>
     <string id="settings_seconds_shows" scope="settings">Le champ secondes affiche</string>
     <string id="settings_seconds" scope="settings">Secondes</string>
+    <string id="settings_daily_counter" scope="settings">Compteur (réinit. quotidienne, appui long pour augmenter)</string>
+    <string id="settings_increase_counter" scope="settings">Augmenter le compteur</string>
+    <string id="settings_decrease_counter" scope="settings">Diminuer le compteur</string>
 </strings>

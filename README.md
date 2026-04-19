@@ -47,13 +47,12 @@ For refactorings and optimizations keep in mind that:
  ## Things people have asked for (may or may not be implemented)
 - Notifications as icon
 - teal / orange inverse theme
-- histogram active minutes 2 colors
-- incorrect label for monthly run distance
 
 Weather stuff:
 - look into if we have wind gusts
 - tomorrows weather
-- precipitation next 6h
+- precipitation next 1h, 3h
+- owm update time
 
 ## Change log
 v0.9

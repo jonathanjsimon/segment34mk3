@@ -1979,6 +1979,11 @@ class Segment34View extends WatchUi.WatchFace {
                 ret.precipitationChance = bestEntry.get("precipitationChance") as Number;
                 ret.windBearing = bestEntry.get("windBearing") as Number;
                 ret.windSpeed = bestEntry.get("windSpeed") as Float;
+                // Forecast entries lack feelsLike/humidity/high/low — use last known values.
+                ret.feelsLikeTemperature = cc_data.get("feelsLikeTemperature") as Float;
+                ret.relativeHumidity = cc_data.get("relativeHumidity") as Number;
+                ret.highTemperature = cc_data.get("highTemperature") as Number;
+                ret.lowTemperature = cc_data.get("lowTemperature") as Number;
                 ret.uvIndex = cc_data.get("uvIndex") as Float;
                 var obsTime2 = cc_data.get("observationTime");
                 if (obsTime2 == null) { obsTime2 = cc_data.get("timestamp"); }

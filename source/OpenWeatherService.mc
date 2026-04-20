@@ -36,7 +36,7 @@ class OpenWeatherService {
     // Receives current-conditions JSON from OWM and stores it in Application.Storage
     // using the same format as Segment34View.storeWeatherData().
     function onCurrentResponse(responseCode as Number, data as Dictionary?) as Void {
-        System.println(["OWM onCurrentResponse", responseCode, data]);
+        //System.println(["OWM onCurrentResponse", responseCode, data]);
         if (responseCode == 401 || responseCode == 403) {
             Application.Storage.setValue("owm_error", "OWM: INVALID API KEY");
             return;

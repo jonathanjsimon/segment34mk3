@@ -1880,8 +1880,8 @@ class Segment34View extends WatchUi.WatchFace {
                 if(cc.feelsLikeTemperature != null) { cc_data["feelsLikeTemperature"] = cc.feelsLikeTemperature; }
                 if(cc.windBearing != null) { cc_data["windBearing"] = cc.windBearing; }
                 if(cc.windSpeed != null) { cc_data["windSpeed"] = cc.windSpeed; }
-                if(cc has :windGust and cc.windGust != null) { cc_data["windGust"] = cc.windGust; }
-                if(cc has :precipitationIntensity and cc.precipitationIntensity != null) { cc_data["precipitationAmount"] = cc.precipitationIntensity; }
+                if(cc has :windGust and cc.windGust != null) { cc_data["windGust"] = cc.windGust as Float; }
+                if(cc has :precipitationIntensity and cc.precipitationIntensity != null) { cc_data["precipitationAmount"] = cc.precipitationIntensity as Float; }
                 if(cc has :uvIndex and cc.uvIndex != null) { cc_data["uvIndex"] = cc.uvIndex; }
                 if(cc.observationTime != null) { cc_data["observationTime"] = cc.observationTime.value(); }
             }
@@ -1958,7 +1958,8 @@ class Segment34View extends WatchUi.WatchFace {
             ret.uvIndex = cc_data.get("uvIndex") as Float;
             ret.cityName = cc_data.get("cityName") as String?;
             var obsTime = cc_data.get("observationTime");
-            ret.observationTimestamp = (obsTime != null ? obsTime : cc_data.get("timestamp")) as Number;
+            if (obsTime == null) { obsTime = cc_data.get("timestamp"); }
+            ret.observationTimestamp = obsTime as Number;
         } else {
             if(hf_data == null) { return ret; }
             // Find the most recently passed slot. When now >= firstForecastTime there is
@@ -1980,7 +1981,8 @@ class Segment34View extends WatchUi.WatchFace {
                 ret.windSpeed = bestEntry.get("windSpeed") as Float;
                 ret.uvIndex = cc_data.get("uvIndex") as Float;
                 var obsTime2 = cc_data.get("observationTime");
-                ret.observationTimestamp = (obsTime2 != null ? obsTime2 : cc_data.get("timestamp")) as Number;
+                if (obsTime2 == null) { obsTime2 = cc_data.get("timestamp"); }
+                ret.observationTimestamp = obsTime2 as Number;
             }
         }
         

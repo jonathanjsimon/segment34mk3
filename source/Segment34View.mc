@@ -2852,57 +2852,14 @@ class Segment34View extends WatchUi.WatchFace {
 
 
     hidden function getWind() as String {
-        var windspeed = "";
         var bearing = "";
-
+        var windspeed = "";
         if(weatherCondition != null and weatherCondition.windSpeed != null) {
-            var windspeed_mps = weatherCondition.windSpeed;
-            if(propWindUnit == 0) { // m/s
-                windspeed = Math.round(windspeed_mps).format("%01d");
-            } else if (propWindUnit == 1) { // km/h
-                var windspeed_kmh = Math.round(windspeed_mps * 3.6);
-                windspeed = windspeed_kmh.format("%01d");
-            } else if (propWindUnit == 2) { // mph
-                var windspeed_mph = Math.round(windspeed_mps * 2.237);
-                windspeed = windspeed_mph.format("%01d");
-            } else if (propWindUnit == 3) { // knots
-                var windspeed_kt = Math.round(windspeed_mps * 1.944);
-                windspeed = windspeed_kt.format("%01d");
-            } else if(propWindUnit == 4) { // beufort
-                if (windspeed_mps < 0.5f) {
-                    windspeed = "0";  // Calm
-                } else if (windspeed_mps < 1.5f) {
-                    windspeed = "1";  // Light air
-                } else if (windspeed_mps < 3.3f) {
-                    windspeed = "2";  // Light breeze
-                } else if (windspeed_mps < 5.5f) {
-                    windspeed = "3";  // Gentle breeze
-                } else if (windspeed_mps < 7.9f) {
-                    windspeed = "4";  // Moderate breeze
-                } else if (windspeed_mps < 10.7f) {
-                    windspeed = "5";  // Fresh breeze
-                } else if (windspeed_mps < 13.8f) {
-                    windspeed = "6";  // Strong breeze
-                } else if (windspeed_mps < 17.1f) {
-                    windspeed = "7";  // Near gale
-                } else if (windspeed_mps < 20.7f) {
-                    windspeed = "8";  // Gale
-                } else if (windspeed_mps < 24.4f) {
-                    windspeed = "9";  // Strong gale
-                } else if (windspeed_mps < 28.4f) {
-                    windspeed = "10";  // Storm
-                } else if (windspeed_mps < 32.6f) {
-                    windspeed = "11";  // Violent storm
-                } else {
-                    windspeed = "12";  // Hurricane force
-                }
-            }
+            windspeed = formatWindSpeed(weatherCondition.windSpeed as Float);
         }
-
         if(weatherCondition != null and weatherCondition.windBearing != null) {
             bearing = ((Math.round((weatherCondition.windBearing.toFloat() + 180) / 45.0).toNumber() % 8) + 97).toChar().toString();
         }
-
         return bearing + windspeed;
     }
 
@@ -2910,27 +2867,31 @@ class Segment34View extends WatchUi.WatchFace {
         if (weatherCondition == null) { return ""; }
         var gust_mps = (weatherCondition has :windGust) ? weatherCondition.windGust : null;
         if (gust_mps == null) { return ""; }
+        return formatWindSpeed(gust_mps as Float);
+    }
+
+    hidden function formatWindSpeed(mps as Float) as String {
         if (propWindUnit == 0) {
-            return Math.round(gust_mps).format("%d");
+            return Math.round(mps).format("%d");
         } else if (propWindUnit == 1) {
-            return Math.round(gust_mps * 3.6).format("%d");
+            return Math.round(mps * 3.6).format("%d");
         } else if (propWindUnit == 2) {
-            return Math.round(gust_mps * 2.237).format("%d");
+            return Math.round(mps * 2.237).format("%d");
         } else if (propWindUnit == 3) {
-            return Math.round(gust_mps * 1.944).format("%d");
+            return Math.round(mps * 1.944).format("%d");
         } else { // beaufort
-            if (gust_mps < 0.5f) { return "0"; }
-            if (gust_mps < 1.5f) { return "1"; }
-            if (gust_mps < 3.3f) { return "2"; }
-            if (gust_mps < 5.5f) { return "3"; }
-            if (gust_mps < 7.9f) { return "4"; }
-            if (gust_mps < 10.7f) { return "5"; }
-            if (gust_mps < 13.8f) { return "6"; }
-            if (gust_mps < 17.1f) { return "7"; }
-            if (gust_mps < 20.7f) { return "8"; }
-            if (gust_mps < 24.4f) { return "9"; }
-            if (gust_mps < 28.4f) { return "10"; }
-            if (gust_mps < 32.6f) { return "11"; }
+            if (mps < 0.5f) { return "0"; }
+            if (mps < 1.5f) { return "1"; }
+            if (mps < 3.3f) { return "2"; }
+            if (mps < 5.5f) { return "3"; }
+            if (mps < 7.9f) { return "4"; }
+            if (mps < 10.7f) { return "5"; }
+            if (mps < 13.8f) { return "6"; }
+            if (mps < 17.1f) { return "7"; }
+            if (mps < 20.7f) { return "8"; }
+            if (mps < 24.4f) { return "9"; }
+            if (mps < 28.4f) { return "10"; }
+            if (mps < 32.6f) { return "11"; }
             return "12";
         }
     }
@@ -2950,7 +2911,13 @@ class Segment34View extends WatchUi.WatchFace {
 
     hidden function getObservationTime() as String {
         if (weatherCondition == null) { return ""; }
-        var ts = (weatherCondition has :observationTimestamp) ? weatherCondition.observationTimestamp : null;
+        var ts = null;
+        if (weatherCondition has :observationTimestamp) {
+            ts = weatherCondition.observationTimestamp;
+        } else if (weatherCondition has :observationTime) {
+            var moment = weatherCondition.observationTime;
+            if (moment != null) { ts = (moment as Time.Moment).value(); }
+        }
         if (ts == null) { return ""; }
         var info = Time.Gregorian.info(new Time.Moment(ts as Number), Time.FORMAT_SHORT);
         var h = formatHour(info.hour);

@@ -413,7 +413,6 @@
             <listEntry value="5">@Strings.settings_time_to_recovery</listEntry>
             <listEntry value="56">@Strings.settings_hrs_next_sun_event</listEntry>
             <listEntry value="41">@Strings.settings_weather_temperature</listEntry>
-            <listEntry value="51">@Strings.settings_weather_uv_index</listEntry>
         </settingConfig>
     </setting>
 
@@ -438,7 +437,6 @@
             <listEntry value="5">@Strings.settings_time_to_recovery</listEntry>
             <listEntry value="56">@Strings.settings_hrs_next_sun_event</listEntry>
             <listEntry value="41">@Strings.settings_weather_temperature</listEntry>
-            <listEntry value="51">@Strings.settings_weather_uv_index</listEntry>
             <listEntry value="16">@Strings.settings_steps_day</listEntry>
         </settingConfig>
     </setting>

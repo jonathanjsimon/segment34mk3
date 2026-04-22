@@ -1985,7 +1985,7 @@ class Segment34View extends WatchUi.WatchFace {
             var firstForecastTime = hf_data[0].get("forecastTime") as Number;
             if (firstForecastTime > ccValidUntil) { ccValidUntil = firstForecastTime; }
         }
-        if(data_age_s > 0 and now < ccValidUntil) {
+        if(data_age_s >= 0 and now < ccValidUntil) {
             ret.condition = cc_data.get("condition") as Number;
             ret.highTemperature = cc_data.get("highTemperature") as Number;
             ret.lowTemperature = cc_data.get("lowTemperature") as Number;

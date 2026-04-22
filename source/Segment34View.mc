@@ -700,6 +700,10 @@ class Segment34View extends WatchUi.WatchFace {
         values[:dataIcon2] = getIconState(propIcon2);
         values[:dataIcon1Count] = getIconCountOverlay(propIcon1);
         values[:dataIcon2Count] = getIconCountOverlay(propIcon2);
+        var tsIconColor = null;
+        if(propIcon1 == 8 || propIcon2 == 8) { tsIconColor = getTrainingStatusColor(); }
+        values[:dataIcon1BgColor] = (propIcon1 == 8) ? tsIconColor : null;
+        values[:dataIcon2BgColor] = (propIcon2 == 8) ? tsIconColor : null;
         values[:dataBattery] = getBattData();
         values[:dataAODLeft] = getValueByType(propAodFieldShows, 10);
         values[:dataAODRight] = getValueByType(propAodRightFieldShows, 5);
@@ -1687,8 +1691,33 @@ class Segment34View extends WatchUi.WatchFace {
             if(notif != null && notif > 0) {
                 return "H";
             }
+        } else if(setting == 8) { // Training status icon
+            try {
+                var complication = Complications.getComplication(new Id(Complications.COMPLICATION_TYPE_TRAINING_STATUS));
+                if(complication != null && complication.value != null) { return "V"; }
+            } catch(e) {}
         }
         return "";
+    }
+
+    hidden function getTrainingStatusColor() as Number? {
+        try {
+            var complication = Complications.getComplication(new Id(Complications.COMPLICATION_TYPE_TRAINING_STATUS));
+            if(complication != null && complication.value != null) {
+                var status = complication.value.toUpper();
+                if(status.find("OVERREACHING") != null) { return 0xFF3333; }
+                if(status.find("PEAKING") != null) { return 0x7B60FF; }
+                if(status.find("UNPRODUCTIVE") != null) { return 0xFF7700; }
+                if(status.find("PRODUCTIVE") != null) { return 0x30A050; }
+                if(status.find("MAINTAINING") != null) { return 0xFFCC00; }
+                if(status.find("RECOVERY") != null) { return 0x4488EE; }
+                if(status.find("STRAINED") != null) { return 0xFF44AA; }
+                if(status.find("DETRAINING") != null) { return 0x808080; }
+                if(status.find("PAUSED") != null) { return 0x444444; }
+                return 0x808080; // No Status / unknown
+            }
+        } catch(e) {}
+        return null;
     }
 
     hidden function getIconCountOverlay(setting as Number) as String {
@@ -3392,7 +3421,13 @@ class Segment34View extends WatchUi.WatchFace {
         // No-op for non-square devices devices
     }
 
-    hidden function drawIconWithOverlay(dc as Dc, x as Number, y as Number, justify as Number, iconStr as String, countStr as String) as Void {
+    hidden function drawIconWithOverlay(dc as Dc, x as Number, y as Number, justify as Number, iconStr as String, countStr as String, bgColor as Number?) as Void {
+        if(bgColor != null) {
+            var circleX = (justify == Graphics.TEXT_JUSTIFY_RIGHT) ? x - 10 : x + 10;
+            dc.setColor(bgColor, Graphics.COLOR_TRANSPARENT);
+            dc.fillCircle(circleX, y, 12);
+            dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+        }
         dc.drawText(x, y, fontIcons, iconStr, justify | Graphics.TEXT_JUSTIFY_VCENTER);
         if(!countStr.equals("")) {
             var labelX = 0;
@@ -3436,10 +3471,10 @@ class Segment34View extends WatchUi.WatchFace {
             dc.setColor(themeColors[dataVal], Graphics.COLOR_TRANSPARENT);
             drawIconWithOverlay(dc, field1Left - (marginX / 2),
                 bottomFiveY + (largeDataHeight / 2) + iconYAdj,
-                Graphics.TEXT_JUSTIFY_RIGHT, values[:dataIcon1], values[:dataIcon1Count] as String);
+                Graphics.TEXT_JUSTIFY_RIGHT, values[:dataIcon1], values[:dataIcon1Count] as String, values[:dataIcon1BgColor] as Number?);
             drawIconWithOverlay(dc, field2Left + field2Width + (marginX / 2) - 2,
                 bottomFiveY + (largeDataHeight / 2) + iconYAdj,
-                Graphics.TEXT_JUSTIFY_LEFT, values[:dataIcon2], values[:dataIcon2Count] as String);
+                Graphics.TEXT_JUSTIFY_LEFT, values[:dataIcon2], values[:dataIcon2Count] as String, values[:dataIcon2BgColor] as Number?);
         } else {
             // Single field - original behavior
             var step_width = drawDataField(dc, centerX, bottomFiveY, 3, null, values[:dataBottom], 5, fontBottomData, bottomDataWidth * 5);
@@ -3455,11 +3490,11 @@ class Segment34View extends WatchUi.WatchFace {
                     step_width = 65;
                     y = screenHeight - 31;
                 }
-                drawIconWithOverlay(dc, centerX - (step_width / 2) - (marginX / 2), y, Graphics.TEXT_JUSTIFY_RIGHT, values[:dataIcon1], values[:dataIcon1Count] as String);
-                drawIconWithOverlay(dc, centerX + (step_width / 2) + (marginX / 2) - 2, y, Graphics.TEXT_JUSTIFY_LEFT, values[:dataIcon2], values[:dataIcon2Count] as String);
+                drawIconWithOverlay(dc, centerX - (step_width / 2) - (marginX / 2), y, Graphics.TEXT_JUSTIFY_RIGHT, values[:dataIcon1], values[:dataIcon1Count] as String, values[:dataIcon1BgColor] as Number?);
+                drawIconWithOverlay(dc, centerX + (step_width / 2) + (marginX / 2) - 2, y, Graphics.TEXT_JUSTIFY_LEFT, values[:dataIcon2], values[:dataIcon2Count] as String, values[:dataIcon2BgColor] as Number?);
             } else {
-                drawIconWithOverlay(dc, centerX - (step_width / 2) - (marginX / 2), bottomFiveY + (largeDataHeight / 2) + iconYAdj, Graphics.TEXT_JUSTIFY_RIGHT, values[:dataIcon1], values[:dataIcon1Count] as String);
-                drawIconWithOverlay(dc, centerX + (step_width / 2) + (marginX / 2) - 2, bottomFiveY + (largeDataHeight / 2) + iconYAdj, Graphics.TEXT_JUSTIFY_LEFT, values[:dataIcon2], values[:dataIcon2Count] as String);
+                drawIconWithOverlay(dc, centerX - (step_width / 2) - (marginX / 2), bottomFiveY + (largeDataHeight / 2) + iconYAdj, Graphics.TEXT_JUSTIFY_RIGHT, values[:dataIcon1], values[:dataIcon1Count] as String, values[:dataIcon1BgColor] as Number?);
+                drawIconWithOverlay(dc, centerX + (step_width / 2) + (marginX / 2) - 2, bottomFiveY + (largeDataHeight / 2) + iconYAdj, Graphics.TEXT_JUSTIFY_LEFT, values[:dataIcon2], values[:dataIcon2Count] as String, values[:dataIcon2BgColor] as Number?);
             }
         }
     }
@@ -3479,11 +3514,11 @@ class Segment34View extends WatchUi.WatchFace {
                 step_width = 65;
                 y = screenHeight - 31;
             }
-            drawIconWithOverlay(dc, centerX - (step_width / 2) - (marginX / 2), y, Graphics.TEXT_JUSTIFY_RIGHT, values[:dataIcon1], values[:dataIcon1Count] as String);
-            drawIconWithOverlay(dc, centerX + (step_width / 2) + (marginX / 2) - 2, y, Graphics.TEXT_JUSTIFY_LEFT, values[:dataIcon2], values[:dataIcon2Count] as String);
+            drawIconWithOverlay(dc, centerX - (step_width / 2) - (marginX / 2), y, Graphics.TEXT_JUSTIFY_RIGHT, values[:dataIcon1], values[:dataIcon1Count] as String, values[:dataIcon1BgColor] as Number?);
+            drawIconWithOverlay(dc, centerX + (step_width / 2) + (marginX / 2) - 2, y, Graphics.TEXT_JUSTIFY_LEFT, values[:dataIcon2], values[:dataIcon2Count] as String, values[:dataIcon2BgColor] as Number?);
         } else {
-            drawIconWithOverlay(dc, centerX - (step_width / 2) - (marginX / 2), bottomFiveY + (largeDataHeight / 2) + iconYAdj, Graphics.TEXT_JUSTIFY_RIGHT, values[:dataIcon1], values[:dataIcon1Count] as String);
-            drawIconWithOverlay(dc, centerX + (step_width / 2) + (marginX / 2) - 2, bottomFiveY + (largeDataHeight / 2) + iconYAdj, Graphics.TEXT_JUSTIFY_LEFT, values[:dataIcon2], values[:dataIcon2Count] as String);
+            drawIconWithOverlay(dc, centerX - (step_width / 2) - (marginX / 2), bottomFiveY + (largeDataHeight / 2) + iconYAdj, Graphics.TEXT_JUSTIFY_RIGHT, values[:dataIcon1], values[:dataIcon1Count] as String, values[:dataIcon1BgColor] as Number?);
+            drawIconWithOverlay(dc, centerX + (step_width / 2) + (marginX / 2) - 2, bottomFiveY + (largeDataHeight / 2) + iconYAdj, Graphics.TEXT_JUSTIFY_LEFT, values[:dataIcon2], values[:dataIcon2Count] as String, values[:dataIcon2BgColor] as Number?);
         }
     }
 

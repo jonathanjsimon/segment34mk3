@@ -49,7 +49,7 @@ For refactorings and optimizations keep in mind that:
 
 
 ## Change log
-v1.0
+v0.10
 - Training status as icon
 - Wind gusts, last weather update and precipitation amount
 - Option for update frequency for OWM

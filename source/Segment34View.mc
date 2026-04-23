@@ -3423,10 +3423,7 @@ class Segment34View extends WatchUi.WatchFace {
 
     hidden function drawIconWithOverlay(dc as Dc, x as Number, y as Number, justify as Number, iconStr as String, countStr as String, bgColor as Number?) as Void {
         if(bgColor != null) {
-            var circleX = (justify == Graphics.TEXT_JUSTIFY_RIGHT) ? x - 10 : x + 10;
             dc.setColor(bgColor, Graphics.COLOR_TRANSPARENT);
-            dc.fillCircle(circleX, y, 12);
-            dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
         }
         dc.drawText(x, y, fontIcons, iconStr, justify | Graphics.TEXT_JUSTIFY_VCENTER);
         if(!countStr.equals("")) {

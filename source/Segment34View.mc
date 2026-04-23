@@ -1728,11 +1728,11 @@ class Segment34View extends WatchUi.WatchFace {
                 var complication = Complications.getComplication(new Id(Complications.COMPLICATION_TYPE_TRAINING_STATUS));
                 if(complication != null && complication.value != null) {
                     var status = complication.value.toUpper();
-                    if(status.find("OVERREACHING") != null) { return 0xFF5555; }
-                    if(status.find("PEAKING") != null) { return 0x5555FF; }
-                    if(status.find("UNPRODUCTIVE") != null) { return 0xFF5500; }
+                    if(status.find("OVERREACHING") != null) { return 0xFF0000; }
+                    if(status.find("PEAKING") != null) { return 0xAA55FF; }
+                    if(status.find("UNPRODUCTIVE") != null) { return 0xFFAA00; }
                     if(status.find("PRODUCTIVE") != null) { return 0x55AA55; }
-                    if(status.find("MAINTAINING") != null) { return 0xFFAA00; }
+                    if(status.find("MAINTAINING") != null) { return 0xFFFF00; }
                     if(status.find("RECOVERY") != null) { return 0x55AAFF; }
                     if(status.find("STRAINED") != null) { return 0xFF55AA; }
                     if(status.find("DETRAINING") != null) { return 0xAAAAAA; }

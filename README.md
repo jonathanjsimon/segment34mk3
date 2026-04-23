@@ -49,6 +49,11 @@ For refactorings and optimizations keep in mind that:
 
 
 ## Change log
+v1.0
+- Training status as icon
+- Wind gusts, last weather update and precipitation amount
+
+
 v0.9
 - Active minutes histogram show both vigorous and moderate minutes
 - Fixed issue with labels for monthly run distance

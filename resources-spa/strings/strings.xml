@@ -509,6 +509,11 @@
     <string id="settings_openweathermap" scope="settings">OpenWeatherMap (ver FAQ 5.0.0 en ludw.github.io/faq para configuración)</string>
     <string id="settings_owm_api_key" scope="settings">Clave API OWM</string>
     <string id="settings_owm_location_override" scope="settings">Anular ubicación OWM (lat,lon ej. 51.5,-0.1 — dejar vacío para usar ubicación Garmin)</string>
+    <string id="settings_owm_refresh_interval" scope="settings">Intervalo de actualización OWM</string>
+    <string id="settings_every_15_min" scope="settings">Cada 15 min</string>
+    <string id="settings_every_30_min" scope="settings">Cada 30 min</string>
+    <string id="settings_every_hour" scope="settings">Cada hora</string>
+    <string id="settings_every_2_hours" scope="settings">Cada 2 horas</string>
     <string id="settings_seconds_shows" scope="settings">El campo de segundos muestra</string>
     <string id="settings_seconds" scope="settings">Segundos</string>
     <string id="settings_daily_counter" scope="settings">Contador (reinicio diario, mantén pulsado para aumentar)</string>

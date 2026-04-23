@@ -44,9 +44,9 @@ class Segment34App extends Application.AppBase {
 
     hidden function updateTemporalEvent() as Void {
         if ((Application.Properties.getValue("weatherProvider") as Number) == 1) {
-            // If no data yet, request a wake as soon as the OS allows.
+            var interval = Application.Properties.getValue("owmRefreshInterval") as Number;
             var hasData = Application.Storage.getValue("owm_last_update") != null;
-            Background.registerForTemporalEvent(new Time.Duration(hasData ? 3600 : 300));
+            Background.registerForTemporalEvent(new Time.Duration(hasData ? interval : 300));
         } else {
             Background.deleteTemporalEvent();
         }

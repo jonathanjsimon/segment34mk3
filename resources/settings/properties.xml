@@ -76,4 +76,5 @@
     <property id="weatherProvider" type="number">0</property>
     <property id="owmApiKey" type="string"></property>
     <property id="owmLocationOverride" type="string"></property>
+    <property id="owmRefreshInterval" type="number">7200</property>
 </properties>

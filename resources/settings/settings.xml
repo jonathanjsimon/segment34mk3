@@ -319,6 +319,15 @@
         <settingConfig type="alphanumeric" />
     </setting>
 
+    <setting propertyKey="@Properties.owmRefreshInterval" title="@Strings.settings_owm_refresh_interval">
+        <settingConfig type="list">
+            <listEntry value="900">@Strings.settings_every_15_min</listEntry>
+            <listEntry value="1800">@Strings.settings_every_30_min</listEntry>
+            <listEntry value="3600">@Strings.settings_every_hour</listEntry>
+            <listEntry value="7200">@Strings.settings_every_2_hours</listEntry>
+        </settingConfig>
+    </setting>
+
     <setting propertyKey="@Properties.weatherLine1Shows" title="@Strings.settings_line_1_above_clock">
         <settingConfig type="list">
             <listEntry value="-2">@Strings.settings_hidden</listEntry>

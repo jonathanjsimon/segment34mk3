@@ -51,7 +51,8 @@ class Segment34ServiceDelegate extends System.ServiceDelegate {
 
         var now = Time.now().value();
         var lastUpdate = Application.Storage.getValue("owm_last_update") as Number?;
-        if (lastUpdate != null && now - lastUpdate < 7200 && !locationChangedSignificantly(lat, lon)) {
+        var interval = Application.Properties.getValue("owmRefreshInterval") as Number;
+        if (lastUpdate != null && now - lastUpdate < interval && !locationChangedSignificantly(lat, lon)) {
             return;
         }
 

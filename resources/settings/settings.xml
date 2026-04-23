@@ -769,6 +769,7 @@
             <listEntry value="50">@Strings.settings_current_location_accuracy</listEntry>
             <listEntry value="45">@Strings.settings_next_calendar_event_time</listEntry>
             <listEntry value="53">@Strings.settings_cgm_glucose_trend</listEntry>
+            <listEntry value="30">@Strings.settings_battery_percentage</listEntry>
         </settingConfig>
     </setting>
 
@@ -807,6 +808,7 @@
             <listEntry value="50">@Strings.settings_current_location_accuracy</listEntry>
             <listEntry value="45">@Strings.settings_next_calendar_event_time</listEntry>
             <listEntry value="53">@Strings.settings_cgm_glucose_trend</listEntry>
+            <listEntry value="30">@Strings.settings_battery_percentage</listEntry>
         </settingConfig>
     </setting>
 

@@ -54,6 +54,7 @@ v0.10
 - Wind gusts, last weather update and precipitation amount
 - Option for update frequency for OWM
 - VO2 MAX trend arrow (takes a few weeks before it shows up)
+- More options for some fields (notification & seconds field, bottom 5 digit fields)
 
 v0.9
 - Active minutes histogram show both vigorous and moderate minutes

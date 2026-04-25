@@ -36,7 +36,7 @@ class OpenWeatherService {
     // Receives current-conditions JSON from OWM and stores it in Application.Storage
     // using the same format as Segment34View.storeWeatherData().
     function onCurrentResponse(responseCode as Number, data as Dictionary?) as Void {
-        //System.println(["OWM onCurrentResponse", responseCode, data]);
+        System.println(["OWM onCurrentResponse", responseCode, data]);
         if (responseCode == 401 || responseCode == 403) {
             Application.Storage.setValue("owm_error", "OWM: INVALID API KEY");
             return;
@@ -120,7 +120,7 @@ class OpenWeatherService {
 
     // Receives 3-hour forecast JSON from OWM and stores it in Application.Storage.
     function onForecastResponse(responseCode as Number, data as Dictionary?) as Void {
-        //System.println(["OWM onForecastResponse", responseCode, data]);
+        System.println(["OWM onForecastResponse", responseCode, data]);
         if (responseCode != 200 || data == null) { return; }
 
         var list = data.get("list") as Array?;
@@ -153,10 +153,25 @@ class OpenWeatherService {
                 if (speed != null) { tmp["windSpeed"] = (speed as Float).toFloat(); }
                 var deg = wind.get("deg");
                 if (deg != null) { tmp["windBearing"] = deg as Number; }
+                var gust = wind.get("gust");
+                if (gust != null) { tmp["windGust"] = (gust as Float).toFloat(); }
             }
 
             var pop = entry.get("pop");
             if (pop != null) { tmp["precipitationChance"] = ((pop as Float) * 100).toNumber(); }
+
+            var rain = entry.get("rain") as Dictionary?;
+            var snow = entry.get("snow") as Dictionary?;
+            var precipMm = 0.0f;
+            if (rain != null) {
+                var r3h = rain.get("3h");
+                if (r3h != null) { precipMm += (r3h as Float).toFloat(); }
+            }
+            if (snow != null) {
+                var s3h = snow.get("3h");
+                if (s3h != null) { precipMm += (s3h as Float).toFloat(); }
+            }
+            if (precipMm > 0.0f) { tmp["precipitationAmount"] = precipMm; }
 
             hf_data.add(tmp);
         }

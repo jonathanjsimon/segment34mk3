@@ -2013,6 +2013,20 @@ class Segment34View extends WatchUi.WatchFace {
             ret.observationLocationPosition = new Position.Location({:latitude => pos[0], :longitude => pos[1], :format => :degrees});
         }
         var hf_data = Application.Storage.getValue("hourly_forecast") as Array?;
+
+        // Find the nearest forecast entry by absolute time distance (past or future).
+        // Used to supplement fields missing from current conditions (e.g. windGust,
+        // precipitationAmount which OWM only reports "where available" in current obs).
+        var nearestEntry = null as Dictionary?;
+        if (hf_data != null) {
+            var nearestDist = 2147483647;
+            for (var i = 0; i < hf_data.size(); i++) {
+                var diff = now - (hf_data[i].get("forecastTime") as Number);
+                if (diff < 0) { diff = -diff; }
+                if (diff < nearestDist) { nearestDist = diff; nearestEntry = hf_data[i]; }
+            }
+        }
+
         // Current conditions are valid for at least 1 hour (Garmin path), or until the
         // first forecast slot starts — whichever is later. For OWM the first slot is always
         // in the future (~3h boundary), so this covers the gap without regressing Garmin.
@@ -2039,6 +2053,14 @@ class Segment34View extends WatchUi.WatchFace {
             var obsTime = cc_data.get("observationTime");
             if (obsTime == null) { obsTime = cc_data.get("timestamp"); }
             ret.observationTimestamp = obsTime as Number;
+            // OWM only includes windGust and precipitationAmount "where available" in
+            // current conditions. Fill gaps from the nearest forecast entry.
+            if (ret.windGust == null && nearestEntry != null) {
+                ret.windGust = nearestEntry.get("windGust") as Float;
+            }
+            if (ret.precipitationAmount == null && nearestEntry != null) {
+                ret.precipitationAmount = nearestEntry.get("precipitationAmount") as Float;
+            }
         } else {
             if(hf_data == null) { return ret; }
             // Find the most recently passed slot. When now >= firstForecastTime there is
@@ -2058,6 +2080,8 @@ class Segment34View extends WatchUi.WatchFace {
                 ret.precipitationChance = bestEntry.get("precipitationChance") as Number;
                 ret.windBearing = bestEntry.get("windBearing") as Number;
                 ret.windSpeed = bestEntry.get("windSpeed") as Float;
+                ret.windGust = bestEntry.get("windGust") as Float;
+                ret.precipitationAmount = bestEntry.get("precipitationAmount") as Float;
                 // Forecast entries lack feelsLike/humidity/high/low — use last known values.
                 ret.feelsLikeTemperature = cc_data.get("feelsLikeTemperature") as Float;
                 ret.relativeHumidity = cc_data.get("relativeHumidity") as Number;

@@ -44,6 +44,40 @@ For refactorings and optimizations keep in mind that:
 - Optimizations must include profiler results and memory useage
 - Both optimizations and refactorings require significant testing across all supported devices
 
+## Code Structure
+
+### Source files (`source/`)
+
+| File | Purpose |
+|---|---|
+| `Segment34App.mc` | App entry point; schedules background temporal events for OWM polling |
+| `Segment34View.mc` | Core watchface rendering: update cycle, draw chain, layout, and settings |
+| `Segment34WatchFaceDelegate.mc` | Handles touch/press input and routes actions to the view |
+| `Segment34ServiceDelegate.mc` | Background service; triggers an OWM fetch on each temporal event |
+| `OpenWeatherService.mc` | HTTP requests to OpenWeatherMap API (runs in background context) |
+| `OpenWeatherServiceTest.mc` | Unit tests for OWM weather code → Garmin condition mapping |
+| `DataHelper.mc` | Activity data and complications: steps, calories, heart rate, battery, etc. |
+| `ValueResolver.mc` | Resolves configurable field type codes to display strings and labels |
+| `WeatherDisplayHelper.mc` | Formats weather data for display (conditions, temperature, wind) |
+| `WeatherStorage.mc` | Reads and writes weather cache to `Application.Storage` |
+| `StoredWeather.mc` | Data class representing a weather snapshot |
+| `ThemeManager.mc` | Computes the active color theme based on settings and time of day |
+| `GraphRenderer.mc` | Histogram and line graph rendering (steps, calories, heart rate, etc.) |
+| `SunCalc.mc` | Sunrise, sunset, dawn, and dusk calculations |
+| `DateTimeUtils.mc` | Date and time utility functions |
+| `FormatUtils.mc` | Number and string formatting helpers |
+
+### Resources
+
+| Path | Contents |
+|---|---|
+| `resources/strings/strings.xml` | English strings — source of truth for all user-visible text |
+| `resources/settings/properties.xml` | Settings property definitions (types, defaults) |
+| `resources/settings/settings.xml` | Settings UI layout shown in the Garmin app |
+| `resources/fonts/` | Custom bitmap fonts: segment clock displays, icons, moon phase, labels |
+| `resources/drawables/` | Images and drawable definitions (launcher icon, AOD overlays) |
+| `resources-{deu,fre,ita,pol,spa,swe}/` | Translated strings for 6 languages; must stay in sync with English |
+
  ## Things people have asked for (may or may not be implemented)
 
 

@@ -25,12 +25,23 @@ Note: Most of the code doesn't have tests, a lot of it is hard to test as mockin
 ## Architecture
 
 ```
-Segment34App.mc          – AppBase entry; manages background temporal events (OWM polling)
-Segment34View.mc         – Entire watchface rendering (~4000 lines); the core file
+Segment34App.mc             – AppBase entry; schedules background temporal events (OWM polling)
+Segment34View.mc            – Core watchface rendering (~1600 lines): update cycle, draw chain, layout, settings
+Segment34WatchFaceDelegate.mc – Handles touch/press input; routes actions to the view
 Segment34ServiceDelegate.mc – Background service; fires OWM fetch on temporal event
-OpenWeatherService.mc    – HTTP requests to OpenWeatherMap API; runs in background context
-OpenWeatherServiceTest.mc – Unit tests for OWM code→Garmin condition mapping
-resources/               – English strings, settings schema (properties.xml/settings.xml), fonts, drawables
+OpenWeatherService.mc       – HTTP requests to OpenWeatherMap API; runs in background context
+OpenWeatherServiceTest.mc   – Unit tests for OWM code→Garmin condition mapping
+DataHelper.mc               – Activity data and complications: steps, calories, heart rate, battery, etc.
+ValueResolver.mc            – Resolves configurable field type codes to display strings and labels
+WeatherDisplayHelper.mc     – Formats weather data for display (conditions, temperature, wind)
+WeatherStorage.mc           – Reads/writes weather cache to Application.Storage
+StoredWeather.mc            – Data class representing a weather snapshot
+ThemeManager.mc             – Computes the active color theme based on settings and time of day
+GraphRenderer.mc            – Histogram and line graph rendering (steps, calories, heart rate, etc.)
+SunCalc.mc                  – Sunrise, sunset, dawn, and dusk calculations
+DateTimeUtils.mc            – Date and time utility functions
+FormatUtils.mc              – Number and string formatting helpers
+resources/                  – English strings, settings schema (properties.xml/settings.xml), fonts, drawables
 resources-{deu,fre,ita,pol,spa,swe}/ – Translated strings (6 languages, must stay in sync with English)
 ```
 

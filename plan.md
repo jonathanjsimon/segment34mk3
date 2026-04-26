@@ -154,7 +154,7 @@ After move, callers pass `weatherCondition` explicitly.
 
 ---
 
-### Step 5 — `source/ComplicationHelper.mc` (CGM, Vo2, complication icons)
+### Step 5 — `source/ComplicationHelper.mc` (CGM, Vo2, complication icons) ✅ COMPLETE
 **Functions to move:**
 - `getIconState(setting)` — stateless (reads System, ActivityMonitor, Complications)
 - `getIconColor(setting)` — (:AMOLED) and (:MIP) variants
@@ -198,7 +198,7 @@ View holds: `hidden var complications as ComplicationHelper = new ComplicationHe
 
 ---
 
-### Step 6 — `source/ThemeManager.mc` (color theme)
+### Step 6 — `source/ThemeManager.mc` (color theme) ✅ COMPLETE
 **Functions to move:**
 - `setColorTheme(theme)` — (:MIP) and (:AMOLED) variants; reads propColorOverride, propColorOverride2; writes infoMessage
 - `parseThemeString(override)` — calls setColorTheme
@@ -366,8 +366,8 @@ Initialized in `reloadSettings()`, re-configured in `updateProperties()`.
 | 2 | `refactor-format-utils` | `FormatUtils.mc` | 150 | Low | ✅ |
 | 3 | `refactor-sun-calc` | `SunCalc.mc` | 80 | Low | ✅ |
 | 4 | `refactor-activity-data` | `ActivityDataHelper.mc` | 220 | Low-med | ✅ |
-| 5 | `refactor-complication-helper` | `ComplicationHelper.mc` | 200 | Medium |
-| 6 | `refactor-theme-manager` | `ThemeManager.mc` | 160 | Med-high |
+| 5 | `refactor-complication-helper` | `ComplicationHelper.mc` | 200 | Medium | ✅ |
+| 6 | `refactor-theme-manager` | `ThemeManager.mc` | 160 | Med-high | ✅ |
 | 7 | `refactor-weather-display` | `WeatherDisplayHelper.mc` | 300 | Medium |
 | 8 | `refactor-graph-renderer` | `GraphRenderer.mc` | 420 | Medium |
 | 9 | `refactor-split-getvaluebtype` | (in-place) | 0 net | Medium |

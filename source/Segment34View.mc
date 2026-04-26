@@ -1606,7 +1606,7 @@ class Segment34View extends WatchUi.WatchFace {
 
         // From Sunset to Sunrise
         if(weatherCondition != null) {
-            var nextSunEventArray = getNextSunEvent();
+            var nextSunEventArray = getNextSunEvent(weatherCondition);
             if(nextSunEventArray != null && nextSunEventArray.size() == 2) { 
                 return nextSunEventArray[1] as Boolean;
             }
@@ -2484,7 +2484,7 @@ class Segment34View extends WatchUi.WatchFace {
             val = getPrecip();
             if(width == 3 and val.equals("100%")) { val = "100"; }
         } else if(complicationType == 43) { // Next Sun Event
-            var nextSunEventArray = getNextSunEvent();
+            var nextSunEventArray = getNextSunEvent(weatherCondition);
             if(nextSunEventArray != null && nextSunEventArray.size() == 2) {
                 val = formatSunTime(nextSunEventArray[0], width, propIs24H, propHourFormat);
             }
@@ -2541,7 +2541,7 @@ class Segment34View extends WatchUi.WatchFace {
         } else if(complicationType == 55) { // Feels like
             val = getFeelsLike();
         } else if(complicationType == 56) { // Hours to next sun event
-            val = hoursToNextSunEvent();
+            val = hoursToNextSunEvent(weatherCondition);
         } else if(complicationType == 57) { // Resting Heart Rate
             var profile = UserProfile.getProfile();
             if(profile.restingHeartRate != null) {
@@ -3037,55 +3037,6 @@ class Segment34View extends WatchUi.WatchFace {
             ret = weatherCondition.precipitationChance.format("%d") + "%";
         }
         return ret;
-    }
-
-    hidden function hoursToNextSunEvent() as String {
-        var nextSunEventArray = getNextSunEvent();
-        if(nextSunEventArray != null && nextSunEventArray.size() == 2) {
-            var nextSunEvent = nextSunEventArray[0] as Time.Moment;
-            var now = Time.now();
-            // Converting seconds to hours
-            var diff = (nextSunEvent.subtract(now)).value();
-            if(diff >= 36000) { // No decimals if 10+ hours
-                return (diff / 3600.0).format("%d");
-            }
-            return (diff / 3600.0).format("%.1f");
-        }
-        return "";
-    }
-
-    hidden function getNextSunEvent() as Array {
-        var now = Time.now();
-        if (weatherCondition != null) {
-            var loc = weatherCondition.observationLocationPosition;
-            if (loc != null) {
-                var nextSunEvent = null;
-                var sunrise = Weather.getSunrise(loc, now);
-                var sunset = Weather.getSunset(loc, now);
-                var isNight = false;
-
-                if ((sunrise != null) && (sunset != null)) {
-                    if (sunrise.lessThan(now)) { 
-                        //if sunrise was already, take tomorrows
-                        sunrise = Weather.getSunrise(loc, Time.today().add(new Time.Duration(86401)));
-                    }
-                    if (sunset.lessThan(now)) { 
-                        //if sunset was already, take tomorrows
-                        sunset = Weather.getSunset(loc, Time.today().add(new Time.Duration(86401)));
-                    }
-                    if (sunrise.lessThan(sunset)) { 
-                        nextSunEvent = sunrise;
-                        isNight = true;
-                    } else {
-                        nextSunEvent = sunset;
-                        isNight = false;
-                    }
-                    return [nextSunEvent, isNight];
-                }
-                
-            }
-        }
-        return [];
     }
 
     hidden function getRestCalories() as Number {

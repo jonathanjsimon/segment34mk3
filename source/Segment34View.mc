@@ -117,10 +117,10 @@ class Segment34View extends WatchUi.WatchFace {
     hidden var isLowMem as Boolean = false;
 
     hidden var doesPartialUpdate as Boolean = false;
-    hidden var complications as ComplicationHelper = new ComplicationHelper();
+    hidden var dataHelper as DataHelper = new DataHelper();
     hidden var weatherHelper as WeatherDisplayHelper = new WeatherDisplayHelper();
     hidden var graphRenderer as GraphRenderer = new GraphRenderer();
-    public var resolver as ValueResolver = new ValueResolver(weatherHelper, complications);
+    public var resolver as ValueResolver = new ValueResolver(weatherHelper, dataHelper);
     
     hidden var propIs24H as Boolean = false;
     hidden var propTheme as Integer = 0;
@@ -680,17 +680,17 @@ class Segment34View extends WatchUi.WatchFace {
         values[:dataBottomFourth] = resolver.getValueByType(propFourthValueShows, fieldWidths[3]);
         values[:dataBottom] = resolver.getValueByType(propBottomFieldShows, 5);
         computeBottomField2Values(values);
-        values[:dataIcon1] = complications.getIconState(propIcon1);
-        values[:dataIcon2] = complications.getIconState(propIcon2);
-        values[:dataIcon1Count] = complications.getIconCountOverlay(propIcon1);
-        values[:dataIcon2Count] = complications.getIconCountOverlay(propIcon2);
-        values[:dataIcon1Color] = complications.getIconColor(propIcon1);
-        values[:dataIcon2Color] = complications.getIconColor(propIcon2);
-        values[:dataBattery] = getBattData(propBatteryVariant, screenHeight, propFontSize);
+        values[:dataIcon1] = dataHelper.getIconState(propIcon1);
+        values[:dataIcon2] = dataHelper.getIconState(propIcon2);
+        values[:dataIcon1Count] = dataHelper.getIconCountOverlay(propIcon1);
+        values[:dataIcon2Count] = dataHelper.getIconCountOverlay(propIcon2);
+        values[:dataIcon1Color] = dataHelper.getIconColor(propIcon1);
+        values[:dataIcon2Color] = dataHelper.getIconColor(propIcon2);
+        values[:dataBattery] = dataHelper.getBattData(propBatteryVariant, screenHeight, propFontSize);
         values[:dataAODLeft] = resolver.getValueByType(propAodFieldShows, 10);
         values[:dataAODRight] = resolver.getValueByType(propAodRightFieldShows, 5);
-        values[:dataLeftBar] = getBarData(propLeftBarShows);
-        values[:dataRightBar] = getBarData(propRightBarShows);
+        values[:dataLeftBar] = dataHelper.getBarData(propLeftBarShows);
+        values[:dataRightBar] = dataHelper.getBarData(propRightBarShows);
 
         if(!resolver.infoMessage.length() == 0) {
             values[:dataBelow] = resolver.infoMessage;
@@ -731,7 +731,7 @@ class Segment34View extends WatchUi.WatchFace {
             lastSlowUpdate = unix_timestamp;
             updateColorTheme();
             updateWeather();
-            complications.updateVo2History();
+            dataHelper.updateVo2History();
         }
 
         if(lastUpdate == null or unix_timestamp - lastUpdate >= propUpdateFreq) {
@@ -1191,7 +1191,7 @@ class Segment34View extends WatchUi.WatchFace {
         var barHeight = Math.round(barVal * (maxSideBarHeight / 100.0));
         var barBottom = baseY + halfClockHeight + barBottomAdj;
 
-        var barColor = useDynamic ? getStressColor(barVal) : theme.colors[baseColor];
+        var barColor = useDynamic ? dataHelper.getStressColor(barVal) : theme.colors[baseColor];
         dc.setColor(barColor, Graphics.COLOR_TRANSPARENT);
         dc.fillRectangle(barX, barBottom - barHeight, abw, barHeight);
 

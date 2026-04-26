@@ -20,7 +20,7 @@ class ValueResolver {
 
     // References to other helpers
     hidden var _weatherHelper as WeatherDisplayHelper;
-    hidden var _complications as ComplicationHelper;
+    hidden var _dataHelper as DataHelper;
 
     // Weather data — updated via setWeatherData() each display cycle
     hidden var _weatherCondition as StoredWeather or Null;
@@ -61,9 +61,9 @@ class ValueResolver {
     // Info message (moved from View)
     public var infoMessage as String = "";
 
-    function initialize(weatherHelper as WeatherDisplayHelper, complications as ComplicationHelper) {
+    function initialize(weatherHelper as WeatherDisplayHelper, dataHelper as DataHelper) {
         _weatherHelper = weatherHelper;
-        _complications = complications;
+        _dataHelper = dataHelper;
         _weatherCondition = null;
     }
 
@@ -279,13 +279,13 @@ class ValueResolver {
             }
             return "";
         } else if (complicationType == 12) { // Stress
-            var st = getStressData();
+            var st = _dataHelper.getStressData();
             if (st != null) {
                 return st.format(numberFormat);
             }
             return "";
         } else if (complicationType == 13) { // Body battery
-            var bb = getBBData();
+            var bb = _dataHelper.getBBData();
             if (bb != null) {
                 return bb.format(numberFormat);
             }
@@ -316,9 +316,9 @@ class ValueResolver {
             }
             return "";
         } else if (complicationType == 19) { // Weekly run distance
-            return getWeeklyDistanceFromComplication(true, _propIsMetricDistance ? 0.001 : 0.000621371, width);
+            return _dataHelper.getWeeklyDistanceFromComplication(true, _propIsMetricDistance ? 0.001 : 0.000621371, width);
         } else if (complicationType == 20) { // Weekly bike distance
-            return getWeeklyDistanceFromComplication(false, _propIsMetricDistance ? 0.001 : 0.000621371, width);
+            return _dataHelper.getWeeklyDistanceFromComplication(false, _propIsMetricDistance ? 0.001 : 0.000621371, width);
         } else if (complicationType == 23) { // Weight kg
             var profile = UserProfile.getProfile();
             if (profile.weight != null) {
@@ -338,7 +338,7 @@ class ValueResolver {
             return "";
         } else if (complicationType == 25) { // Act Calories
             activityInfo = ActivityMonitor.getInfo();
-            var rest_calories = getRestCalories();
+            var rest_calories = _dataHelper.getRestCalories();
             // Get total calories and subtract rest calories
             if (activityInfo.calories != null && rest_calories > 0) {
                 var active_calories = activityInfo.calories - rest_calories;
@@ -348,10 +348,10 @@ class ValueResolver {
             }
             return "";
         } else if (complicationType == 28 || complicationType == 29) { // Total distance past 7 days
-            return formatDistanceByWidth(getWeeklyDistance() * (_propIsMetricDistance ? 0.00001 : 0.00000621371), width);
+            return formatDistanceByWidth(_dataHelper.getWeeklyDistance() * (_propIsMetricDistance ? 0.00001 : 0.00000621371), width);
         } else if (complicationType == 46) { // Active / Total calories
             activityInfo = ActivityMonitor.getInfo();
-            var rest_calories = getRestCalories();
+            var rest_calories = _dataHelper.getRestCalories();
             var total_calories = 0;
             // Get total calories and subtract rest calories
             if (activityInfo.calories != null) {
@@ -367,26 +367,26 @@ class ValueResolver {
             }
             return "";
         } else if (complicationType == 58 || complicationType == 59) { // Run/bike distance past 7 days
-            if (Time.now().value() - _lastActivityDistUpdate >= 60*5) {
-                _lastActivityDistUpdate = Time.now().value();
-                updateActivityDistCache();
+            if (Time.now().value() - _dataHelper.getLastActivityDistUpdate() >= 60*5) {
+                _dataHelper.setLastActivityDistUpdate(Time.now().value());
+                _dataHelper.updateActivityDistCache();
             }
             var distFactor = _propIsMetricDistance ? 0.001 : 0.000621371;
-            return formatDistanceByWidth((complicationType == 58 ? _cachedRunDist7Days : _cachedBikeDist7Days) * distFactor, width);
+            return formatDistanceByWidth((complicationType == 58 ? _dataHelper.getCachedRunDist7Days() : _dataHelper.getCachedBikeDist7Days()) * distFactor, width);
         } else if (complicationType == 65) { // Swim distance past 7 days
-            if (Time.now().value() - _lastActivityDistUpdate >= 60*5) {
-                _lastActivityDistUpdate = Time.now().value();
-                updateActivityDistCache();
+            if (Time.now().value() - _dataHelper.getLastActivityDistUpdate() >= 60*5) {
+                _dataHelper.setLastActivityDistUpdate(Time.now().value());
+                _dataHelper.updateActivityDistCache();
             }
             var distFactor = _propIsMetricDistance ? 0.001 : 0.000621371;
-            return formatDistanceByWidth(_cachedSwimDist7Days * distFactor, width);
+            return formatDistanceByWidth(_dataHelper.getCachedSwimDist7Days() * distFactor, width);
         } else if (complicationType == 66 || complicationType == 67) { // Run dist this month / past 28 days
-            if (Time.now().value() - _lastActivityDistUpdate >= 60*5) {
-                _lastActivityDistUpdate = Time.now().value();
-                updateActivityDistCache();
+            if (Time.now().value() - _dataHelper.getLastActivityDistUpdate() >= 60*5) {
+                _dataHelper.setLastActivityDistUpdate(Time.now().value());
+                _dataHelper.updateActivityDistCache();
             }
             var distFactor = _propIsMetricDistance ? 0.001 : 0.000621371;
-            return formatDistanceByWidth((complicationType == 66 ? _cachedRunDistMonth : _cachedRunDist28Days) * distFactor, width);
+            return formatDistanceByWidth((complicationType == 66 ? _dataHelper.getCachedRunDistMonth() : _dataHelper.getCachedRunDist28Days()) * distFactor, width);
         } else if (complicationType == 68) { // Daily counter (resets at midnight)
             var today = Time.Gregorian.info(Time.now(), Time.FORMAT_SHORT);
             var todayKey = today.year * 10000 + today.month * 100 + today.day;
@@ -495,33 +495,33 @@ class ValueResolver {
     hidden function getComplicationValue(complicationType as Number, width as Number) as String? {
         var numberFormat = "%d";
         if (complicationType == 5) { // Time to Recovery (h)
-            return _complications.getRecoveryTimeVal(numberFormat);
+            return _dataHelper.getRecoveryTimeVal(numberFormat);
         } else if (complicationType == 6) { // VO2 Max Running
             var profile = UserProfile.getProfile();
             if (profile.vo2maxRunning != null) {
-                return _complications.vo2RunTrend + (profile.vo2maxRunning as Number).format(numberFormat);
+                return _dataHelper.vo2RunTrend + (profile.vo2maxRunning as Number).format(numberFormat);
             }
             return "";
         } else if (complicationType == 7) { // VO2 Max Cycling
             var profile = UserProfile.getProfile();
             if (profile.vo2maxCycling != null) {
-                return _complications.vo2BikeTrend + (profile.vo2maxCycling as Number).format(numberFormat);
+                return _dataHelper.vo2BikeTrend + (profile.vo2maxCycling as Number).format(numberFormat);
             }
             return "";
         } else if (complicationType == 11) { // Altitude (m)
-            var alt = _complications.getAltitudeValue();
+            var alt = _dataHelper.getAltitudeValue();
             if (alt != null) {
                 return alt.format(numberFormat);
             }
             return "";
         } else if (complicationType == 14) { // Altitude (ft)
-            var alt = _complications.getAltitudeValue();
+            var alt = _dataHelper.getAltitudeValue();
             if (alt != null) {
                 return (alt * 3.28084).format(numberFormat);
             }
             return "";
         } else if (complicationType == 21) { // Training status
-            return _complications.getTrainingStatusVal();
+            return _dataHelper.getTrainingStatusVal();
         } else if (complicationType == 30) { // Battery percentage
             var battery = System.getSystemStats().battery;
             return battery.format("%d");
@@ -549,13 +549,13 @@ class ValueResolver {
         } else if (complicationType == 38) { // Alarms
             return System.getDeviceSettings().alarmCount.format(numberFormat);
         } else if (complicationType == 45) { // Time of the next Calendar Event
-            return _complications.getCalendarEventVal(width);
+            return _dataHelper.getCalendarEventVal(width);
         } else if (complicationType == 47) { // PulseOx
-            return _complications.getPulseOxVal(numberFormat);
+            return _dataHelper.getPulseOxVal(numberFormat);
         } else if (complicationType == 53) { // CGM Glucose + Trend
-            return _complications.getCgmReading();
+            return _dataHelper.getCgmReading();
         } else if (complicationType == 54) { // CGM Age (minutes)
-            return _complications.getCgmAge();
+            return _dataHelper.getCgmAge();
         }
         return null;
     }

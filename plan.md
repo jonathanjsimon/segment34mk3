@@ -328,7 +328,7 @@ Split into:
 
 ---
 
-### Step 10 — `source/ValueResolver.mc` (value + label dispatch)
+### Step 10 — `source/ValueResolver.mc` (value + label dispatch) ✅ COMPLETE
 **Functions to move** (after Step 9 splits them):
 - `getValueByType(typeCode, width)` — the dispatcher
 - `getActivityValue(typeCode, width)` — new sub-function from Step 9
@@ -371,6 +371,6 @@ Initialized in `reloadSettings()`, re-configured in `updateProperties()`.
 | 7 | `refactor-weather-display` | `WeatherDisplayHelper.mc` | 300 | Medium | ✅ |
 | 8 | `refactor-graph-renderer` | `GraphRenderer.mc` | 420 | Medium | ✅ |
 | 9 | `refactor-split-getvaluebtype` | (in-place) | 0 net | Medium | ✅ |
-| 10 | `refactor-value-resolver` | `ValueResolver.mc` | 750 | High |
+| 10 | `refactor-value-resolver` | `ValueResolver.mc` | 750 | High | ✅ |
 
 **Total estimated reduction: ~2280 lines → view ends up ~1570 lines**

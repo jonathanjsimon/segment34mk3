@@ -1680,243 +1680,192 @@ class Segment34View extends WatchUi.WatchFace {
         return unit;
     }
 
-    hidden function getValueByType(complicationType as Number, width as Number) as String {
-        var val = "";
+    // Types: -2 (hidden), -1 (date), 15/37 (alt TZ), 27 (week#), 44 (DTG), 48/49/50 (location)
+    hidden function getClockValue(complicationType as Number, width as Number) as String? {
+        var numberFormat = "%d";
+        if (complicationType == -2) { // Hidden
+            return "";
+        } else if (complicationType == -1) { // Date
+            return formatDate(propDateFormat, propDateCustomFormat, propFontSize, propWeekOffset);
+        } else if (complicationType == 15) { // Alt TZ 1
+            return secondaryTimezone(propTzOffset1, width, propIs24H, propHourFormat, propTzHourFormat);
+        } else if (complicationType == 27) { // Week number
+            var today = Time.Gregorian.info(Time.now(), Time.FORMAT_SHORT);
+            var week_number = isoWeekNumber(today.year, today.month, today.day, propWeekOffset);
+            return week_number.format(numberFormat);
+        } else if (complicationType == 37) { // Alt TZ 2
+            return secondaryTimezone(propTzOffset2, width, propIs24H, propHourFormat, propTzHourFormat);
+        } else if (complicationType == 44) { // Military Date Time Group
+            return getDateTimeGroup();
+        } else if (complicationType == 48) { // Location Long Lat dec deg
+            var pos = Activity.getActivityInfo().currentLocation;
+            if (pos != null) {
+                return pos.toDegrees()[0] + " " + pos.toDegrees()[1];
+            } else {
+                return Application.loadResource(Rez.Strings.LABEL_POS_NA);
+            }
+        } else if (complicationType == 49) { // Location Military format
+            var pos = Activity.getActivityInfo().currentLocation;
+            if (pos != null) {
+                return pos.toGeoString(Position.GEO_MGRS);
+            } else {
+                return Application.loadResource(Rez.Strings.LABEL_POS_NA);
+            }
+        } else if (complicationType == 50) { // Location Accuracy
+            var acc = Activity.getActivityInfo().currentLocationAccuracy;
+            if (acc != null) {
+                if (width < 4) {
+                    return (acc as Number).format("%d");
+                } else {
+                    return ["N/A", "LAST", "POOR", "USBL", "GOOD"][acc];
+                }
+            }
+            return "";
+        }
+        return null;
+    }
+
+    // Types: 0-4, 8-10, 12-13, 16-20, 23-25, 28-29, 46, 57-59, 62, 65-68 (activity/fitness metrics)
+    hidden function getActivityValue(complicationType as Number, width as Number) as String? {
         var numberFormat = "%d";
         var activityInfo = null;
-
-        if(complicationType == -2) { // Hidden
-            return "";
-        } else if(complicationType == -1) { // Date
-            val = formatDate(propDateFormat, propDateCustomFormat, propFontSize, propWeekOffset);
-        } else if(complicationType == 0) { // Active min / week
+        if (complicationType == 0) { // Active min / week
             activityInfo = ActivityMonitor.getInfo();
-            if(activityInfo.activeMinutesWeek != null) {
-                val = activityInfo.activeMinutesWeek.total.format(numberFormat);
+            if (activityInfo.activeMinutesWeek != null) {
+                return activityInfo.activeMinutesWeek.total.format(numberFormat);
             }
-        } else if(complicationType == 62) { // Active hours / week
-            if(activityInfo == null) { activityInfo = ActivityMonitor.getInfo(); }
-            if(activityInfo.activeMinutesWeek != null) {
-                val = (activityInfo.activeMinutesWeek.total / 60.0).format("%.1f");
+            return "";
+        } else if (complicationType == 62) { // Active hours / week
+            activityInfo = ActivityMonitor.getInfo();
+            if (activityInfo.activeMinutesWeek != null) {
+                return (activityInfo.activeMinutesWeek.total / 60.0).format("%.1f");
             }
-        } else if(complicationType == 1) { // Active min / day
-            if(activityInfo == null) { activityInfo = ActivityMonitor.getInfo(); }
-            if(activityInfo.activeMinutesDay != null) {
-                val = activityInfo.activeMinutesDay.total.format(numberFormat);
+            return "";
+        } else if (complicationType == 1) { // Active min / day
+            activityInfo = ActivityMonitor.getInfo();
+            if (activityInfo.activeMinutesDay != null) {
+                return activityInfo.activeMinutesDay.total.format(numberFormat);
             }
-        } else if(complicationType == 2) { // distance / day
-            if(activityInfo == null) { activityInfo = ActivityMonitor.getInfo(); }
-            if(activityInfo.distance != null) {
-                val = formatDistanceByWidth(activityInfo.distance / (propIsMetricDistance ? 100000.0 : 160900.0), width);
+            return "";
+        } else if (complicationType == 2) { // distance / day
+            activityInfo = ActivityMonitor.getInfo();
+            if (activityInfo.distance != null) {
+                return formatDistanceByWidth(activityInfo.distance / (propIsMetricDistance ? 100000.0 : 160900.0), width);
             }
-        } else if(complicationType == 3) { // floors climbed / day
-            if(activityInfo == null) { activityInfo = ActivityMonitor.getInfo(); }
-            if(activityInfo.floorsClimbed != null) {
-                val = activityInfo.floorsClimbed.format(numberFormat);
+            return "";
+        } else if (complicationType == 3) { // floors climbed / day
+            activityInfo = ActivityMonitor.getInfo();
+            if (activityInfo.floorsClimbed != null) {
+                return activityInfo.floorsClimbed.format(numberFormat);
             }
-        } else if(complicationType == 4) { // meters climbed / day
-            if(activityInfo == null) { activityInfo = ActivityMonitor.getInfo(); }
-            if(activityInfo.metersClimbed != null) {
-                val = activityInfo.metersClimbed.format(numberFormat);
+            return "";
+        } else if (complicationType == 4) { // meters climbed / day
+            activityInfo = ActivityMonitor.getInfo();
+            if (activityInfo.metersClimbed != null) {
+                return activityInfo.metersClimbed.format(numberFormat);
             }
-        } else if(complicationType == 5) { // Time to Recovery (h)
-            val = complications.getRecoveryTimeVal(numberFormat);
-
-        } else if(complicationType == 6) { // VO2 Max Running
-            var profile = UserProfile.getProfile();
-            if(profile.vo2maxRunning != null) {
-                val = complications.vo2RunTrend + (profile.vo2maxRunning as Number).format(numberFormat);
+            return "";
+        } else if (complicationType == 8) { // Respiration rate
+            activityInfo = ActivityMonitor.getInfo();
+            if (activityInfo.respirationRate != null) {
+                return activityInfo.respirationRate.format(numberFormat);
             }
-        } else if(complicationType == 7) { // VO2 Max Cycling
-            var profile = UserProfile.getProfile();
-            if(profile.vo2maxCycling != null) {
-                val = complications.vo2BikeTrend + (profile.vo2maxCycling as Number).format(numberFormat);
-            }
-        } else if(complicationType == 8) { // Respiration rate
-            if(activityInfo == null) { activityInfo = ActivityMonitor.getInfo(); }
-            if(activityInfo.respirationRate != null) {
-                val = activityInfo.respirationRate.format(numberFormat);
-            }
-        } else if(complicationType == 9) {
+            return "";
+        } else if (complicationType == 9) { // Heart Rate (live)
             // Try to retrieve live HR from Activity::Info
             var activity_info = Activity.getActivityInfo();
             var sample = activity_info.currentHeartRate;
-            if(sample != null) {
-                val = sample.format("%01d");
+            if (sample != null) {
+                return sample.format("%01d");
             } else {
                 var history = ActivityMonitor.getHeartRateHistory(1, /* newestFirst */ true);
                 if (history != null) {
                     var hist = history.next();
                     if ((hist != null) && (hist.heartRate != ActivityMonitor.INVALID_HR_SAMPLE)) {
-                        val = hist.heartRate.format("%01d");
+                        return hist.heartRate.format("%01d");
                     }
                 }
             }
-        } else if(complicationType == 10) { // Calories
-            if(activityInfo == null) { activityInfo = ActivityMonitor.getInfo(); }
-            if(activityInfo.calories != null) {
-                val = activityInfo.calories.format(numberFormat);
+            return "";
+        } else if (complicationType == 10) { // Calories
+            activityInfo = ActivityMonitor.getInfo();
+            if (activityInfo.calories != null) {
+                return activityInfo.calories.format(numberFormat);
             }
-        } else if(complicationType == 11) { // Altitude (m)
-                var alt = complications.getAltitudeValue();
-                if (alt != null) {
-                    val = alt.format(numberFormat);
+            return "";
+        } else if (complicationType == 12) { // Stress
+            var st = getStressData();
+            if (st != null) {
+                return st.format(numberFormat);
             }
-        } else if(complicationType == 12) { // Stress
-        var st = getStressData();
-            if(st != null) {
-                val = st.format(numberFormat);
-            }
-        } else if(complicationType == 13) { // Body battery
+            return "";
+        } else if (complicationType == 13) { // Body battery
             var bb = getBBData();
-            if(bb != null) {
-                val = bb.format(numberFormat);
+            if (bb != null) {
+                return bb.format(numberFormat);
             }
-        } else if(complicationType == 14) { // Altitude (ft)
-            var alt = complications.getAltitudeValue();
-            if (alt != null) {
-                val = (alt * 3.28084).format(numberFormat);
-            }
-        } else if(complicationType == 15) { // Alt TZ 1
-            val = secondaryTimezone(propTzOffset1, width, propIs24H, propHourFormat, propTzHourFormat);
-        } else if(complicationType == 16) { // Steps / day
-            if(activityInfo == null) { activityInfo = ActivityMonitor.getInfo(); }
-            if(activityInfo.steps != null) {
+            return "";
+        } else if (complicationType == 16) { // Steps / day
+            activityInfo = ActivityMonitor.getInfo();
+            if (activityInfo.steps != null) {
                 var steps = activityInfo.steps;
-                if(width >= 5) {
-                    val = steps.format("%d");
-                } else if(width == 4 and steps < 10000) {
-                    val = steps.format("%d");
+                if (width >= 5) {
+                    return steps.format("%d");
+                } else if (width == 4 and steps < 10000) {
+                    return steps.format("%d");
                 } else {
-                    val = (steps / 1000).format("%d") + "K";
+                    return (steps / 1000).format("%d") + "K";
                 }
             }
-        } else if(complicationType == 17) { // Distance (m) / day
-            if(activityInfo == null) { activityInfo = ActivityMonitor.getInfo(); }
-            if(activityInfo.distance != null) {
-                val = (activityInfo.distance / 100).format(numberFormat);
+            return "";
+        } else if (complicationType == 17) { // Distance (m) / day
+            activityInfo = ActivityMonitor.getInfo();
+            if (activityInfo.distance != null) {
+                return (activityInfo.distance / 100).format(numberFormat);
             }
-        } else if(complicationType == 18) { // Wheelchair pushes
-            if(activityInfo == null) { activityInfo = ActivityMonitor.getInfo(); }
-            if(activityInfo.pushes != null) {
-                val = activityInfo.pushes.format(numberFormat);
+            return "";
+        } else if (complicationType == 18) { // Wheelchair pushes
+            activityInfo = ActivityMonitor.getInfo();
+            if (activityInfo.pushes != null) {
+                return activityInfo.pushes.format(numberFormat);
             }
-        } else if(complicationType == 19) { // Weekly run distance
-            val = getWeeklyDistanceFromComplication(true, propIsMetricDistance ? 0.001 : 0.000621371, width);
-        } else if(complicationType == 20) { // Weekly bike distance
-            val = getWeeklyDistanceFromComplication(false, propIsMetricDistance ? 0.001 : 0.000621371, width);
-        } else if(complicationType == 21) { // Training status
-            val = complications.getTrainingStatusVal();
-        } else if(complicationType == 22) { // Raw Barometric pressure (hPA)
-            var info = Activity.getActivityInfo();
-            if (info.rawAmbientPressure != null) {
-                val = formatPressure(info.rawAmbientPressure / 100.0, width, propPressureUnit);
-            }
-        } else if(complicationType == 23) { // Weight kg
+            return "";
+        } else if (complicationType == 19) { // Weekly run distance
+            return getWeeklyDistanceFromComplication(true, propIsMetricDistance ? 0.001 : 0.000621371, width);
+        } else if (complicationType == 20) { // Weekly bike distance
+            return getWeeklyDistanceFromComplication(false, propIsMetricDistance ? 0.001 : 0.000621371, width);
+        } else if (complicationType == 23) { // Weight kg
             var profile = UserProfile.getProfile();
-            if(profile.weight != null) {
+            if (profile.weight != null) {
                 var weight_kg = profile.weight / 1000.0;
                 if (width == 3) {
-                    val = weight_kg.format(numberFormat);
+                    return weight_kg.format(numberFormat);
                 } else {
-                    val = weight_kg.format("%.1f");
+                    return weight_kg.format("%.1f");
                 }
             }
-        } else if(complicationType == 24) { // Weight lbs
+            return "";
+        } else if (complicationType == 24) { // Weight lbs
             var profile = UserProfile.getProfile();
-            if(profile.weight != null) {
-                val = (profile.weight * 0.00220462).format(numberFormat);
+            if (profile.weight != null) {
+                return (profile.weight * 0.00220462).format(numberFormat);
             }
-        } else if(complicationType == 25) { // Act Calories
-            if(activityInfo == null) { activityInfo = ActivityMonitor.getInfo(); }
+            return "";
+        } else if (complicationType == 25) { // Act Calories
+            activityInfo = ActivityMonitor.getInfo();
             var rest_calories = getRestCalories();
             // Get total calories and subtract rest calories
             if (activityInfo.calories != null && rest_calories > 0) {
                 var active_calories = activityInfo.calories - rest_calories;
                 if (active_calories > 0) {
-                    val = active_calories.format(numberFormat);
-                } else { val = "0"; }
+                    return active_calories.format(numberFormat);
+                } else { return "0"; }
             }
-        } else if(complicationType == 26) { // Sea level pressure (hPA)
-            var info = Activity.getActivityInfo();
-            if (info.meanSeaLevelPressure != null) {
-                val = formatPressure(info.meanSeaLevelPressure / 100.0, width, propPressureUnit);
-            }
-        } else if(complicationType == 27) { // Week number
-            var today = Time.Gregorian.info(Time.now(), Time.FORMAT_SHORT);
-            var week_number = isoWeekNumber(today.year, today.month, today.day, propWeekOffset);
-            val = week_number.format(numberFormat);
-        } else if(complicationType == 28 || complicationType == 29) { // Total distance past 7 days
-            val = formatDistanceByWidth(getWeeklyDistance() * (propIsMetricDistance ? 0.00001 : 0.00000621371), width);
-        } else if(complicationType == 30) { // Battery percentage
-            var battery = System.getSystemStats().battery;
-            val = battery.format("%d");
-        } else if(complicationType == 31) { // Battery days remaining
-            var stats35 = System.getSystemStats();
-            if(stats35.batteryInDays != null) {
-                val = Math.round(stats35.batteryInDays).format(numberFormat);
-            }
-        } else if(complicationType == 32) { // Notification count
-            var notif_count = System.getDeviceSettings().notificationCount;
-            if(notif_count != null) {
-                if(notif_count == 0) {
-                    val = ""; // Hide when zero
-                } else {
-                    val = notif_count.format(numberFormat);
-                }
-            }
-        } else if(complicationType == 33) { // Solar intensity
-            var stats37 = System.getSystemStats();
-            if(stats37.solarIntensity != null) {
-                val = stats37.solarIntensity.format(numberFormat);
-            }
-        } else if(complicationType == 34) { // Sensor temperature
-            var tempIterator = Toybox.SensorHistory.getTemperatureHistory({:period => 1});
-            if (tempIterator != null) {
-                var temp = tempIterator.next();
-                if(temp != null and temp.data != null) {
-                    val = formatTemperature(convertTemperature(temp.data, cachedTempUnit), propShowTempUnit, cachedTempUnit);
-                }
-            }
-        } else if(complicationType == 35 || complicationType == 36) { // Sunrise / Sunset
-            if(weatherCondition != null) {
-                var loc = weatherCondition.observationLocationPosition;
-                if(loc != null) {
-                    var now = Time.now();
-                    var s = (complicationType == 35) ? Weather.getSunrise(loc, now) : Weather.getSunset(loc, now);
-                    val = formatSunTime(s, width, propIs24H, propHourFormat);
-                }
-            }
-        } else if(complicationType == 37) { // Alt TZ 2
-            val = secondaryTimezone(propTzOffset2, width, propIs24H, propHourFormat, propTzHourFormat);
-        } else if(complicationType == 38) { // Alarms
-            val = System.getDeviceSettings().alarmCount.format(numberFormat);
-        } else if(complicationType == 39) { // High temp
-            if(weatherCondition != null and weatherCondition.highTemperature != null) {
-                var tempVal = weatherCondition.highTemperature;
-                val = formatTemperature(convertTemperature(tempVal, cachedTempUnit), propShowTempUnit, cachedTempUnit);
-            }
-        } else if(complicationType == 40) { // Low temp
-            if(weatherCondition != null and weatherCondition.lowTemperature != null) {
-                var tempVal = weatherCondition.lowTemperature;
-                val = formatTemperature(convertTemperature(tempVal, cachedTempUnit), propShowTempUnit, cachedTempUnit);
-            }
-        } else if(complicationType == 41) { // Temperature
-            val = weatherHelper.getTemperature();
-        } else if(complicationType == 42) { // Precipitation chance
-            val = weatherHelper.getPrecip();
-            if(width == 3 and val.equals("100%")) { val = "100"; }
-        } else if(complicationType == 43) { // Next Sun Event
-            var nextSunEventArray = getNextSunEvent(weatherCondition);
-            if(nextSunEventArray != null && nextSunEventArray.size() == 2) {
-                val = formatSunTime(nextSunEventArray[0], width, propIs24H, propHourFormat);
-            }
-        } else if(complicationType == 44) { // Millitary Date Time Group
-            val = getDateTimeGroup();
-        } else if(complicationType == 45) { // Time of the next Calendar Event
-            val = complications.getCalendarEventVal(width);
-        } else if(complicationType == 46) { // Active / Total calories
-            if(activityInfo == null) { activityInfo = ActivityMonitor.getInfo(); }
+            return "";
+        } else if (complicationType == 28 || complicationType == 29) { // Total distance past 7 days
+            return formatDistanceByWidth(getWeeklyDistance() * (propIsMetricDistance ? 0.00001 : 0.00000621371), width);
+        } else if (complicationType == 46) { // Active / Total calories
+            activityInfo = ActivityMonitor.getInfo();
             var rest_calories = getRestCalories();
             var total_calories = 0;
             // Get total calories and subtract rest calories
@@ -1925,105 +1874,213 @@ class Segment34View extends WatchUi.WatchFace {
             }
             var active_calories = total_calories - rest_calories;
             active_calories = (active_calories > 0) ? active_calories : 0; // Ensure active calories is not negative
-            val = active_calories.format(numberFormat) + "/" + total_calories.format(numberFormat);
-        } else if(complicationType == 47) { // PulseOx
-            val = complications.getPulseOxVal(numberFormat);
-        } else if(complicationType == 48) { // Location Long Lat dec deg
-            var pos = Activity.getActivityInfo().currentLocation;
-            if(pos != null) {
-                val = pos.toDegrees()[0] + " " + pos.toDegrees()[1];
-            } else {
-                val = Application.loadResource(Rez.Strings.LABEL_POS_NA);
-            }
-
-        } else if(complicationType == 49) { // Location Millitary format
-            var pos = Activity.getActivityInfo().currentLocation;
-            if(pos != null) {
-                val = pos.toGeoString(Position.GEO_MGRS);
-            } else {
-                val = Application.loadResource(Rez.Strings.LABEL_POS_NA);
-            }
-
-        } else if(complicationType == 50) { // Location Accuracy
-            var acc = Activity.getActivityInfo().currentLocationAccuracy;
-            if(acc != null) {
-                if(width < 4) {
-                    val = (acc as Number).format("%d");
-                } else {
-                    val = ["N/A", "LAST", "POOR", "USBL", "GOOD"][acc];
-                }
-            }
-        } else if(complicationType == 51) { // UV Index
-            val = weatherHelper.getUVIndex();
-        } else if(complicationType == 52) { // Humidity
-            val = weatherHelper.getHumidity();
-        } else if(complicationType == 53) { // CGM Glucose + Trend
-            val = complications.getCgmReading();
-        } else if(complicationType == 54) { // CGM Age (minutes)
-            val = complications.getCgmAge();
-        } else if(complicationType == 55) { // Feels like
-            val = weatherHelper.getFeelsLike();
-        } else if(complicationType == 56) { // Hours to next sun event
-            val = hoursToNextSunEvent(weatherCondition);
-        } else if(complicationType == 57) { // Resting Heart Rate
+            return active_calories.format(numberFormat) + "/" + total_calories.format(numberFormat);
+        } else if (complicationType == 57) { // Resting Heart Rate
             var profile = UserProfile.getProfile();
-            if(profile.restingHeartRate != null) {
-                val = profile.restingHeartRate.format(numberFormat);
+            if (profile.restingHeartRate != null) {
+                return profile.restingHeartRate.format(numberFormat);
             }
-        } else if(complicationType == 58 || complicationType == 59) { // Run/bike distance past 7 days
-            if(Time.now().value() - _lastActivityDistUpdate >= 60*5) {
+            return "";
+        } else if (complicationType == 58 || complicationType == 59) { // Run/bike distance past 7 days
+            if (Time.now().value() - _lastActivityDistUpdate >= 60*5) {
                 _lastActivityDistUpdate = Time.now().value();
                 updateActivityDistCache();
             }
             var distFactor = propIsMetricDistance ? 0.001 : 0.000621371;
-            val = formatDistanceByWidth((complicationType == 58 ? _cachedRunDist7Days : _cachedBikeDist7Days) * distFactor, width);
-        } else if(complicationType == 65) { // Swim distance past 7 days
-            if(Time.now().value() - _lastActivityDistUpdate >= 60*5) {
+            return formatDistanceByWidth((complicationType == 58 ? _cachedRunDist7Days : _cachedBikeDist7Days) * distFactor, width);
+        } else if (complicationType == 65) { // Swim distance past 7 days
+            if (Time.now().value() - _lastActivityDistUpdate >= 60*5) {
                 _lastActivityDistUpdate = Time.now().value();
                 updateActivityDistCache();
             }
             var distFactor = propIsMetricDistance ? 0.001 : 0.000621371;
-            val = formatDistanceByWidth(_cachedSwimDist7Days * distFactor, width);
-        } else if(complicationType == 66 || complicationType == 67) { // Run dist this month / past 28 days
-            if(Time.now().value() - _lastActivityDistUpdate >= 60*5) {
+            return formatDistanceByWidth(_cachedSwimDist7Days * distFactor, width);
+        } else if (complicationType == 66 || complicationType == 67) { // Run dist this month / past 28 days
+            if (Time.now().value() - _lastActivityDistUpdate >= 60*5) {
                 _lastActivityDistUpdate = Time.now().value();
                 updateActivityDistCache();
             }
             var distFactor = propIsMetricDistance ? 0.001 : 0.000621371;
-            val = formatDistanceByWidth((complicationType == 66 ? _cachedRunDistMonth : _cachedRunDist28Days) * distFactor, width);
-        } else if(complicationType == 60) { // Weather data 1 format string
-            val = weatherHelper.getWeatherByFormat(propWeatherFormat1);
-        } else if(complicationType == 61) { // Weather data 2 format string
-            val = weatherHelper.getWeatherByFormat(propWeatherFormat2);
-        } else if(complicationType == 63 || complicationType == 64) { // Civil dawn / Civil dusk
-            if(weatherCondition != null) {
-                var loc = weatherCondition.observationLocationPosition;
-                if(loc != null) {
-                    var now = Time.now();
-                    var sunrise = Weather.getSunrise(loc, now);
-                    var sunset = Weather.getSunset(loc, now);
-                    if(sunrise != null && sunset != null) {
-                        var latDeg = loc.toDegrees()[0];
-                        var twilight = getCivilTwilight(latDeg as Double, sunrise, sunset);
-                        if(twilight != null) {
-                            val = formatSunTime(complicationType == 63 ? twilight[0] : twilight[1], width, propIs24H, propHourFormat);
-                        }
-                    }
-                }
-            }
-        } else if(complicationType == 68) { // Daily counter (resets at midnight)
+            return formatDistanceByWidth((complicationType == 66 ? _cachedRunDistMonth : _cachedRunDist28Days) * distFactor, width);
+        } else if (complicationType == 68) { // Daily counter (resets at midnight)
             var today = Time.Gregorian.info(Time.now(), Time.FORMAT_SHORT);
             var todayKey = today.year * 10000 + today.month * 100 + today.day;
             var storedKey = Application.Storage.getValue("dailyCounterDay") as Number?;
-            if(storedKey == null || storedKey != todayKey) {
+            if (storedKey == null || storedKey != todayKey) {
                 Application.Storage.setValue("dailyCounterDay", todayKey);
                 Application.Storage.setValue("dailyCounter", 0);
             }
             var count = Application.Storage.getValue("dailyCounter") as Number?;
-            val = (count != null ? count : 0).format(numberFormat);
+            return (count != null ? count : 0).format(numberFormat);
         }
+        return null;
+    }
 
-        return val;
+    // Types: 22/26 (pressure), 34 (sensor temp), 35/36 (sun), 39-43 (weather), 51/52/55/56 (weather detail), 60/61 (format), 63/64 (twilight)
+    hidden function getWeatherValue(complicationType as Number, width as Number) as String? {
+        if (complicationType == 22) { // Raw Barometric pressure (hPA)
+            var info = Activity.getActivityInfo();
+            if (info.rawAmbientPressure != null) {
+                return formatPressure(info.rawAmbientPressure / 100.0, width, propPressureUnit);
+            }
+            return "";
+        } else if (complicationType == 26) { // Sea level pressure (hPA)
+            var info = Activity.getActivityInfo();
+            if (info.meanSeaLevelPressure != null) {
+                return formatPressure(info.meanSeaLevelPressure / 100.0, width, propPressureUnit);
+            }
+            return "";
+        } else if (complicationType == 34) { // Sensor temperature
+            var tempIterator = Toybox.SensorHistory.getTemperatureHistory({:period => 1});
+            if (tempIterator != null) {
+                var temp = tempIterator.next();
+                if (temp != null and temp.data != null) {
+                    return formatTemperature(convertTemperature(temp.data, cachedTempUnit), propShowTempUnit, cachedTempUnit);
+                }
+            }
+            return "";
+        } else if (complicationType == 35 || complicationType == 36) { // Sunrise / Sunset
+            if (weatherCondition != null) {
+                var loc = weatherCondition.observationLocationPosition;
+                if (loc != null) {
+                    var now = Time.now();
+                    var s = (complicationType == 35) ? Weather.getSunrise(loc, now) : Weather.getSunset(loc, now);
+                    return formatSunTime(s, width, propIs24H, propHourFormat);
+                }
+            }
+            return "";
+        } else if (complicationType == 39) { // High temp
+            if (weatherCondition != null and weatherCondition.highTemperature != null) {
+                var tempVal = weatherCondition.highTemperature;
+                return formatTemperature(convertTemperature(tempVal, cachedTempUnit), propShowTempUnit, cachedTempUnit);
+            }
+            return "";
+        } else if (complicationType == 40) { // Low temp
+            if (weatherCondition != null and weatherCondition.lowTemperature != null) {
+                var tempVal = weatherCondition.lowTemperature;
+                return formatTemperature(convertTemperature(tempVal, cachedTempUnit), propShowTempUnit, cachedTempUnit);
+            }
+            return "";
+        } else if (complicationType == 41) { // Temperature
+            return weatherHelper.getTemperature();
+        } else if (complicationType == 42) { // Precipitation chance
+            var val = weatherHelper.getPrecip();
+            if (width == 3 and val.equals("100%")) { val = "100"; }
+            return val;
+        } else if (complicationType == 43) { // Next Sun Event
+            var nextSunEventArray = getNextSunEvent(weatherCondition);
+            if (nextSunEventArray != null && nextSunEventArray.size() == 2) {
+                return formatSunTime(nextSunEventArray[0], width, propIs24H, propHourFormat);
+            }
+            return "";
+        } else if (complicationType == 51) { // UV Index
+            return weatherHelper.getUVIndex();
+        } else if (complicationType == 52) { // Humidity
+            return weatherHelper.getHumidity();
+        } else if (complicationType == 55) { // Feels like
+            return weatherHelper.getFeelsLike();
+        } else if (complicationType == 56) { // Hours to next sun event
+            return hoursToNextSunEvent(weatherCondition);
+        } else if (complicationType == 60) { // Weather data 1 format string
+            return weatherHelper.getWeatherByFormat(propWeatherFormat1);
+        } else if (complicationType == 61) { // Weather data 2 format string
+            return weatherHelper.getWeatherByFormat(propWeatherFormat2);
+        } else if (complicationType == 63 || complicationType == 64) { // Civil dawn / Civil dusk
+            if (weatherCondition != null) {
+                var loc = weatherCondition.observationLocationPosition;
+                if (loc != null) {
+                    var now = Time.now();
+                    var sunrise = Weather.getSunrise(loc, now);
+                    var sunset = Weather.getSunset(loc, now);
+                    if (sunrise != null && sunset != null) {
+                        var latDeg = loc.toDegrees()[0];
+                        var twilight = getCivilTwilight(latDeg as Double, sunrise, sunset);
+                        if (twilight != null) {
+                            return formatSunTime(complicationType == 63 ? twilight[0] : twilight[1], width, propIs24H, propHourFormat);
+                        }
+                    }
+                }
+            }
+            return "";
+        }
+        return null;
+    }
+
+    // Types: 5-7 (recovery/VO2), 11/14 (altitude), 21 (training), 30-33/38 (system), 45/47/53/54 (complications)
+    hidden function getComplicationValue(complicationType as Number, width as Number) as String? {
+        var numberFormat = "%d";
+        if (complicationType == 5) { // Time to Recovery (h)
+            return complications.getRecoveryTimeVal(numberFormat);
+        } else if (complicationType == 6) { // VO2 Max Running
+            var profile = UserProfile.getProfile();
+            if (profile.vo2maxRunning != null) {
+                return complications.vo2RunTrend + (profile.vo2maxRunning as Number).format(numberFormat);
+            }
+            return "";
+        } else if (complicationType == 7) { // VO2 Max Cycling
+            var profile = UserProfile.getProfile();
+            if (profile.vo2maxCycling != null) {
+                return complications.vo2BikeTrend + (profile.vo2maxCycling as Number).format(numberFormat);
+            }
+            return "";
+        } else if (complicationType == 11) { // Altitude (m)
+            var alt = complications.getAltitudeValue();
+            if (alt != null) {
+                return alt.format(numberFormat);
+            }
+            return "";
+        } else if (complicationType == 14) { // Altitude (ft)
+            var alt = complications.getAltitudeValue();
+            if (alt != null) {
+                return (alt * 3.28084).format(numberFormat);
+            }
+            return "";
+        } else if (complicationType == 21) { // Training status
+            return complications.getTrainingStatusVal();
+        } else if (complicationType == 30) { // Battery percentage
+            var battery = System.getSystemStats().battery;
+            return battery.format("%d");
+        } else if (complicationType == 31) { // Battery days remaining
+            var stats35 = System.getSystemStats();
+            if (stats35.batteryInDays != null) {
+                return Math.round(stats35.batteryInDays).format(numberFormat);
+            }
+            return "";
+        } else if (complicationType == 32) { // Notification count
+            var notif_count = System.getDeviceSettings().notificationCount;
+            if (notif_count != null) {
+                if (notif_count == 0) {
+                    return ""; // Hide when zero
+                } else {
+                    return notif_count.format(numberFormat);
+                }
+            }
+        } else if (complicationType == 33) { // Solar intensity
+            var stats37 = System.getSystemStats();
+            if (stats37.solarIntensity != null) {
+                return stats37.solarIntensity.format(numberFormat);
+            }
+            return "";
+        } else if (complicationType == 38) { // Alarms
+            return System.getDeviceSettings().alarmCount.format(numberFormat);
+        } else if (complicationType == 45) { // Time of the next Calendar Event
+            return complications.getCalendarEventVal(width);
+        } else if (complicationType == 47) { // PulseOx
+            return complications.getPulseOxVal(numberFormat);
+        } else if (complicationType == 53) { // CGM Glucose + Trend
+            return complications.getCgmReading();
+        } else if (complicationType == 54) { // CGM Age (minutes)
+            return complications.getCgmAge();
+        }
+        return null;
+    }
+
+    hidden function getValueByType(complicationType as Number, width as Number) as String {
+        var val = getClockValue(complicationType, width);
+        if (val == null) { val = getActivityValue(complicationType, width); }
+        if (val == null) { val = getWeatherValue(complicationType, width); }
+        if (val == null) { val = getComplicationValue(complicationType, width); }
+        return val != null ? val : "";
     }
 
     hidden function getLabelByType(complicationType as Number, labelSize as Number) as String {

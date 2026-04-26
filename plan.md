@@ -309,7 +309,7 @@ Graph layout params (graphBarWidth, graphHeight, etc.) passed to `configure()` i
 
 ---
 
-### Step 9 — Internal refactor of `getValueByType` (prerequisite for Step 10)
+### Step 9 — Internal refactor of `getValueByType` (prerequisite for Step 10) ✅ COMPLETE
 **No new file.** This step makes Step 10 feasible by breaking `getValueByType` (344 lines)
 into logical private sub-functions within the class:
 
@@ -370,7 +370,7 @@ Initialized in `reloadSettings()`, re-configured in `updateProperties()`.
 | 6 | `refactor-theme-manager` | `ThemeManager.mc` | 160 | Med-high | ✅ |
 | 7 | `refactor-weather-display` | `WeatherDisplayHelper.mc` | 300 | Medium | ✅ |
 | 8 | `refactor-graph-renderer` | `GraphRenderer.mc` | 420 | Medium | ✅ |
-| 9 | `refactor-split-getvaluebtype` | (in-place) | 0 net | Medium |
+| 9 | `refactor-split-getvaluebtype` | (in-place) | 0 net | Medium | ✅ |
 | 10 | `refactor-value-resolver` | `ValueResolver.mc` | 750 | High |
 
 **Total estimated reduction: ~2280 lines → view ends up ~1570 lines**

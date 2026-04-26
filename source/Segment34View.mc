@@ -66,10 +66,7 @@ class Segment34View extends WatchUi.WatchFace {
     hidden var fontAODData as WatchUi.FontResource?;
     hidden var fontBottomData as WatchUi.FontResource?;
     hidden var fontBattery as WatchUi.FontResource?;
-    hidden var cachedDayOfWeek as Number = -1;
-    hidden var cachedDayName as String = "";
-    hidden var cachedMonth as Number = -1;
-    hidden var cachedMonthName as String = "";
+
 
     // Layout Caching
     hidden var fieldXCoords as Array<Number> = [0, 0, 0, 0];
@@ -670,7 +667,7 @@ class Segment34View extends WatchUi.WatchFace {
         
         // From updateSlowData logic
         values[:dataClock] = getClockData(now);
-        values[:dataMoon] = (propTopPartShows == 0) ? moonPhase(now) : "";
+        values[:dataMoon] = (propTopPartShows == 0) ? moonPhase(now, propHemisphere) : "";
         if(propTopPartShows == 2) {
             var currentMinute = now.hour * 60 + now.min;
             // Only re-fetch sensor history when the minute changes or the data source changed.
@@ -1372,17 +1369,6 @@ class Segment34View extends WatchUi.WatchFace {
     }
 
     // Format a Y-axis value for display; uses "k" suffix for values >= 1000.
-    hidden function formatGraphAxisValue(val as Float) as String {
-        var n = val.toNumber();
-        if(n < 0) {
-            var abs = (-val).toNumber();
-            if(abs >= 1000) { return "-" + (abs / 1000).toString() + "K"; }
-            return "-" + abs.toString();
-        }
-        if(n >= 1000) { return (n / 1000).toString() + "K"; }
-        return n.toString();
-    }
-
     // Returns the X-axis label for the leftmost (isLeft=true) or rightmost point.
     // For 2-hour data: formatted time; for 7-day data: abbreviated weekday.
     hidden function getGraphXLabel(isLeft as Boolean) as String {
@@ -1760,9 +1746,9 @@ class Segment34View extends WatchUi.WatchFace {
         }
 
         if(propZeropadHour) {
-            return formatHour(now.hour).format("%02d") + separator + now.min.format("%02d") + after;
+            return formatHour(now.hour, propIs24H, propHourFormat).format("%02d") + separator + now.min.format("%02d") + after;
         } else {
-            return formatHour(now.hour).format("%2d") + separator + now.min.format("%02d") + after;
+            return formatHour(now.hour, propIs24H, propHourFormat).format("%2d") + separator + now.min.format("%02d") + after;
         }
     }
 
@@ -1918,11 +1904,6 @@ class Segment34View extends WatchUi.WatchFace {
         return null;
     }
 
-    hidden function goalPercent(val as Number, goal as Number) as Number {
-        if(goal == 0 || val == 0) { return 0; }
-        return Math.round(val.toFloat() / goal.toFloat() * 100.0);
-    }
-
     hidden function getStepGoalProgress() as Number? {
         var info = ActivityMonitor.getInfo();
         if(info.steps != null and info.stepGoal != null) {
@@ -2000,13 +1981,6 @@ class Segment34View extends WatchUi.WatchFace {
         return value;
     }
 
-    hidden function formatHour(hour as Number) as Number {
-        if((!propIs24H and propHourFormat == 0) or propHourFormat == 2) {
-            hour = hour % 12;
-            if(hour == 0) { hour = 12; }
-        }
-        return hour;
-    }
 
     hidden function updateWeather() as Void {
         if (propWeatherProvider == 1) {
@@ -2291,7 +2265,7 @@ class Segment34View extends WatchUi.WatchFace {
         if(complicationType == -2) { // Hidden
             return "";
         } else if(complicationType == -1) { // Date
-            val = formatDate();
+            val = formatDate(propDateFormat, propDateCustomFormat, propFontSize, propWeekOffset);
         } else if(complicationType == 0) { // Active min / week
             activityInfo = ActivityMonitor.getInfo();
             if(activityInfo.activeMinutesWeek != null) {
@@ -2381,7 +2355,7 @@ class Segment34View extends WatchUi.WatchFace {
                 val = (alt * 3.28084).format(numberFormat);
             }
         } else if(complicationType == 15) { // Alt TZ 1
-            val = secondaryTimezone(propTzOffset1, width);
+            val = secondaryTimezone(propTzOffset1, width, propIs24H, propHourFormat, propTzHourFormat);
         } else if(complicationType == 16) { // Steps / day
             if(activityInfo == null) { activityInfo = ActivityMonitor.getInfo(); }
             if(activityInfo.steps != null) {
@@ -2413,7 +2387,7 @@ class Segment34View extends WatchUi.WatchFace {
         } else if(complicationType == 22) { // Raw Barometric pressure (hPA)
             var info = Activity.getActivityInfo();
             if (info.rawAmbientPressure != null) {
-                val = formatPressure(info.rawAmbientPressure / 100.0, width);
+                val = formatPressure(info.rawAmbientPressure / 100.0, width, propPressureUnit);
             }
         } else if(complicationType == 23) { // Weight kg
             var profile = UserProfile.getProfile();
@@ -2443,11 +2417,11 @@ class Segment34View extends WatchUi.WatchFace {
         } else if(complicationType == 26) { // Sea level pressure (hPA)
             var info = Activity.getActivityInfo();
             if (info.meanSeaLevelPressure != null) {
-                val = formatPressure(info.meanSeaLevelPressure / 100.0, width);
+                val = formatPressure(info.meanSeaLevelPressure / 100.0, width, propPressureUnit);
             }
         } else if(complicationType == 27) { // Week number
             var today = Time.Gregorian.info(Time.now(), Time.FORMAT_SHORT);
-            var week_number = isoWeekNumber(today.year, today.month, today.day);
+            var week_number = isoWeekNumber(today.year, today.month, today.day, propWeekOffset);
             val = week_number.format(numberFormat);
         } else if(complicationType == 28 || complicationType == 29) { // Total distance past 7 days
             val = formatDistanceByWidth(getWeeklyDistance() * (propIsMetricDistance ? 0.00001 : 0.00000621371), width);
@@ -2478,7 +2452,7 @@ class Segment34View extends WatchUi.WatchFace {
             if (tempIterator != null) {
                 var temp = tempIterator.next();
                 if(temp != null and temp.data != null) {
-                    val = formatTemperature(convertTemperature(temp.data, cachedTempUnit));
+                    val = formatTemperature(convertTemperature(temp.data, cachedTempUnit), propShowTempUnit, cachedTempUnit);
                 }
             }
         } else if(complicationType == 35 || complicationType == 36) { // Sunrise / Sunset
@@ -2487,22 +2461,22 @@ class Segment34View extends WatchUi.WatchFace {
                 if(loc != null) {
                     var now = Time.now();
                     var s = (complicationType == 35) ? Weather.getSunrise(loc, now) : Weather.getSunset(loc, now);
-                    val = formatSunTime(s, width);
+                    val = formatSunTime(s, width, propIs24H, propHourFormat);
                 }
             }
         } else if(complicationType == 37) { // Alt TZ 2
-            val = secondaryTimezone(propTzOffset2, width);
+            val = secondaryTimezone(propTzOffset2, width, propIs24H, propHourFormat, propTzHourFormat);
         } else if(complicationType == 38) { // Alarms
             val = System.getDeviceSettings().alarmCount.format(numberFormat);
         } else if(complicationType == 39) { // High temp
             if(weatherCondition != null and weatherCondition.highTemperature != null) {
                 var tempVal = weatherCondition.highTemperature;
-                val = formatTemperature(convertTemperature(tempVal, cachedTempUnit));
+                val = formatTemperature(convertTemperature(tempVal, cachedTempUnit), propShowTempUnit, cachedTempUnit);
             }
         } else if(complicationType == 40) { // Low temp
             if(weatherCondition != null and weatherCondition.lowTemperature != null) {
                 var tempVal = weatherCondition.lowTemperature;
-                val = formatTemperature(convertTemperature(tempVal, cachedTempUnit));
+                val = formatTemperature(convertTemperature(tempVal, cachedTempUnit), propShowTempUnit, cachedTempUnit);
             }
         } else if(complicationType == 41) { // Temperature
             val = getTemperature();
@@ -2512,7 +2486,7 @@ class Segment34View extends WatchUi.WatchFace {
         } else if(complicationType == 43) { // Next Sun Event
             var nextSunEventArray = getNextSunEvent();
             if(nextSunEventArray != null && nextSunEventArray.size() == 2) {
-                val = formatSunTime(nextSunEventArray[0], width);
+                val = formatSunTime(nextSunEventArray[0], width, propIs24H, propHourFormat);
             }
         } else if(complicationType == 44) { // Millitary Date Time Group
             val = getDateTimeGroup();
@@ -2609,7 +2583,7 @@ class Segment34View extends WatchUi.WatchFace {
                         var latDeg = loc.toDegrees()[0];
                         var twilight = getCivilTwilight(latDeg as Double, sunrise, sunset);
                         if(twilight != null) {
-                            val = formatSunTime(complicationType == 63 ? twilight[0] : twilight[1], width);
+                            val = formatSunTime(complicationType == 63 ? twilight[0] : twilight[1], width, propIs24H, propHourFormat);
                         }
                     }
                 }
@@ -2884,44 +2858,6 @@ class Segment34View extends WatchUi.WatchFace {
         return "";
     }
 
-    hidden function formatLabel(short as ResourceId, mid as ResourceId, size as Number) as String {
-        if(size == 1) { return Application.loadResource(short) + ":"; }
-        return Application.loadResource(mid) + ":";
-    }
-
-    hidden function formatDate() as String {
-        var now = Time.now();
-        var today = Time.Gregorian.info(now, Time.FORMAT_SHORT);
-
-        if(propDateFormat == 1) {
-            return formatCustomDate(today);
-        }
-        // Auto: omit year for large font
-        var base = dayName(today.day_of_week) + ", " + today.day + " " + monthName(today.month);
-        if(propFontSize == 1) {
-            return base;
-        }
-        return base + " " + today.year;
-    }
-
-    hidden function formatCustomDate(today as Time.Gregorian.Info) as String {
-        var fmt = propDateCustomFormat;
-        var result = "";
-        var i = 0;
-        while(i < fmt.length()) {
-            var ch = fmt.substring(i, i + 1);
-            if(ch.equals("y")) { result += today.year.toString(); }
-            else if(ch.equals("m")) { result += today.month.format("%02d"); }
-            else if(ch.equals("d")) { result += today.day.toString(); }
-            else if(ch.equals("o")) { result += dayName(today.day_of_week); }
-            else if(ch.equals("n")) { result += monthName(today.month); }
-            else if(ch.equals("w")) { result += isoWeekNumber(today.year, today.month, today.day).toString(); }
-            else { result += ch; }
-            i += 1;
-        }
-        return result;
-    }
-
     hidden function getWeatherByFormat(format as String) as String {
         var result = "";
         var i = 0;
@@ -2944,87 +2880,6 @@ class Segment34View extends WatchUi.WatchFace {
             i += 1;
         }
         return result;
-    }
-
-    hidden function getDateTimeGroup() as String {
-        // 052125ZMAR25
-        // DDHHMMZmmmYY
-        var now = Time.now();
-        var utc = Time.Gregorian.utcInfo(now, Time.FORMAT_SHORT);
-        var value = utc.day.format("%02d") + utc.hour.format("%02d") + utc.min.format("%02d") + "Z" + monthName(utc.month) + utc.year.toString().substring(2,4);
-
-        return value;
-    }
-
-    hidden function formatPressure(pressureHpa as Float, width as Number) as String {
-        var val = "";
-        var nf = "%d";
-
-        if (propPressureUnit == 0) { // hPA
-            val = pressureHpa.format(nf);
-        } else if (propPressureUnit == 1) { // mmHG
-            val = (pressureHpa * 0.750062).format(nf);
-        } else if (propPressureUnit == 2) { // inHG
-            if(width == 5) {
-                val = (pressureHpa * 0.02953).format("%.2f");
-            } else {
-                val = (pressureHpa * 0.02953).format("%.1f");
-            }
-        }
-
-        return val;
-    }
-
-    hidden function moonPhase(time) as String {
-        var jd = julianDay(time.year, time.month, time.day);
-
-        var days_since_new_moon = jd - 2459966;
-        var lunar_cycle = 29.53;
-        var phase = ((days_since_new_moon / lunar_cycle) * 100).toNumber() % 100;
-        var into_cycle = (phase / 100.0) * lunar_cycle;
-
-        if(time.month == 5 and time.day == 4) {
-            return "8"; // That's no moon!
-        }
-
-        var moonPhase;
-        if (into_cycle < 3) { // 2+1
-            moonPhase = 0;
-        } else if (into_cycle < 6) { // 4
-            moonPhase = 1;
-        } else if (into_cycle < 10) { // 4
-            moonPhase = 2;
-        } else if (into_cycle < 14) { // 4
-            moonPhase = 3;
-        } else if (into_cycle < 18) { // 4
-            moonPhase = 4;
-        } else if (into_cycle < 22) { // 4
-            moonPhase = 5;
-        } else if (into_cycle < 26) { // 4
-            moonPhase = 6;
-        } else if (into_cycle < 29) { // 3
-            moonPhase = 7;
-        } else {
-            moonPhase = 0;
-        }
-
-        // If hemisphere is 1 (southern), invert the phase index
-        if (propHemisphere == 1) {
-            moonPhase = (8 - moonPhase) % 8;
-        }
-
-        return moonPhase.toString();
-
-    }
-
-    hidden function formatDistanceByWidth(distance as Float, width as Number) as String {
-        if (width == 3) {
-            return distance < 9.9 ? distance.format("%.1f") : Math.round(distance).format("%d");
-        } else if (width == 4) {
-            return distance < 100 ? distance.format("%.1f") : distance.format("%d");
-        } else {  // width == 5
-            return distance < 1000 ? distance.format("%05.1f") : distance.format("%05d");
-        }
     }
 
     hidden function getCityName() as String {
@@ -3084,7 +2939,7 @@ class Segment34View extends WatchUi.WatchFace {
     hidden function getTemperature() as String {
         if(weatherCondition != null and weatherCondition.temperature != null) {
             var temp_val = weatherCondition.temperature;
-            return formatTemperature(convertTemperature(temp_val, cachedTempUnit));
+            return formatTemperature(convertTemperature(temp_val, cachedTempUnit), propShowTempUnit, cachedTempUnit);
         }
         return "";
     }
@@ -3098,27 +2953,13 @@ class Segment34View extends WatchUi.WatchFace {
         }
     }
 
-    hidden function formatTemperature(temp) as String {
-        if(propShowTempUnit) {
-            return temp.format("%d") + cachedTempUnit;
-        }
-        return temp.format("%d");
-    }
-
-    hidden function convertTemperature(temp as Numeric, unit as String) as Numeric {
-        if(unit.equals("C")) {
-            return temp;
-        } else {
-            return ((temp * 9/5) + 32);
-        }
-    }
 
 
     hidden function getWind() as String {
         var bearing = "";
         var windspeed = "";
         if(weatherCondition != null and weatherCondition.windSpeed != null) {
-            windspeed = formatWindSpeed(weatherCondition.windSpeed as Float);
+            windspeed = formatWindSpeed(weatherCondition.windSpeed as Float, propWindUnit);
         }
         if(weatherCondition != null and weatherCondition.windBearing != null) {
             bearing = ((Math.round((weatherCondition.windBearing.toFloat() + 180) / 45.0).toNumber() % 8) + 97).toChar().toString();
@@ -3130,33 +2971,7 @@ class Segment34View extends WatchUi.WatchFace {
         if (weatherCondition == null) { return ""; }
         var gust_mps = weatherCondition.windGust;
         if (gust_mps == null) { return ""; }
-        return formatWindSpeed(gust_mps as Float);
-    }
-
-    hidden function formatWindSpeed(mps as Float) as String {
-        if (propWindUnit == 0) {
-            return Math.round(mps).format("%d");
-        } else if (propWindUnit == 1) {
-            return Math.round(mps * 3.6).format("%d");
-        } else if (propWindUnit == 2) {
-            return Math.round(mps * 2.237).format("%d");
-        } else if (propWindUnit == 3) {
-            return Math.round(mps * 1.944).format("%d");
-        } else { // beaufort
-            if (mps < 0.5f) { return "0"; }
-            if (mps < 1.5f) { return "1"; }
-            if (mps < 3.3f) { return "2"; }
-            if (mps < 5.5f) { return "3"; }
-            if (mps < 7.9f) { return "4"; }
-            if (mps < 10.7f) { return "5"; }
-            if (mps < 13.8f) { return "6"; }
-            if (mps < 17.1f) { return "7"; }
-            if (mps < 20.7f) { return "8"; }
-            if (mps < 24.4f) { return "9"; }
-            if (mps < 28.4f) { return "10"; }
-            if (mps < 32.6f) { return "11"; }
-            return "12";
-        }
+        return formatWindSpeed(gust_mps as Float, propWindUnit);
     }
 
     hidden function getPrecipAmount() as String {
@@ -3177,13 +2992,13 @@ class Segment34View extends WatchUi.WatchFace {
         var ts = weatherCondition.observationTimestamp;
         if (ts == null) { return ""; }
         var info = Time.Gregorian.info(new Time.Moment(ts as Number), Time.FORMAT_SHORT);
-        var h = formatHour(info.hour);
+        var h = formatHour(info.hour, propIs24H, propHourFormat);
         return h.format("%02d") + ":" + info.min.format("%02d");
     }
 
     hidden function getFeelsLike() as String {
         if(weatherCondition != null and weatherCondition.feelsLikeTemperature != null) {
-            return formatTemperature(convertTemperature(weatherCondition.feelsLikeTemperature, cachedTempUnit));
+            return formatTemperature(convertTemperature(weatherCondition.feelsLikeTemperature, cachedTempUnit), propShowTempUnit, cachedTempUnit);
         }
         return "";
     }
@@ -3210,7 +3025,7 @@ class Segment34View extends WatchUi.WatchFace {
             if(weatherCondition.highTemperature != null and weatherCondition.lowTemperature != null) {
                 var high = convertTemperature(weatherCondition.highTemperature, cachedTempUnit);
                 var low = convertTemperature(weatherCondition.lowTemperature, cachedTempUnit);
-                ret = formatTemperature(high) + "/" + formatTemperature(low);
+                ret = formatTemperature(high, propShowTempUnit, cachedTempUnit) + "/" + formatTemperature(low, propShowTempUnit, cachedTempUnit);
             }
         }
         return ret;
@@ -3237,16 +3052,6 @@ class Segment34View extends WatchUi.WatchFace {
             return (diff / 3600.0).format("%.1f");
         }
         return "";
-    }
-
-    hidden function formatSunTime(s as Time.Moment?, width as Number) as String {
-        if(s != null) {
-            var info = Time.Gregorian.info(s, Time.FORMAT_SHORT);
-            var h = formatHour(info.hour);
-            if(width < 5) { return h.format("%02d") + info.min.format("%02d"); }
-            return h.format("%02d") + ":" + info.min.format("%02d");
-        }
-        return Application.loadResource(Rez.Strings.LABEL_NA);
     }
 
     hidden function getNextSunEvent() as Array {
@@ -3281,41 +3086,6 @@ class Segment34View extends WatchUi.WatchFace {
             }
         }
         return [];
-    }
-
-    // Returns [dawn, dusk] as Time.Moment objects, or null if unavailable.
-    // dawn = civil dawn (sun at -6°), dusk = civil dusk (sun at -6°).
-    // Requires: lat_deg (latitude in degrees), sunrise and sunset as Time.Moment.
-    hidden function getCivilTwilight(lat_deg as Double, sunrise as Time.Moment, sunset as Time.Moment) as Array? {
-        var PI = Math.PI;
-        var lat = lat_deg * PI / 180.0;
-
-        // Half-day length as hour angle in radians (Earth rotates 2π in 86400s)
-        var half_day_s = (sunset.value() - sunrise.value()) / 2.0;
-        var H0 = half_day_s / 86400.0 * 2.0 * PI;
-
-        // Back-calculate solar declination from H0 and latitude.
-        // sunrise formula: cos(H0) = (sin(h0) - sin(lat)*sin(dec)) / (cos(lat)*cos(dec))
-        // where h0 = -0.8333° (includes atmospheric refraction + solar disc)
-        var sin_h0 = Math.sin(-0.8333 * PI / 180.0);
-        var a = Math.cos(H0) * Math.cos(lat);
-        var b = Math.sin(lat);
-        var R = Math.sqrt(a * a + b * b);
-        var ratio = sin_h0 / R;
-        if (ratio < -1.0 || ratio > 1.0) { return null; }
-        var alpha = Math.atan2(b, a);
-        var dec = alpha - Math.acos(ratio); // valid root; other root is always ~180°+
-
-        // Hour angle for civil twilight (sun at -6°)
-        var cos_H_civil = (Math.sin(-6.0 * PI / 180.0) - Math.sin(lat) * Math.sin(dec)) /
-                          (Math.cos(lat) * Math.cos(dec));
-        if (cos_H_civil > 1.0) { return null; } // polar twilight — sun never drops below -6°
-        if (cos_H_civil < -1.0) { return null; } // shouldn't happen when sunrise is valid
-        var H_civil = Math.acos(cos_H_civil);
-
-        var delta_s = (H_civil - H0) / (2.0 * PI) * 86400.0;
-        var delta = new Time.Duration(delta_s.toNumber());
-        return [sunrise.subtract(delta), sunset.add(delta)];
     }
 
     hidden function getRestCalories() as Number {
@@ -3510,115 +3280,6 @@ class Segment34View extends WatchUi.WatchFace {
             return ageMin.format("%d");
         } catch (e) {}
         return "";
-    }
-    hidden function secondaryTimezone(offset, width) as String {
-        var val = "";
-        var now = Time.now();
-        var utc = Time.Gregorian.utcInfo(now, Time.FORMAT_MEDIUM);
-        var min = utc.min + (offset % 60);
-        var hour = (utc.hour + Math.floor(offset / 60)) % 24;
-
-        if(min > 59) {
-            min -= 60;
-            hour += 1;
-        }
-
-        if(min < 0) {
-            min += 60;
-            hour -= 1;
-        }
-
-        if(hour < 0) {
-            hour += 24;
-        }
-        if(hour > 23) {
-            hour -= 24;
-        }
-        var mainClockIs12h = (!propIs24H and propHourFormat == 0) or propHourFormat == 2;
-        var tzIs12h = (propTzHourFormat == 2) or (propTzHourFormat == 0 and mainClockIs12h);
-        var f_hour = hour;
-        if(tzIs12h) {
-            f_hour = hour % 12;
-            if(f_hour == 0) { f_hour = 12; }
-        }
-        if(width < 5) {
-            val = f_hour.format("%02d") + min.format("%02d");
-        } else {
-            if(tzIs12h) {
-                var ampm = "A";
-                if(hour >= 12) { ampm = "P"; }
-                val = f_hour.format("%02d") + min.format("%02d") + ampm;
-            } else {
-                val = f_hour.format("%02d") + ":" + min.format("%02d");
-            }
-        }
-        return val;
-    }
-
-    hidden function dayName(day_of_week as Number) as String {
-        if (cachedDayOfWeek == day_of_week) { return cachedDayName; }
-        cachedDayOfWeek = day_of_week;
-        var names = [Rez.Strings.DAY_OF_WEEK_SUN, Rez.Strings.DAY_OF_WEEK_MON, Rez.Strings.DAY_OF_WEEK_TUE,
-                     Rez.Strings.DAY_OF_WEEK_WED, Rez.Strings.DAY_OF_WEEK_THU, Rez.Strings.DAY_OF_WEEK_FRI,
-                     Rez.Strings.DAY_OF_WEEK_SAT];
-        cachedDayName = Application.loadResource(names[day_of_week - 1]);
-        return cachedDayName;
-    }
-
-    hidden function monthName(month as Number) as String {
-        if (cachedMonth == month) { return cachedMonthName; }
-        cachedMonth = month;
-        var names = [Rez.Strings.MONTH_JAN, Rez.Strings.MONTH_FEB, Rez.Strings.MONTH_MAR,
-                     Rez.Strings.MONTH_APR, Rez.Strings.MONTH_MAY, Rez.Strings.MONTH_JUN,
-                     Rez.Strings.MONTH_JUL, Rez.Strings.MONTH_AUG, Rez.Strings.MONTH_SEP,
-                     Rez.Strings.MONTH_OCT, Rez.Strings.MONTH_NOV, Rez.Strings.MONTH_DEC];
-        cachedMonthName = Application.loadResource(names[month - 1]);
-        return cachedMonthName;
-    }
-
-    hidden function isoWeekNumber(year as Number, month as Number, day as Number) as Number {
-        var first_day_of_year = julianDay(year, 1, 1);
-        var given_day_of_year = julianDay(year, month, day);
-        var day_of_week = (first_day_of_year + 3) % 7;
-        var week_of_year = (given_day_of_year - first_day_of_year + day_of_week + 4) / 7;
-        var ret = 0;
-        if (week_of_year == 53) {
-            if (day_of_week == 6) {
-                ret = week_of_year;
-            } else if (day_of_week == 5 && isLeapYear(year)) {
-                ret = week_of_year;
-            } else {
-                ret = 1;
-            }
-        } else if (week_of_year == 0) {
-            first_day_of_year = julianDay(year - 1, 1, 1);
-            day_of_week = (first_day_of_year + 3) % 7;
-            ret = (given_day_of_year - first_day_of_year + day_of_week + 4) / 7;
-        } else {
-            ret = week_of_year;
-        }
-        if(propWeekOffset != 0) {
-            ret = ret + propWeekOffset;
-        }
-        return ret;
-    }
-
-    hidden function julianDay(year as Number, month as Number, day as Number) as Number {
-        var a = (14 - month) / 12;
-        var y = (year + 4800 - a);
-        var m = (month + 12 * a - 3);
-        return day + ((153 * m + 2) / 5) + (365 * y) + (y / 4) - (y / 100) + (y / 400) - 32045;
-    }
-
-    hidden function isLeapYear(year as Number) as Boolean {
-        if (year % 4 != 0) {
-            return false;
-           } else if (year % 100 != 0) {
-            return true;
-        } else if (year % 400 == 0) {
-            return true;
-        }
-        return false;
     }
 
     // Square helper functions - only compiled for square devices

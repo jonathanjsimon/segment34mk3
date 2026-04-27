@@ -919,11 +919,11 @@ class Segment34View extends WatchUi.WatchFace {
 
         if(isSleeping and canBurnIn) {
             drawAOD(dc, now, cachedValues);
-        } else if(valuesUpdated or slowUpdated or now.min != lastDrawnMinute) {
-            // Full redraw: computed values changed, theme/weather refreshed, or minute flipped.
+        } else if(!propExperimentalBattery or valuesUpdated or slowUpdated or now.min != lastDrawnMinute) {
+            // Full redraw: optimizations off, or values/theme changed, or minute flipped.
             drawWatchface(dc, now, false, cachedValues);
             lastDrawnMinute = now.min;
-        } else if(canBurnIn and propSecondsShows == -3 and propShowSeconds and propExperimentalBattery) {
+        } else if(canBurnIn and propSecondsShows == -3 and propShowSeconds) {
             // AMOLED: onPartialUpdate is unavailable; only the seconds digit changed.
             // Redraw just the seconds clip area — avoids clear + gradient bitmap + all drawText calls.
             drawPartialSeconds(dc, cachedValues[:dataSeconds] as String);

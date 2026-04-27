@@ -310,37 +310,63 @@ class GraphRenderer {
             cachedGraphYMin = min.toFloat(); cachedGraphYMax = max.toFloat();
         }
 
-        var ret = [];
-        var diff = max - (min * 0.9);
+        // Allocate one slot per display column, each covering an equal slice of the 2h window.
+        // Anchor the right edge to the actual newest sample time rather than Time.now(), so the
+        // slot mapping stays aligned even when the device clock drifts from sample timestamps.
+        // secsPerSlot is exact because all graphTargetWidth values (25, 40, 45) divide 7200 evenly.
+        var newestMoment = iterator.getNewestSampleTime();
+        var oldestMoment = iterator.getOldestSampleTime();
+        var nowEpoch = Time.now().value();
+        var newestEpoch = newestMoment != null ? newestMoment.value() : nowEpoch;
+        var oldestEpoch = oldestMoment != null ? oldestMoment.value() : (nowEpoch - 7200);
+        // Some simulators return getNewestSampleTime/getOldestSampleTime with swapped semantics,
+        // so take whichever is actually later as the right edge of the window.
+        var windowEndEpoch = newestEpoch > oldestEpoch ? newestEpoch : oldestEpoch;
+        var windowStartEpoch = windowEndEpoch - 7200;
+        var secsPerSlot = 7200 / _targetWidth;
         var isStress = (dataSource == 5 or dataSource == 7);
+        var diff = max - (min * 0.9);
+
+        // ORDER_OLDEST_FIRST: older samples write first, newer samples overwrite → newest wins per slot.
+        var ret = [] as Array<Number>;
+        for(var i = 0; i < _targetWidth; i++) { ret.add(-1); }
+
         var sample = iterator.next();
         while(sample != null) {
+            var slot = (sample.when.value() - windowStartEpoch) / secsPerSlot;
+            if(slot < 0) { slot = 0; }
+            if(slot >= _targetWidth) { slot = _targetWidth - 1; }
+
+            var normalized = -1;
             if(dataSource == 2) {
                 if(sample.data != null and sample.data != 0 and sample.data < 255) {
                     var hrRange = max - hrMin;
-                    var normalized = hrRange > 0 ? Math.round((sample.data.toFloat() - hrMin) / hrRange * 100).toNumber() : 0;
+                    normalized = hrRange > 0 ? Math.round((sample.data.toFloat() - hrMin) / hrRange * 100).toNumber() : 0;
                     if(normalized < 0) { normalized = 0; }
-                    ret.add(normalized);
                 }
             } else if(dataSource == 1 or dataSource == 4) {
                 if(sample.data != null) {
-                    ret.add(Math.round((sample.data.toFloat() - Math.round(min * 0.9)) / diff * 100).toNumber());
+                    normalized = Math.round((sample.data.toFloat() - Math.round(min * 0.9)) / diff * 100).toNumber();
                 }
             } else if(dataSource == 3) {
                 if(sample.data != null) {
-                    ret.add(Math.round((sample.data.toFloat() - 50.0) / 50.0 * 100).toNumber());
+                    normalized = Math.round((sample.data.toFloat() - 50.0) / 50.0 * 100).toNumber();
                 }
             } else {
                 if(sample.data != null) {
-                    ret.add(Math.round(sample.data.toFloat() / max * 100).toNumber());
-                } else if(isStress) {
-                    ret.add(-1); // gap: stress not measurable, preserve for display
+                    normalized = Math.round(sample.data.toFloat() / max * 100).toNumber();
                 }
+                // for stress, null data stays -1 (not measurable — explicit gap)
             }
+
+            if(normalized >= 0 or isStress) {
+                ret[slot] = normalized;
+            }
+
             sample = iterator.next();
         }
 
-        return downsampleGraph(ret);
+        return ret;
     }
 
     // Daily activity graph (distance / steps / active minutes), past 6 days + today.
@@ -413,15 +439,4 @@ class GraphRenderer {
         return 0;
     }
 
-    hidden function downsampleGraph(data as Array<Number>) as Array<Number> {
-        if(data.size() <= _targetWidth) { return data; }
-        var reduced = [];
-        var step = (data.size() as Float) / _targetWidth.toFloat();
-        for(var i = 0; i < _targetWidth; i++) {
-            var idx = Math.round(i * step).toNumber();
-            if(idx >= data.size()) { idx = data.size() - 1; }
-            reduced.add(data[idx]);
-        }
-        return reduced;
-    }
 }

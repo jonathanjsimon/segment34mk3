@@ -102,6 +102,7 @@ class GraphRenderer {
             dc.drawLine(graphLeft, y + h, graphRight, y + h);   // X axis
             dc.drawLine(graphLeft, y, graphLeft, y + h);         // Y axis
 
+            dc.setColor(themeColors[dataVal], Graphics.COLOR_TRANSPARENT);
             var maxStr = formatGraphAxisValue(cachedGraphYMax);
             dc.drawText(graphLeft - 2, y, _fontLabel, maxStr, Graphics.TEXT_JUSTIFY_RIGHT);
             if(cachedGraphYMin != 0.0) {

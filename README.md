@@ -83,6 +83,10 @@ For refactorings and optimizations keep in mind that:
 
 
 ## Change log
+v0.12
+- Experimental battery saving mode (off by default)
+- Some adjustments to the graph rendering
+
 v0.11
 - Big refactoring of the code, let me know if you spot any new issues
 - Fix for gusts and percipitation amount

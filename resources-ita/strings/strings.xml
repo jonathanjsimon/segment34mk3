@@ -442,6 +442,7 @@
     <string id="settings_no_separator" scope="settings">Nessun separatore</string>
     <string id="settings_show_seconds_active" scope="settings">Mostra Secondi in modalità Attiva</string>
     <string id="settings_show_seconds_inactive" scope="settings">Mostra secondi in modalità Inattiva (solo schermi MIP)</string>
+    <string id="settings_experimental_battery" scope="settings">Experimental battery optimizations</string>
     <string id="settings_show_stress_body_battery" scope="settings">Mostra barre Stress (arancione) e Batteria Corpo (blu)</string>
     <string id="settings_show_hide_labels" scope="settings">Mostra/Nascondi Etichette</string>
     <string id="settings_show_all_labels" scope="settings">Mostra Tutte le Etichette</string>

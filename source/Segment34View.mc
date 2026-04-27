@@ -55,7 +55,7 @@ class Segment34View extends WatchUi.WatchFace {
     hidden var bottomFiveAdj as Number = 0;
     hidden var fieldSpaceingAdj as Number = 0;
     hidden var textSideAdj as Number = 0;
-    hidden var secondsClipWidth as Number = 24;
+    hidden var secondsTextWidth as Number = 0; // lazily measured on first partial draw; reset in loadResources
     hidden var iconYAdj as Number = 3;
     hidden var graphBarWidth as Number = 2;
     hidden var graphBarSpacing as Number = 2;
@@ -137,6 +137,7 @@ class Segment34View extends WatchUi.WatchFace {
     hidden var propRightValueShows as Number = 0;
     hidden var propFourthValueShows as Number = 0;
     hidden var propAlwaysShowSeconds as Boolean = false;
+    hidden var propExperimentalBattery as Boolean = false;
     hidden var propUpdateFreq as Number = 5;
     hidden var propShowClockBg as Boolean = true;
     hidden var propShowDataBg as Boolean = false;
@@ -270,6 +271,7 @@ class Segment34View extends WatchUi.WatchFace {
         propDateFieldShows = p.getValue("dateFieldShows") as Number;
         propShowSeconds = p.getValue("showSeconds") as Boolean;
         propAlwaysShowSeconds = p.getValue("alwaysShowSeconds") as Boolean;
+        propExperimentalBattery = p.getValue("experimentalBattery") as Boolean;
         propFieldLayout = p.getValue("fieldLayout") as Number;
         propLeftValueShows = p.getValue("leftValueShows") as Number;
         propMiddleValueShows = p.getValue("middleValueShows") as Number;
@@ -400,7 +402,7 @@ class Segment34View extends WatchUi.WatchFace {
             labelHeight = 8;
             tinyDataHeight = 10;
             smallDataHeight = 13;
-            secondsClipWidth = 24;
+            secondsTextWidth = 0;
             bottomFiveAdj = 2;
             baseY = centerY - smallDataHeight;
             aboveLine2Adjustment = 5;
@@ -417,7 +419,7 @@ class Segment34View extends WatchUi.WatchFace {
             labelHeight = 10;
             tinyDataHeight = 10;
             smallDataHeight = 20;
-            secondsClipWidth = 36;
+            secondsTextWidth = 0;
             bottomFiveAdj = 2;
             baseY = centerY - 6;
             aboveLine2Adjustment = 3;
@@ -460,7 +462,7 @@ class Segment34View extends WatchUi.WatchFace {
             marginY = 8;
             labelHeight = 8;
             smallDataHeight = 13;
-            secondsClipWidth = 24;
+            secondsTextWidth = 0;
             bottomFiveAdj = 5;
             baseY = centerY - smallDataHeight - 4;
             aboveLine2Adjustment = 2;
@@ -476,7 +478,7 @@ class Segment34View extends WatchUi.WatchFace {
             marginY = 6;
             labelHeight = 10;
             smallDataHeight = 20;
-            secondsClipWidth = 36;
+            secondsTextWidth = 0;
             bottomFiveAdj = 5;
             baseY = centerY - 5;
             aboveLine2Adjustment = 2;
@@ -921,7 +923,7 @@ class Segment34View extends WatchUi.WatchFace {
             // Full redraw: computed values changed, theme/weather refreshed, or minute flipped.
             drawWatchface(dc, now, false, cachedValues);
             lastDrawnMinute = now.min;
-        } else if(canBurnIn and propSecondsShows == -3 and propShowSeconds) {
+        } else if(canBurnIn and propSecondsShows == -3 and propShowSeconds and propExperimentalBattery) {
             // AMOLED: onPartialUpdate is unavailable; only the seconds digit changed.
             // Redraw just the seconds clip area — avoids clear + gradient bitmap + all drawText calls.
             drawPartialSeconds(dc, cachedValues[:dataSeconds] as String);
@@ -945,7 +947,10 @@ class Segment34View extends WatchUi.WatchFace {
     // The AMOLED path in onUpdate calls clearClip() itself immediately after.
     hidden function drawPartialSeconds(dc as Dc, seconds as String) as Void {
         var y1 = baseY + halfClockHeight + marginY;
-        dc.setClip(baseX + halfClockWidth - textSideAdj - secondsClipWidth, y1, secondsClipWidth, smallDataHeight + 1);
+        if(secondsTextWidth == 0) {
+            secondsTextWidth = dc.getTextWidthInPixels("00", fontSmallData) + 2;
+        }
+        dc.setClip(baseX + halfClockWidth - textSideAdj - secondsTextWidth, y1, secondsTextWidth, smallDataHeight + 1);
         dc.setColor(theme.colors[bg], theme.colors[bg]);
         dc.clear();
         dc.setColor(theme.colors[date], Graphics.COLOR_TRANSPARENT);

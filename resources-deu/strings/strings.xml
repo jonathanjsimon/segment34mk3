@@ -426,6 +426,7 @@
     <string id="settings_no_separator" scope="settings">Kein Trennzeichen</string>
     <string id="settings_show_seconds_active" scope="settings">Zeige Sekunden im Aktiv-Modus</string>
     <string id="settings_show_seconds_inactive" scope="settings">Zeige Sekunden im Inaktiv-Modus (nur MIP)</string>
+    <string id="settings_experimental_battery" scope="settings">Experimental battery optimizations</string>
     <string id="settings_show_stress_body_battery" scope="settings">Zeige Stress (orange) u. Body Batt. (blau) Balken</string>
     <string id="settings_show_hide_labels" scope="settings">Zeige/Verberge Beschriftungen</string>
     <string id="settings_show_all_labels" scope="settings">Zeige alle Beschriftungen</string>

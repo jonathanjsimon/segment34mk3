@@ -445,7 +445,6 @@
     <string id="settings_no_separator" scope="settings">Ingen separator</string>
     <string id="settings_show_seconds_active" scope="settings">Visa sekunder i aktivt läge</string>
     <string id="settings_show_seconds_inactive" scope="settings">Visa sekunder i inaktivt läge (endast MIP-skärmar)</string>
-    <string id="settings_experimental_battery" scope="settings">Experimental battery optimizations</string>
     <string id="settings_show_stress_body_battery" scope="settings">Visa stress (orange) och kroppsbatteri (blå) staplar</string>
     <string id="settings_show_hide_labels" scope="settings">Visa/dölj etiketter</string>
     <string id="settings_show_all_labels" scope="settings">Visa alla etiketter</string>

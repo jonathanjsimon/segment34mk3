@@ -55,7 +55,7 @@ class Segment34View extends WatchUi.WatchFace {
     hidden var bottomFiveAdj as Number = 0;
     hidden var fieldSpaceingAdj as Number = 0;
     hidden var textSideAdj as Number = 0;
-    hidden var secondsTextWidth as Number = 0; // lazily measured on first partial draw; reset in loadResources
+    hidden var secondsClipWidth as Number = 24;
     hidden var iconYAdj as Number = 3;
     hidden var graphBarWidth as Number = 2;
     hidden var graphBarSpacing as Number = 2;
@@ -113,7 +113,6 @@ class Segment34View extends WatchUi.WatchFace {
     hidden var weatherStorage as WeatherStorage = new WeatherStorage();
 
     hidden var doesPartialUpdate as Boolean = false;
-    hidden var lastDrawnMinute as Number = -1;
     hidden var dataHelper as DataHelper = new DataHelper();
     hidden var weatherHelper as WeatherDisplayHelper = new WeatherDisplayHelper();
     hidden var graphRenderer as GraphRenderer = new GraphRenderer();
@@ -137,7 +136,6 @@ class Segment34View extends WatchUi.WatchFace {
     hidden var propRightValueShows as Number = 0;
     hidden var propFourthValueShows as Number = 0;
     hidden var propAlwaysShowSeconds as Boolean = false;
-    hidden var propExperimentalBattery as Boolean = false;
     hidden var propUpdateFreq as Number = 5;
     hidden var propShowClockBg as Boolean = true;
     hidden var propShowDataBg as Boolean = false;
@@ -271,7 +269,6 @@ class Segment34View extends WatchUi.WatchFace {
         propDateFieldShows = p.getValue("dateFieldShows") as Number;
         propShowSeconds = p.getValue("showSeconds") as Boolean;
         propAlwaysShowSeconds = p.getValue("alwaysShowSeconds") as Boolean;
-        propExperimentalBattery = p.getValue("experimentalBattery") as Boolean;
         propFieldLayout = p.getValue("fieldLayout") as Number;
         propLeftValueShows = p.getValue("leftValueShows") as Number;
         propMiddleValueShows = p.getValue("middleValueShows") as Number;
@@ -402,7 +399,7 @@ class Segment34View extends WatchUi.WatchFace {
             labelHeight = 8;
             tinyDataHeight = 10;
             smallDataHeight = 13;
-            secondsTextWidth = 0;
+            secondsClipWidth = 24;
             bottomFiveAdj = 2;
             baseY = centerY - smallDataHeight;
             aboveLine2Adjustment = 5;
@@ -419,7 +416,7 @@ class Segment34View extends WatchUi.WatchFace {
             labelHeight = 10;
             tinyDataHeight = 10;
             smallDataHeight = 20;
-            secondsTextWidth = 0;
+            secondsClipWidth = 36;
             bottomFiveAdj = 2;
             baseY = centerY - 6;
             aboveLine2Adjustment = 3;
@@ -462,7 +459,7 @@ class Segment34View extends WatchUi.WatchFace {
             marginY = 8;
             labelHeight = 8;
             smallDataHeight = 13;
-            secondsTextWidth = 0;
+            secondsClipWidth = 24;
             bottomFiveAdj = 5;
             baseY = centerY - smallDataHeight - 4;
             aboveLine2Adjustment = 2;
@@ -478,7 +475,7 @@ class Segment34View extends WatchUi.WatchFace {
             marginY = 6;
             labelHeight = 10;
             smallDataHeight = 20;
-            secondsTextWidth = 0;
+            secondsClipWidth = 36;
             bottomFiveAdj = 5;
             baseY = centerY - 5;
             aboveLine2Adjustment = 2;
@@ -841,7 +838,6 @@ class Segment34View extends WatchUi.WatchFace {
         visible = true;
         lastUpdate = null;
         lastSlowUpdate = null;
-        lastDrawnMinute = -1;
     }
 
     // Called when this View is removed from the screen.
@@ -849,14 +845,12 @@ class Segment34View extends WatchUi.WatchFace {
     // This includes freeing resources from memory.
     function onHide() as Void {
         visible = false;
-        lastDrawnMinute = -1;
     }
 
     // The user has just looked at their watch. Timers and animations may be started here.
     function onExitSleep() as Void {
         lastUpdate = null;
         lastSlowUpdate = null;
-        lastDrawnMinute = -1;
         isSleeping = false;
         WatchUi.requestUpdate();
     }
@@ -865,7 +859,6 @@ class Segment34View extends WatchUi.WatchFace {
     function onEnterSleep() as Void {
         lastUpdate = null;
         lastSlowUpdate = null;
-        lastDrawnMinute = -1;
         isSleeping = true;
         WatchUi.requestUpdate();
     }
@@ -874,13 +867,11 @@ class Segment34View extends WatchUi.WatchFace {
         reloadSettings();
         lastUpdate = null;
         lastSlowUpdate = null;
-        lastDrawnMinute = -1;
         WatchUi.requestUpdate();
     }
 
     public function forceDataRefresh() as Void {
         lastUpdate = null;
-        lastDrawnMinute = -1;
     }
 
     // === UPDATE ENTRY POINTS ===
@@ -892,46 +883,32 @@ class Segment34View extends WatchUi.WatchFace {
         var now = Time.Gregorian.info(Time.now(), Time.FORMAT_SHORT);
         var unix_timestamp = Time.now().value();
 
-        var slowUpdated = false;
+        if(doesPartialUpdate) {
+            dc.clearClip();
+            doesPartialUpdate = false;
+        }
+
         if(now.sec % 60 == 0 or lastSlowUpdate == null or unix_timestamp - lastSlowUpdate >= 60) {
             lastSlowUpdate = unix_timestamp;
             updateColorTheme();
             updateWeather();
             dataHelper.updateVo2History();
-            slowUpdated = true;
         }
 
-        var valuesUpdated = false;
         if(lastUpdate == null or unix_timestamp - lastUpdate >= propUpdateFreq) {
             lastUpdate = unix_timestamp;
             cachedValues = computeDisplayValues(now);
-            valuesUpdated = true;
         } else {
             // Only update time-sensitive values
             cachedValues[:dataClock] = getClockData(now);
             cachedValues[:dataSeconds] = getValueForSeconds(now);
         }
 
-        if(doesPartialUpdate) {
-            dc.clearClip();
-            doesPartialUpdate = false;
-        }
-
         if(isSleeping and canBurnIn) {
             drawAOD(dc, now, cachedValues);
-        } else if(!propExperimentalBattery or valuesUpdated or slowUpdated or now.min != lastDrawnMinute
-                  or System.getSystemStats().charging) {
-            // Full redraw: optimizations off, values/theme changed, minute flipped, or charging
-            // (charging overlay may disturb the screen at any time; no point saving power on charger).
+        } else {
             drawWatchface(dc, now, false, cachedValues);
-            lastDrawnMinute = now.min;
-        } else if(canBurnIn and propSecondsShows == -3 and propShowSeconds) {
-            // AMOLED: onPartialUpdate is unavailable; only the seconds digit changed.
-            // Redraw just the seconds clip area — avoids clear + gradient bitmap + all drawText calls.
-            drawPartialSeconds(dc, cachedValues[:dataSeconds] as String);
-            dc.clearClip();
         }
-        // MIP + nothing changed: onPartialUpdate handles seconds; nothing to do here.
     }
 
     function onPartialUpdate(dc) {
@@ -940,19 +917,11 @@ class Segment34View extends WatchUi.WatchFace {
         doesPartialUpdate = true;
 
         var now = Time.Gregorian.info(Time.now(), Time.FORMAT_SHORT);
-        drawPartialSeconds(dc, now.sec.format("%02d"));
-        // Clip is intentionally left set; onUpdate will call clearClip() via doesPartialUpdate.
-    }
-
-    // Redraws only the seconds clip region. Does NOT call clearClip() — caller is responsible.
-    // onPartialUpdate (MIP) leaves clip set for onUpdate to clean up via doesPartialUpdate.
-    // The AMOLED path in onUpdate calls clearClip() itself immediately after.
-    hidden function drawPartialSeconds(dc as Dc, seconds as String) as Void {
         var y1 = baseY + halfClockHeight + marginY;
-        if(secondsTextWidth == 0) {
-            secondsTextWidth = dc.getTextWidthInPixels("00", fontSmallData) + 2;
-        }
-        dc.setClip(baseX + halfClockWidth - textSideAdj - secondsTextWidth, y1, secondsTextWidth, smallDataHeight + 1);
+
+        var seconds = now.sec.format("%02d");
+
+        dc.setClip(baseX + halfClockWidth - textSideAdj - secondsClipWidth, y1, secondsClipWidth, smallDataHeight + 1);
         dc.setColor(theme.colors[bg], theme.colors[bg]);
         dc.clear();
         dc.setColor(theme.colors[date], Graphics.COLOR_TRANSPARENT);

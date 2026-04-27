@@ -1384,8 +1384,4 @@
                 <listEntry value="3">@Strings.settings_hide_bottom_labels</listEntry>
             </settingConfig>
     </setting>
-
-    <setting propertyKey="@Properties.experimentalBattery" title="@Strings.settings_experimental_battery">
-        <settingConfig type="boolean" />
-    </setting>
 </settings>

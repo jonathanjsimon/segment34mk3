@@ -19,6 +19,10 @@ class WeatherDisplayHelper {
     hidden var _is24H as Boolean = false;
     hidden var _hourFormat as Number = 0;
 
+    // Cached weather condition string (invalidated by update())
+    hidden var _cachedConditionStr as String? = null;
+    hidden var _cachedConditionIdx as Number = -1;
+
     function initialize() {}
 
     function update(
@@ -39,6 +43,8 @@ class WeatherDisplayHelper {
         _precipAmountUnit = precipAmountUnit;
         _is24H = is24H;
         _hourFormat = hourFormat;
+        _cachedConditionStr = null;
+        _cachedConditionIdx = -1;
     }
 
     function getTempUnit(propTempUnit as Number) as String {
@@ -58,6 +64,11 @@ class WeatherDisplayHelper {
     function getWeatherCondition() as String {
         if (_owmError != null) { return _owmError as String; }
         if (_w == null || (_w as StoredWeather).condition == null) { return ""; }
+        var idx = (_w as StoredWeather).condition.toNumber();
+        if (idx < 0 || idx >= 54) { idx = 53; }
+        if (idx == _cachedConditionIdx && _cachedConditionStr != null) {
+            return _cachedConditionStr as String;
+        }
         var weatherStrings = [
             Rez.Strings.WEATHER_0,  Rez.Strings.WEATHER_1,  Rez.Strings.WEATHER_2,  Rez.Strings.WEATHER_3,
             Rez.Strings.WEATHER_4,  Rez.Strings.WEATHER_5,  Rez.Strings.WEATHER_6,  Rez.Strings.WEATHER_7,
@@ -74,9 +85,9 @@ class WeatherDisplayHelper {
             Rez.Strings.WEATHER_48, Rez.Strings.WEATHER_49, Rez.Strings.WEATHER_50, Rez.Strings.WEATHER_51,
             Rez.Strings.WEATHER_52, Rez.Strings.WEATHER_53
         ];
-        var idx = (_w as StoredWeather).condition.toNumber();
-        if (idx < 0 || idx >= weatherStrings.size()) { idx = 53; }
-        return Application.loadResource(weatherStrings[idx]);
+        _cachedConditionIdx = idx;
+        _cachedConditionStr = Application.loadResource(weatherStrings[idx]) as String;
+        return _cachedConditionStr as String;
     }
 
     function getWeatherConditionShort() as String {

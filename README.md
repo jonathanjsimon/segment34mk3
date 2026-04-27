@@ -83,11 +83,11 @@ For refactorings and optimizations keep in mind that:
 
 
 ## Change log
-v0.12
+v1.2
 - Experimental battery saving mode (off by default)
 - Some adjustments to the graph rendering
 
-v0.11
+v1.11
 - Big refactoring of the code, let me know if you spot any new issues
 - Fix for gusts and percipitation amount
 - New options to show line graph instead of histogram

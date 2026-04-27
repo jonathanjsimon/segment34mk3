@@ -55,6 +55,13 @@ class ValueResolver {
     // Info message (moved from View)
     public var infoMessage as String = "";
 
+    // Cached unit strings (loaded once on first use — these never change at runtime)
+    hidden var _unitKcal as String? = null;
+    hidden var _unitM as String? = null;
+    hidden var _unitFt as String? = null;
+    hidden var _unitSteps as String? = null;
+    hidden var _unitPushes as String? = null;
+
     function initialize(weatherHelper as WeatherDisplayHelper, dataHelper as DataHelper) {
         _weatherHelper = weatherHelper;
         _dataHelper = dataHelper;
@@ -237,11 +244,21 @@ class ValueResolver {
         switch (complicationType) {
             case 10:
             case 25:
-            case 46: return Application.loadResource(Rez.Strings.UNIT_KCAL) as String;
-            case 11: return Application.loadResource(Rez.Strings.UNIT_M) as String;
-            case 14: return Application.loadResource(Rez.Strings.UNIT_FT) as String;
-            case 16: return Application.loadResource(Rez.Strings.UNIT_STEPS) as String;
-            case 18: return Application.loadResource(Rez.Strings.UNIT_PUSHES) as String;
+            case 46:
+                if (_unitKcal == null) { _unitKcal = Application.loadResource(Rez.Strings.UNIT_KCAL) as String; }
+                return _unitKcal as String;
+            case 11:
+                if (_unitM == null) { _unitM = Application.loadResource(Rez.Strings.UNIT_M) as String; }
+                return _unitM as String;
+            case 14:
+                if (_unitFt == null) { _unitFt = Application.loadResource(Rez.Strings.UNIT_FT) as String; }
+                return _unitFt as String;
+            case 16:
+                if (_unitSteps == null) { _unitSteps = Application.loadResource(Rez.Strings.UNIT_STEPS) as String; }
+                return _unitSteps as String;
+            case 18:
+                if (_unitPushes == null) { _unitPushes = Application.loadResource(Rez.Strings.UNIT_PUSHES) as String; }
+                return _unitPushes as String;
         }
         return "";
     }

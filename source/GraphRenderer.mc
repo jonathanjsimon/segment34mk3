@@ -33,6 +33,11 @@ class GraphRenderer {
     var cachedGraphYMax as Float = 100.0;
     var cachedGraphData2 as Array<Number>? = null;
 
+    // X-axis label cache: recomputed once per minute, not every frame
+    hidden var _cachedXLabelEpochMin as Number = -1;
+    hidden var _cachedXLabelLeft as String = "";
+    hidden var _cachedXLabelRight as String = "";
+
     function initialize() {}
 
     function configure(
@@ -207,26 +212,40 @@ class GraphRenderer {
 
     // Returns the X-axis label for the leftmost (isLeft=true) or rightmost point.
     // For 2-hour data: formatted time; for 7-day data: abbreviated weekday.
+    // Labels are cached per epoch-minute so Gregorian.info is only called once/minute.
     function getGraphXLabel(isLeft as Boolean) as String {
-        if(_propGraphData >= 8) {
-            var daysBack = isLeft ? 6 : 0;
-            var target = Time.now().subtract(new Time.Duration(daysBack * 86400));
-            var info = Time.Gregorian.info(target, Time.FORMAT_SHORT);
-            return dayName(info.day_of_week);
+        refreshXLabels();
+        return isLeft ? _cachedXLabelLeft : _cachedXLabelRight;
+    }
+
+    hidden function refreshXLabels() as Void {
+        var nowMoment = Time.now();
+        var epochMin = nowMoment.value() / 60;
+        if (epochMin == _cachedXLabelEpochMin) { return; }
+        _cachedXLabelEpochMin = epochMin;
+        if (_propGraphData >= 8) {
+            var infoNow = Time.Gregorian.info(nowMoment, Time.FORMAT_SHORT);
+            var target6 = nowMoment.subtract(new Time.Duration(6 * 86400));
+            var info6 = Time.Gregorian.info(target6, Time.FORMAT_SHORT);
+            _cachedXLabelLeft = dayName(info6.day_of_week);
+            _cachedXLabelRight = dayName(infoNow.day_of_week);
         } else {
-            var minutesBack = isLeft ? 120 : 0;
-            var target = Time.now().subtract(new Time.Duration(minutesBack * 60));
-            var info = Time.Gregorian.info(target, Time.FORMAT_SHORT);
-            var h = info.hour;
-            var m = info.min;
-            if(!_propIs24H) {
-                var ampm = h >= 12 ? "P" : "A";
-                h = h % 12;
-                if(h == 0) { h = 12; }
-                return h.toString() + ":" + m.format("%02d") + ampm;
-            }
-            return h.format("%02d") + ":" + m.format("%02d");
+            var target2h = nowMoment.subtract(new Time.Duration(7200));
+            var infoNow = Time.Gregorian.info(nowMoment, Time.FORMAT_SHORT);
+            var info2h = Time.Gregorian.info(target2h, Time.FORMAT_SHORT);
+            _cachedXLabelLeft = formatXLabel(info2h.hour, info2h.min);
+            _cachedXLabelRight = formatXLabel(infoNow.hour, infoNow.min);
         }
+    }
+
+    hidden function formatXLabel(h as Number, m as Number) as String {
+        if (!_propIs24H) {
+            var ampm = h >= 12 ? "P" : "A";
+            h = h % 12;
+            if (h == 0) { h = 12; }
+            return h.toString() + ":" + m.format("%02d") + ampm;
+        }
+        return h.format("%02d") + ":" + m.format("%02d");
     }
 
     function getDataArrayByType(dataSource as Number) as Array<Number> {

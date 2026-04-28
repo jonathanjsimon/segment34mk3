@@ -101,7 +101,7 @@ class Segment34View extends WatchUi.WatchFace {
     hidden var theme as ThemeManager = new ThemeManager();
     hidden var weatherCondition as StoredWeather or Null;
     hidden var propWeatherProvider as Number = 0;
-    hidden var owmError as String or Null = null;
+    hidden var wxError as String or Null = null;
     hidden var hrHistoryData as Array<Number>?;
     hidden var canBurnIn as Boolean = false;
     hidden var isSleeping as Boolean = false;
@@ -1090,21 +1090,20 @@ class Segment34View extends WatchUi.WatchFace {
     }
 
     hidden function updateWeather() as Void {
-        if (propWeatherProvider == 1) {
-            // OWM provider: background service delegate handles fetching.
-            // The view only reads the results from Application.Storage.
-            owmError = Application.Storage.getValue("owm_error") as String?;
+        if (propWeatherProvider == 1 || propWeatherProvider == 2) {
+            // Background service handles fetching; view only reads from Application.Storage.
+            wxError = Application.Storage.getValue("wx_error") as String?;
             try { weatherCondition = weatherStorage.read(); } catch(e) {}
         } else {
             // Garmin provider: original behavior unchanged.
-            owmError = null;
+            wxError = null;
             if (Weather.getCurrentConditions() != null) {
                 try { weatherStorage.store(); } catch(e) {}
             }
             try { weatherCondition = weatherStorage.read(); } catch(e) {}
         }
         cachedTempUnit = weatherHelper.getTempUnit(propTempUnit);
-        weatherHelper.update(weatherCondition, owmError, cachedTempUnit, propShowTempUnit, propWindUnit, propPrecipAmountUnit, propIs24H, propHourFormat);
+        weatherHelper.update(weatherCondition, wxError, cachedTempUnit, propShowTempUnit, propWindUnit, propPrecipAmountUnit, propIs24H, propHourFormat);
     }
 
     // === DRAW CHAIN ===

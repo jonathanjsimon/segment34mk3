@@ -34,18 +34,19 @@ class Segment34App extends Application.AppBase {
     }
 
     function onSettingsChanged() as Void {
-        // Reset OWM state so the next temporal event fetches immediately with the new settings.
-        Application.Storage.deleteValue("owm_last_update");
-        Application.Storage.deleteValue("owm_error");
+        // Reset weather service state so the next temporal event fetches immediately.
+        Application.Storage.deleteValue("wx_last_update");
+        Application.Storage.deleteValue("wx_error");
         updateTemporalEvent();
         mView.onSettingsChanged();
         WatchUi.requestUpdate();
     }
 
     hidden function updateTemporalEvent() as Void {
-        if ((Application.Properties.getValue("weatherProvider") as Number) == 1) {
+        var provider = (Application.Properties.getValue("weatherProvider") as Number);
+        if (provider == 1 || provider == 2) {
             var interval = Application.Properties.getValue("owmRefreshInterval") as Number;
-            var hasData = Application.Storage.getValue("owm_last_update") != null;
+            var hasData = Application.Storage.getValue("wx_last_update") != null;
             Background.registerForTemporalEvent(new Time.Duration(hasData ? interval : 300));
         } else {
             Background.deleteTemporalEvent();

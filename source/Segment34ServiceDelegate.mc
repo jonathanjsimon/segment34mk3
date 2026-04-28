@@ -14,11 +14,18 @@ class Segment34ServiceDelegate extends System.ServiceDelegate {
 
     function onTemporalEvent() as Void {
         var weatherProvider = Application.Properties.getValue("weatherProvider") as Number;
-        if (weatherProvider != 1) { return; }
 
-        var apiKey = Application.Properties.getValue("owmApiKey") as String;
-        if (apiKey.length() == 0) { return; }
+        // Validate API key early for OWM; Open-Meteo needs no key.
+        var apiKey = "" as String;
+        if (weatherProvider == 1) {
+            apiKey = Application.Properties.getValue("owmApiKey") as String;
+            if (apiKey.length() == 0) { return; }
+        } else if (weatherProvider != 2) {
+            return;
+        }
 
+        // Resolve location: shared between providers.
+        // Prefer the manual location override; fall back to Garmin's last known position.
         var lat = 0.0f;
         var lon = 0.0f;
         var hasLocation = false;
@@ -49,15 +56,21 @@ class Segment34ServiceDelegate extends System.ServiceDelegate {
             lon = (deg[1] as Decimal).toFloat();
         }
 
+        // Rate-limit: skip fetch if data is fresh and location hasn't changed.
         var now = Time.now().value();
-        var lastUpdate = Application.Storage.getValue("owm_last_update") as Number?;
+        var lastUpdate = Application.Storage.getValue("wx_last_update") as Number?;
         var interval = Application.Properties.getValue("owmRefreshInterval") as Number;
         if (lastUpdate != null && now - lastUpdate < interval && !locationChangedSignificantly(lat, lon)) {
             return;
         }
 
-        var service = new OpenWeatherService();
-        service.fetchWeather(lat, lon, apiKey);
+        if (weatherProvider == 1) {
+            var service = new OpenWeatherService();
+            service.fetchWeather(lat, lon, apiKey);
+        } else {
+            var service = new OpenMeteoService();
+            service.fetchWeather(lat, lon);
+        }
     }
 
     // Returns true if current position is >~55km from the stored weather location.
@@ -73,3 +86,4 @@ class Segment34ServiceDelegate extends System.ServiceDelegate {
         return latDiff > 0.5f || lonDiff > 0.5f;
     }
 }
+

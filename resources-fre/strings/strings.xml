@@ -503,9 +503,10 @@
     <string id="settings_weather_provider" scope="settings">Fournisseur météo</string>
     <string id="settings_garmin" scope="settings">Garmin</string>
     <string id="settings_openweathermap" scope="settings">OpenWeatherMap (voir FAQ 5.0.0 sur ludw.github.io/faq pour la configuration)</string>
+    <string id="settings_open_meteo" scope="settings">Open-Meteo (gratuit, sans clé API)</string>
     <string id="settings_owm_api_key" scope="settings">Clé API OWM</string>
-    <string id="settings_owm_location_override" scope="settings">Remplacement de la localisation OWM (lat,lon ex. 51.5,-0.1 — laisser vide pour utiliser la localisation Garmin)</string>
-    <string id="settings_owm_refresh_interval" scope="settings">Intervalle de mise à jour OWM</string>
+    <string id="settings_owm_location_override" scope="settings">Remplacement de la localisation (lat,lon ex. 51.5,-0.1 — laisser vide pour utiliser la localisation Garmin)</string>
+    <string id="settings_owm_refresh_interval" scope="settings">Intervalle de mise à jour météo</string>
     <string id="settings_every_15_min" scope="settings">Toutes les 15 min</string>
     <string id="settings_every_30_min" scope="settings">Toutes les 30 min</string>
     <string id="settings_every_hour" scope="settings">Toutes les heures</string>

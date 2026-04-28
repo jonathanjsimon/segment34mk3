@@ -11,7 +11,7 @@ import Toybox.Weather;
 
 class WeatherDisplayHelper {
     hidden var _w as StoredWeather or Null = null;
-    hidden var _owmError as String or Null = null;
+    hidden var _wxError as String or Null = null;
     hidden var _tempUnit as String = "C";
     hidden var _showTempUnit as Boolean = true;
     hidden var _windUnit as Number = 0;
@@ -27,7 +27,7 @@ class WeatherDisplayHelper {
 
     function update(
         w as StoredWeather or Null,
-        owmError as String or Null,
+        wxError as String or Null,
         tempUnit as String,
         showTempUnit as Boolean,
         windUnit as Number,
@@ -36,7 +36,7 @@ class WeatherDisplayHelper {
         hourFormat as Number
     ) as Void {
         _w = w;
-        _owmError = owmError;
+        _wxError = wxError;
         _tempUnit = tempUnit;
         _showTempUnit = showTempUnit;
         _windUnit = windUnit;
@@ -62,7 +62,7 @@ class WeatherDisplayHelper {
     }
 
     function getWeatherCondition() as String {
-        if (_owmError != null) { return _owmError as String; }
+        if (_wxError != null) { return _wxError as String; }
         if (_w == null || (_w as StoredWeather).condition == null) { return ""; }
         var idx = (_w as StoredWeather).condition.toNumber();
         if (idx < 0 || idx >= 54) { idx = 53; }
@@ -91,7 +91,7 @@ class WeatherDisplayHelper {
     }
 
     function getWeatherConditionShort() as String {
-        if (_owmError != null) { return _owmError as String; }
+        if (_wxError != null) { return _wxError as String; }
         if (_w == null || (_w as StoredWeather).condition == null) { return ""; }
         var short = [
             "CLEAR", "CLOUDY", "CLOUDY", "RAIN", "SNOW", "WINDY", "THUNDER",

@@ -38,14 +38,14 @@ class OpenWeatherService {
     function onCurrentResponse(responseCode as Number, data as Dictionary?) as Void {
         System.println(["OWM onCurrentResponse", responseCode, data]);
         if (responseCode == 401 || responseCode == 403) {
-            Application.Storage.setValue("owm_error", "OWM: INVALID API KEY");
+            Application.Storage.setValue("wx_error", "OWM: INVALID API KEY");
             return;
         }
         if (responseCode != 200 || data == null) {
-            // Network error or server error — keep cached data, do not touch owm_error.
+            // Network error or server error — keep cached data, do not touch wx_error.
             return;
         }
-        Application.Storage.deleteValue("owm_error");
+        Application.Storage.deleteValue("wx_error");
 
         var now = Time.now().value();
         var cc_data = {};
@@ -113,7 +113,7 @@ class OpenWeatherService {
         if (dt != null) { cc_data["observationTime"] = dt as Number; }
         cc_data["timestamp"] = now;
         Application.Storage.setValue("current_conditions", cc_data);
-        Application.Storage.setValue("owm_last_update", now);
+        Application.Storage.setValue("wx_last_update", now);
         // Switch to the long interval now that we have data.
         Background.registerForTemporalEvent(new Time.Duration(3600));
     }

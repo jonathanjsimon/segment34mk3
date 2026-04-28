@@ -342,8 +342,8 @@
     <string id="settings_date" scope="settings">Date</string>
     <string id="settings_weather_data_1" scope="settings">Weather data 1 (specify format below)</string>
     <string id="settings_weather_data_2" scope="settings">Weather data 2 (specify format below)</string>
-    <string id="settings_weather_format_1" scope="settings">Weather data 1 format (t=temp w=wind g=gust (OWM only) h=humidity p=precip% r=precip_amount (OWM only) u=UV l=high/low f=feels c=conditions s=shortened conditions n=city(OWM only) o=obs_time)</string>
-    <string id="settings_weather_format_2" scope="settings">Weather data 2 format (t=temp w=wind g=gust (OWM only) h=humidity p=precip% r=precip_amount (OWM only) u=UV l=high/low f=feels c=conditions s=shortened conditions n=city(OWM only) o=obs_time)</string>
+    <string id="settings_weather_format_1" scope="settings">Weather data 1 format (t=temp w=wind g=gust h=humidity p=precip% r=precip_amount u=UV l=high/low f=feels c=conditions s=shortened conditions n=city(OWM only) o=obs_time)</string>
+    <string id="settings_weather_format_2" scope="settings">Weather data 2 format (t=temp w=wind g=gust h=humidity p=precip% r=precip_amount u=UV l=high/low f=feels c=conditions s=shortened conditions n=city(OWM only) o=obs_time)</string>
     <string id="settings_steps_day" scope="settings">Steps / day (thousands if not enough room)</string>
     <string id="settings_wheelchair_pushes_day" scope="settings">Wheelchair pushes / day</string>
     <string id="settings_calories_kcal_day_2" scope="settings">Calories (kcal) / day</string>
@@ -494,9 +494,10 @@
     <string id="settings_weather_provider" scope="settings">Weather provider</string>
     <string id="settings_garmin" scope="settings">Garmin</string>
     <string id="settings_openweathermap" scope="settings">OpenWeatherMap (see FAQ 5.0.0 at ludw.github.io/faq for setup)</string>
+    <string id="settings_open_meteo" scope="settings">Open-Meteo (free, no API key)</string>
     <string id="settings_owm_api_key" scope="settings">OWM API key</string>
-    <string id="settings_owm_location_override" scope="settings">OWM location override (lat,lon e.g. 51.5,-0.1 — leave empty to use Garmin location)</string>
-    <string id="settings_owm_refresh_interval" scope="settings">OWM refresh interval</string>
+    <string id="settings_owm_location_override" scope="settings">Location override (lat,lon e.g. 51.5,-0.1 — leave empty to use Garmin location)</string>
+    <string id="settings_owm_refresh_interval" scope="settings">Weather refresh interval</string>
     <string id="settings_every_15_min" scope="settings">Every 15 min</string>
     <string id="settings_every_30_min" scope="settings">Every 30 min</string>
     <string id="settings_every_hour" scope="settings">Every hour</string>

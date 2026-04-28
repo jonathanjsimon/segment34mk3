@@ -37,6 +37,8 @@ class Segment34App extends Application.AppBase {
         // Reset weather service state so the next temporal event fetches immediately.
         Application.Storage.deleteValue("wx_last_update");
         Application.Storage.deleteValue("wx_error");
+        Application.Storage.deleteValue("owm_forecast_high");
+        Application.Storage.deleteValue("owm_forecast_low");
         updateTemporalEvent();
         mView.onSettingsChanged();
         WatchUi.requestUpdate();

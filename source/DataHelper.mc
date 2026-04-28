@@ -260,28 +260,28 @@ class DataHelper {
     function getIconState(setting as Number) as String {
         if(setting == 1) { // Alarm
             var alarms = System.getDeviceSettings().alarmCount;
-            if(alarms > 0) {
+            if(alarms != null && alarms > 0) {
                 return "A";
             } else {
                 return "";
             }
         } else if(setting == 2) { // DND
             var dnd = System.getDeviceSettings().doNotDisturb;
-            if(dnd) {
+            if(dnd != null && dnd) {
                 return "D";
             } else {
                 return "";
             }
         } else if(setting == 3) { // Bluetooth (on / off)
             var bl = System.getDeviceSettings().phoneConnected;
-            if(bl) {
+            if(bl != null && bl) {
                 return "L";
             } else {
                 return "M";
             }
         } else if(setting == 4) { // Bluetooth (just off)
             var bl = System.getDeviceSettings().phoneConnected;
-            if(bl) {
+            if(bl != null && bl) {
                 return "";
             } else {
                 return "M";
@@ -651,7 +651,7 @@ class DataHelper {
 
     function getWheelchairPushesFormatted() as String {
         var info = ActivityMonitor.getInfo();
-        if (info.pushes != null) { return info.pushes.format("%d"); }
+        if ((info has :pushes) && info.pushes != null) { return info.pushes.format("%d"); }
         return "";
     }
 

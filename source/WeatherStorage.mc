@@ -45,7 +45,7 @@ class WeatherStorage {
                 if(cc.feelsLikeTemperature != null) { cc_data["feelsLikeTemperature"] = cc.feelsLikeTemperature; }
                 if(cc.windBearing != null) { cc_data["windBearing"] = cc.windBearing; }
                 if(cc.windSpeed != null) { cc_data["windSpeed"] = cc.windSpeed; }
-                if(cc.uvIndex != null) { cc_data["uvIndex"] = cc.uvIndex; }
+                if((cc has :uvIndex) && cc.uvIndex != null) { cc_data["uvIndex"] = cc.uvIndex; }
                 if(cc.observationTime != null) { cc_data["observationTime"] = cc.observationTime.value(); }
             }
 
@@ -75,7 +75,7 @@ class WeatherStorage {
                     "windBearing" => hf[i].windBearing,
                     "windSpeed" => hf[i].windSpeed
                 };
-                if(hf[i].uvIndex != null) { tmp["uvIndex"] = hf[i].uvIndex; }
+                if((hf[i] has :uvIndex) && hf[i].uvIndex != null) { tmp["uvIndex"] = hf[i].uvIndex; }
 
                 hf_data.add(tmp);
             }

@@ -90,6 +90,7 @@ function goalPercent(val as Number, goal as Number) as Number {
 }
 
 function moonPhase(time, propHemisphere as Number) as String {
+    if (time == null) { return "0"; }
     var jd = julianDay(time.year, time.month, time.day);
 
     var days_since_new_moon = jd - 2459966;

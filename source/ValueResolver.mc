@@ -189,7 +189,7 @@ class ValueResolver {
             case 35:
             case 36: return _weatherHelper.getSunriseOrSunsetFormatted(complicationType, width);
             case 37: return secondaryTimezone(_propTzOffset2, width, _propIs24H, _propHourFormat, _propTzHourFormat);
-            case 38: return System.getDeviceSettings().alarmCount.format("%d");
+            case 38: var ac = System.getDeviceSettings().alarmCount; return (ac != null) ? ac.format("%d") : "0";
             case 39: return _weatherHelper.getHighTempFormatted();
             case 40: return _weatherHelper.getLowTempFormatted();
             case 41: return _weatherHelper.getTemperature();

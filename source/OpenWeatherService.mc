@@ -36,7 +36,7 @@ class OpenWeatherService {
     // Receives current-conditions JSON from OWM and stores it in Application.Storage
     // using the same format as Segment34View.storeWeatherData().
     function onCurrentResponse(responseCode as Number, data as Dictionary?) as Void {
-        System.println(["OWM onCurrentResponse", responseCode, data]);
+        //System.println(["OWM onCurrentResponse", responseCode, data]);
         if (responseCode == 401 || responseCode == 403) {
             Application.Storage.setValue("wx_error", "OWM: INVALID API KEY");
             return;
@@ -114,13 +114,13 @@ class OpenWeatherService {
         cc_data["timestamp"] = now;
         Application.Storage.setValue("current_conditions", cc_data);
         Application.Storage.setValue("wx_last_update", now);
-        // Switch to the long interval now that we have data.
-        Background.registerForTemporalEvent(new Time.Duration(3600));
+        var interval = Application.Properties.getValue("owmRefreshInterval") as Number;
+        Background.registerForTemporalEvent(new Time.Duration(interval));
     }
 
     // Receives 3-hour forecast JSON from OWM and stores it in Application.Storage.
     function onForecastResponse(responseCode as Number, data as Dictionary?) as Void {
-        System.println(["OWM onForecastResponse", responseCode, data]);
+        //System.println(["OWM onForecastResponse", responseCode, data]);
         if (responseCode != 200 || data == null) { return; }
 
         var list = data.get("list") as Array?;

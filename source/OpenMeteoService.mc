@@ -35,7 +35,7 @@ class OpenMeteoService {
     }
 
     function onResponse(responseCode as Number, data as Dictionary?) as Void {
-        System.println(["OM onResponse", responseCode]);
+        //System.println(["OM onResponse", responseCode]);
         if (responseCode >= 400 && responseCode < 500) {
             Application.Storage.setValue("wx_error", "OM: ERROR " + responseCode.toString());
             return;
@@ -136,7 +136,8 @@ class OpenMeteoService {
         Application.Storage.setValue("current_conditions", cc_data);
         Application.Storage.setValue("hourly_forecast", hf_data);
         Application.Storage.setValue("wx_last_update", now);
-        Background.registerForTemporalEvent(new Time.Duration(3600));
+        var interval = Application.Properties.getValue("owmRefreshInterval") as Number;
+        Background.registerForTemporalEvent(new Time.Duration(interval));
     }
 
     // Maps WMO weather interpretation code to Garmin Weather.Condition enum (0–53).
